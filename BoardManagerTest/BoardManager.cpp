@@ -42,25 +42,6 @@ BoardManager::~BoardManager()
 
 bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 {
-	//ActiveCard** side;
-	//if (playerIndex == 1)
-	//{
-	//	side = m_side1;
-	//}
-	//else
-	//{
-	//	side = m_side2;
-	//}
-	//
-	//if (side[slot] != nullptr)
-	//{
-	//	return false; // Could not play card if there was already a card there
-	//}
-	//
-	//ActiveCard* placedCard = new ActiveCard(data, slot, playerIndex);
-	//
-	//side[slot] = placedCard;
-
 	if (playerIndex == 1)
 	{
 		if (m_side1[slot] != nullptr)

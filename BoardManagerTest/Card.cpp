@@ -28,7 +28,7 @@ int ActiveCard::GetAtk()
 
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
 {
-	return std::vector<int>(m_slot);
+	return std::vector<int>(1, m_slot);
 }
 
 void ActiveCard::TakeDamage(int damage)

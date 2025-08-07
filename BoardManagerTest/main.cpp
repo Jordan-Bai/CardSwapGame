@@ -17,18 +17,18 @@ int main()
 	//	player.m_drawPile.push_back(&basicCard);
 	//}
 
-	//std::vector<CreatureData> creatures;
-	//std::vector<CardData> cards;
+	std::vector<CreatureData*> creatures;
+	std::vector<CardData*> cards;
 	for (int i = 0; i < 5; i++)
 	{
-		CreatureData frontCreature(i, 1);
-		//creatures.push_back(frontCreature);
+		CreatureData* frontCreature = new CreatureData(i, 1);
+		creatures.push_back(frontCreature);
 
-		CardData newCard(1, &frontCreature);
-		//cards.push_back(newCard);
+		CardData* newCard = new CardData(1, frontCreature);
+		cards.push_back(newCard);
 
-		dealer.m_drawPile.push_back(&newCard);
-		player.m_drawPile.push_back(&newCard);
+		dealer.m_drawPile.push_back(newCard);
+		player.m_drawPile.push_back(newCard);
 	}
 
 	BoardManager board(&dealer, &player, 4);
@@ -62,5 +62,15 @@ int main()
 		}
 
 		board.DoAttackPhase();
+	}
+
+	for (CreatureData* creature : creatures)
+	{
+		delete creature;
+	}
+
+	for (CardData* card : cards)
+	{
+		delete card;
 	}
 }
