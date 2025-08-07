@@ -1,0 +1,29 @@
+#pragma once
+#include "Player.h"
+
+class BoardManager
+{
+	int m_slots;
+	ActiveCard** m_side1;
+	ActiveCard** m_side2;
+
+	Player* m_player1;
+	Player* m_player2;
+
+public:
+	BoardManager(Player* dealer, Player* player, int slotsPerSide);
+	~BoardManager();
+
+	bool PlayCard(CardData* data, int slot, int playerIndex);
+
+	void DoAttackPhase();
+	void PerformAttack(ActiveCard* attacker, int targetSlot);
+	void DestroyCard(ActiveCard* card);
+
+	void DisplayBoard();
+
+	int OppositeSide(int side);
+	Player* GetPlayer(int side);
+	ActiveCard* GetSlot(int slot, int side);
+	void SetSlot(int slot, int side, ActiveCard* newCard);
+};
