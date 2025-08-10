@@ -20,4 +20,5 @@ public:
 	void StartTurn();
 
 	bool PlayCard(int cardIndex, int targetSlot);
+	bool FlipCard(int cardSlot);
 };

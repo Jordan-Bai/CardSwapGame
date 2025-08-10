@@ -11,6 +11,18 @@ CardData* ActiveCard::GetData()
 	return m_data;
 }
 
+CreatureData* ActiveCard::GetCurrentFace()
+{
+	if (m_frontActive)
+	{
+		return m_data->frontCreature;
+	}
+	else
+	{
+		return m_data->backCreature;
+	}
+}
+
 int ActiveCard::GetCost()
 {
 	return m_data->cost;
@@ -18,12 +30,17 @@ int ActiveCard::GetCost()
 
 int ActiveCard::GetHP()
 {
-	return m_data->frontCreature->hp - m_damageTaken;
+	return GetCurrentFace()->hp - m_damageTaken;
 }
 
 int ActiveCard::GetAtk()
 {
-	return m_data->frontCreature->atk;
+	return GetCurrentFace()->atk;
+}
+
+int ActiveCard::GetFlipCost()
+{
+	return GetCurrentFace()->fCost;
 }
 
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot

@@ -21,10 +21,12 @@ int main()
 	std::vector<CardData*> cards;
 	for (int i = 0; i < 5; i++)
 	{
-		CreatureData* frontCreature = new CreatureData(i, 1);
+		CreatureData* frontCreature = new CreatureData(i, 1, 1);
 		creatures.push_back(frontCreature);
+		CreatureData* backCreature = new CreatureData(1, i, 1);
+		creatures.push_back(backCreature);
 
-		CardData* newCard = new CardData(1, frontCreature);
+		CardData* newCard = new CardData(1, frontCreature, backCreature);
 		cards.push_back(newCard);
 
 		dealer.m_drawPile.push_back(newCard);
@@ -46,8 +48,19 @@ int main()
 		while (playerInput != "x" && playerInput != "e") // E ends the turn
 		{
 			std::cin >> playerInput;
+			int fIndex = playerInput.find("f");
 			int num1Index = playerInput.find_first_of("0123456789");
-			if (num1Index != std::string::npos)
+			if (fIndex != std::string::npos)
+			{
+				if (num1Index != std::string::npos)
+				{
+					int num = std::stoi(playerInput.substr(num1Index, 1));
+					player.FlipCard(num);
+
+					board.DisplayBoard();
+				}
+			}
+			else if (num1Index != std::string::npos)
 			{
 				int num2Index = playerInput.find_first_of("0123456789", num1Index + 1);
 				if (num1Index != std::string::npos)

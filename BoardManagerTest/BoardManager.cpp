@@ -176,7 +176,7 @@ void BoardManager::DisplayBoard()
 		}
 		else
 		{
-			dealerSide1 += std::to_string(m_side1[i]->GetCost()) + "--";
+			dealerSide1 += "--" + std::to_string(m_side1[i]->GetFlipCost());
 			dealerSide2 += std::to_string(m_side1[i]->GetAtk()) + "-" + std::to_string(m_side1[i]->GetHP());
 		}
 		dealerSide1 += "| ";
@@ -200,7 +200,7 @@ void BoardManager::DisplayBoard()
 		}
 		else
 		{
-			playerSide1 += std::to_string(m_side2[i]->GetCost()) + "--";
+			playerSide1 += "--" + std::to_string(m_side2[i]->GetFlipCost());
 			playerSide2 += std::to_string(m_side2[i]->GetAtk()) + "-" + std::to_string(m_side2[i]->GetHP());
 		}
 		playerSide1 += "| ";
