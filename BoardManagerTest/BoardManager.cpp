@@ -127,6 +127,9 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 		defendingCard->TakeDamage(attacker->GetAtk());
 		if (defendingCard->GetHP() <= 0)
 		{
+			// Do overkill damage 
+			defendingPlayer->m_hp += defendingCard->GetHP();
+
 			DestroyCard(defendingCard);
 		}
 	}
@@ -144,6 +147,16 @@ void BoardManager::DestroyCard(ActiveCard* card)
 	delete card;
 }
 
+void BoardManager::DestroyCard(int slot, int side)
+{
+	ActiveCard* cardToDestroy = GetSlot(slot, side);
+	
+	if (cardToDestroy != nullptr)
+	{
+		DestroyCard(cardToDestroy);
+	}
+}
+
 void BoardManager::DisplayBoard()
 {
 	// Print dealer health
@@ -152,12 +165,21 @@ void BoardManager::DisplayBoard()
 
 	// Print dealer hand
 	//==============================================================
-	std::string dealerHand;
+	//std::string dealerHand;
+	//for (CardData* card : m_player1->m_hand)
+	//{
+	//	dealerHand += " <---> ";
+	//}
+	//std::cout << dealerHand << '\n';
+	std::string dealerHand1;
+	std::string dealerHand2;
 	for (CardData* card : m_player1->m_hand)
 	{
-		dealerHand += " <---> ";
+		CreatureData* frontCreature = card->frontCreature;
+		dealerHand1 += " <" + std::to_string(card->cost) + "--> ";
+		dealerHand2 += " <" + std::to_string(frontCreature->atk) + "-" + std::to_string(frontCreature->hp) + "> ";
 	}
-	std::cout << dealerHand << '\n';
+	std::cout << dealerHand1 << '\n' << dealerHand2 << '\n';
 
 	// Print dealer side
 	//==============================================================
@@ -276,4 +298,10 @@ void BoardManager::SetSlot(int slot, int side, ActiveCard* newCard)
 	{
 		m_side2[slot] = newCard;
 	}
+}
+
+
+int BoardManager::GetSlotCount()
+{
+	return m_slots;
 }

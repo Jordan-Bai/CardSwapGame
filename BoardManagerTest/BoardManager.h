@@ -19,6 +19,7 @@ public:
 	void DoAttackPhase();
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
 	void DestroyCard(ActiveCard* card);
+	void DestroyCard(int slot, int side);
 
 	void DisplayBoard();
 
@@ -26,4 +27,6 @@ public:
 	Player* GetPlayer(int side);
 	ActiveCard* GetSlot(int slot, int side);
 	void SetSlot(int slot, int side, ActiveCard* newCard);
+
+	int GetSlotCount();
 };

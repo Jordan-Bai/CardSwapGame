@@ -45,6 +45,9 @@ public:
 	int GetHP();
 	int GetAtk();
 	int GetFlipCost();
+	int GetDamageTaken();
+
+
 	std::vector<int> GetTargets();
 
 	void TakeDamage(int damage);

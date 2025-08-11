@@ -43,6 +43,11 @@ int ActiveCard::GetFlipCost()
 	return GetCurrentFace()->fCost;
 }
 
+int ActiveCard::GetDamageTaken()
+{
+	return m_damageTaken;
+}
+
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
 {
 	return std::vector<int>(1, m_slot);

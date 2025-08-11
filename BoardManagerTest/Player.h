@@ -8,7 +8,7 @@ class BoardManager;
 class Player
 {
 public:
-	int m_hp = 10;
+	int m_hp = 20;
 	int m_energy;
 	int m_playerIndex;
 	BoardManager* m_boardRef;
@@ -18,6 +18,7 @@ public:
 	std::vector<CardData*> m_hand;
 
 	void StartTurn();
+	bool DrawCard();
 
 	bool PlayCard(int cardIndex, int targetSlot);
 	bool FlipCard(int cardSlot);

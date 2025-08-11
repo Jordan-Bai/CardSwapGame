@@ -127,13 +127,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Behaviour.h" />
     <ClInclude Include="BoardManager.h" />
     <ClInclude Include="Card.h" />
+    <ClInclude Include="DealerAI.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="BoardManager.cpp" />
     <ClCompile Include="Card.cpp" />
+    <ClCompile Include="DealerAI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>

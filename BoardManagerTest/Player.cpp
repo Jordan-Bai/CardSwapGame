@@ -8,6 +8,14 @@ const int MaxHandSize = 5;
 void Player::StartTurn()
 {
 	m_energy = StartingEnergy;
+	while (DrawCard()) // Draw cards till you can't anymore
+	{
+
+	};
+}
+
+bool Player::DrawCard()
+{
 	// Draw a card
 	if (m_hand.size() < MaxHandSize)
 	{
@@ -27,8 +35,11 @@ void Player::StartTurn()
 			CardData* drawnCard = m_drawPile[0];
 			m_hand.push_back(drawnCard);
 			m_drawPile.erase(m_drawPile.begin());
+			return true;
 		}
 	}
+
+	return false;
 }
 
 bool Player::PlayCard(int cardIndex, int targetSlot)
