@@ -66,16 +66,30 @@ bool Player::PlayCard(int cardIndex, int targetSlot)
 
 bool Player::FlipCard(int cardSlot)
 {
-	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
-	if (targetSlot != nullptr)
-	{
-		if (m_energy >= targetSlot->GetFlipCost())
-		{
-			targetSlot->m_frontActive = !targetSlot->m_frontActive;
-			m_energy -= targetSlot->GetFlipCost();
-			return true;
-		}
-	}
+	//ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
+	//if (targetSlot != nullptr)
+	//{
+	//	if (m_energy >= targetSlot->GetFlipCost())
+	//	{
+	//		targetSlot->m_frontActive = !targetSlot->m_frontActive;
+	//		m_energy -= targetSlot->GetFlipCost();
+	//		return true;
+	//	}
+	//}
 
+	//if (m_boardRef->FlipCard(cardSlot, m_playerIndex))
+	//{
+	//	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
+	//	m_energy -= targetSlot->GetFlipCost();
+	//}
+	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
+	if (targetSlot != nullptr && targetSlot->CanFlip())
+	{
+		m_energy -= targetSlot->GetFlipCost();
+		targetSlot->Flip();
+
+		return true;
+	}
+	
 	return false;
 }

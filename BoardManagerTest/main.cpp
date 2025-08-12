@@ -22,6 +22,10 @@ int main()
 		creatures.push_back(backCreature);
 
 		int cost = (stat1 + stat2) / 4;
+		//if (cost == 0)
+		//{
+		//	cost = 1;
+		//}
 
 		CardData* newCard = new CardData(cost, frontCreature, backCreature);
 		cards.push_back(newCard);
@@ -32,13 +36,38 @@ int main()
 
 	BoardManager board(&dealer, &player, 4);
 
+	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
+	//==============================================================
+	if (false)
+	{
+		CreatureData* creature1 = new CreatureData(1, 0, 4);
+		creatures.push_back(creature1);
+		CardData* card1 = new CardData(1, creature1, creature1);
+		cards.push_back(card1);
+
+		CreatureData* creature2 = new CreatureData(2, 2, 4);
+		creatures.push_back(creature2);
+		CardData* card2 = new CardData(1, creature2, creature2);
+		cards.push_back(card2);
+
+		dealer.m_drawPile.clear();
+		dealer.m_hand.push_back(card2);
+
+		board.PlayCard(card1, 0, dealer.m_playerIndex);
+		board.PlayCard(card1, 1, dealer.m_playerIndex);
+		board.PlayCard(card1, 2, dealer.m_playerIndex);
+		board.PlayCard(card1, 3, dealer.m_playerIndex);
+	}
+	//==============================================================
+
 	DealerAI captain(&board, & dealer);
 
 	std::string playerInput = " ";
 
+	//board.DisplayBoard();
+
 	while (playerInput != "x") // X ends the game
 	{
-		//dealer.DrawCard();
 		captain.StartTurn();
 		player.StartTurn();
 		board.DisplayBoard();
@@ -87,6 +116,11 @@ int main()
 
 		board.DoAttackPhase();
 		board.DisplayBoard();
+
+		while (playerInput != "x" && playerInput != "n") // N for next (advance turn)
+		{
+			std::cin >> playerInput;
+		}
 	}
 
 	for (CreatureData* creature : creatures)

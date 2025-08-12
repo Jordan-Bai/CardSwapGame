@@ -1,6 +1,6 @@
 #include "DealerAI.h"
 
-#include "Behaviour.h"
+//#include "Behaviour.h"
 #include <iostream>
 
 const float HealthWeight = 2.0f;
@@ -26,17 +26,66 @@ void DealerAI::StartTurn()
 {
 	m_data->StartTurn();
 
-	CopyBoardData();
+	//CopyBoardData();
+	//
+	//std::vector<Behaviour*> possibleActions = GetPossibleActions();
+	//
+	//// Evaluate each action 
+	////==============================================================
+	//float bestScore = -FLT_MAX;
+	//Behaviour* bestAction = nullptr;
+	//
+	//for (Behaviour* action : possibleActions)
+	//{
+	//	CopyBoardData();
+	//	action->DoAction(m_copyDealer);
+	//
+	//	m_copyBoard->DoAttackPhase();
+	//	float actionScore = EvaluateBoard();
+	//	
+	//	if (actionScore > bestScore)
+	//	{
+	//		bestScore = actionScore;
+	//		bestAction = action;
+	//	}
+	//}
+	//
+	//// After evaluating each action, actually do the best one
+	//if (bestAction == nullptr)
+	//{
+	//	std::cout << "ERROR: Dealer can't do any actions\n";
+	//}
+	//else
+	//{
+	//	bestAction->DoAction(m_data);
+	//}
 
+	std::pair<int, std::vector<Behaviour*>> bestBranch = GetBestBranch(std::vector<Behaviour*>());
+
+	for (Behaviour* action : bestBranch.second)
+	{
+		action->DoAction(m_data);
+	}
+
+	// Delete all actions
+	for (Behaviour* action : bestBranch.second)
+	{
+		delete action;
+	}
+}
+
+std::vector<Behaviour*> DealerAI::GetPossibleActions()
+{
+	int availableEnergy = m_copyDealer->m_energy;
 	std::vector<Behaviour*> possibleActions;
 
 	// Get which slots have cards in them
 	//==============================================================
 	std::vector<int> filledSlots;
 	std::vector<int> emptySlots;
-	for (int i = 0; i < m_boardRef->GetSlotCount(); i++)
+	for (int i = 0; i < m_copyBoard->GetSlotCount(); i++)
 	{
-		ActiveCard* slot = m_boardRef->GetSlot(i, m_data->m_playerIndex);
+		ActiveCard* slot = m_copyBoard->GetSlot(i, m_data->m_playerIndex);
 		if (slot != nullptr)
 		{
 			filledSlots.push_back(i);
@@ -53,8 +102,12 @@ void DealerAI::StartTurn()
 	{
 		for (int slot : emptySlots)
 		{
-			Behaviour* playCardAction = new PlayCard(i, slot);
-			possibleActions.push_back(playCardAction);
+			int cardCost = m_copyDealer->m_hand[i]->cost;
+			if (availableEnergy >= cardCost)
+			{
+				Behaviour* playCardAction = new PlayCard(i, slot, cardCost);
+				possibleActions.push_back(playCardAction);
+			}
 		}
 	}
 
@@ -62,48 +115,95 @@ void DealerAI::StartTurn()
 	//==============================================================
 	for (int slot : filledSlots)
 	{
-		Behaviour* flipCardAction = new FlipCard(slot);
-		possibleActions.push_back(flipCardAction);
-		Behaviour* destroyCardAction = new DestroyCard(slot);
-		possibleActions.push_back(destroyCardAction);
-	}
-
-
-	// Evaluate each action 
-	//==============================================================
-	float bestScore = -FLT_MAX;
-	Behaviour* bestAction = nullptr;
-
-	for (Behaviour* action : possibleActions)
-	{
-		CopyBoardData();
-		action->DoAction(m_copyDealer);
-
-		m_copyBoard->DoAttackPhase();
-		float actionScore = EvaluateBoard();
-		
-		if (actionScore > bestScore)
+		ActiveCard* targetCard = m_copyBoard->GetSlot(slot, m_data->m_playerIndex);
+		int flipCost = targetCard->GetFlipCost();
+		if (targetCard->CanFlip() && availableEnergy >= flipCost)
 		{
-			bestScore = actionScore;
-			bestAction = action;
+			Behaviour* flipCardAction = new FlipCard(slot, flipCost);
+			possibleActions.push_back(flipCardAction);
+		}
+
+
+		// If the card was played this turn, proobably shouldn't be destroyed this turn as well
+		ActiveCard* realCard = m_boardRef->GetSlot(slot, m_data->m_playerIndex);
+		if (realCard != nullptr && realCard->GetData() == targetCard->GetData())
+		{
+			Behaviour* destroyCardAction = new DestroyCard(slot);
+			possibleActions.push_back(destroyCardAction);
 		}
 	}
 
-	// After evaluating each action, actually do the best one
-	if (bestAction == nullptr)
+	return possibleActions;
+}
+
+std::pair<int, std::vector<Behaviour*>> DealerAI::GetBestBranch(std::vector<Behaviour*> parentSequence)
+{
+	//std::cout << "Branch depth: " << parentSequence.size() << '\n';
+
+	// Set board state
+	CopyBoardData();
+	for (Behaviour* action : parentSequence)
 	{
-		std::cout << "ERROR: Dealer can't do any actions\n";
-	}
-	else
-	{
-		bestAction->DoAction(m_data);
+		action->DoAction(m_copyDealer);
 	}
 
-	// Delete all actions
-	for (Behaviour* action : possibleActions)
+	std::vector<Behaviour*> possibleActions = GetPossibleActions();
+
+	// First, evaluate the current action sequence
+	m_copyBoard->DoAttackPhase();
+	float bestScore = EvaluateBoard();
+
+	std::vector<Behaviour*> childSequence;
+	
+	// Then, evaluate all child action sequences
+	for (int i = 0; i < possibleActions.size(); i++)
 	{
-		delete action;
+		std::vector<Behaviour*> totalSequence = parentSequence;
+		totalSequence.push_back(possibleActions[i]);
+		std::pair<int, std::vector<Behaviour*>> branchScore = GetBestBranch(totalSequence);
+
+		if (branchScore.first > bestScore)
+		{
+			bestScore = branchScore.first;
+			
+			// Delete previous best branch
+			for (Behaviour* action : childSequence)
+			{
+				delete action;
+			}
+			childSequence.clear();
+
+			//childSequence = branchScore.second;
+			childSequence.push_back(possibleActions[i]);
+			for (Behaviour* action : branchScore.second)
+			{
+				childSequence.push_back(action);
+			}
+		}
+		else
+		{
+			for (Behaviour* action : branchScore.second)
+			{
+				delete action;
+			}
+			branchScore.second.clear();
+		}
 	}
+
+	//std::vector<Behaviour*> bestSequence = parentSequence;
+	//if (bestActionIndex != -1)
+	//{
+	//	bestSequence.push_back(possibleActions[bestActionIndex]);
+	//}
+	// NEED TO DELETE ACTIONS THAT AREN'T PART OF FINAL PATH
+
+	//std::vector<Behaviour*> bestSequence = parentSequence;
+	//for (Behaviour* action : childSequence)
+	//{
+	//	bestSequence.push_back(action);
+	//}
+
+	return std::pair<int, std::vector<Behaviour*>>(bestScore, childSequence);
 }
 
 
@@ -119,17 +219,23 @@ void DealerAI::CopyBoardData()
 		ActiveCard* cardSide1 = m_boardRef->GetSlot(i, 1);
 		if (cardSide1 != nullptr)
 		{
-			ActiveCard* copyCard = new ActiveCard(cardSide1->GetData(), i, 1);
-			copyCard->m_frontActive = cardSide1->m_frontActive;
-			copyCard->TakeDamage(cardSide1->GetDamageTaken());
+			//ActiveCard* copyCard = new ActiveCard(cardSide1->GetData(), i, 1);
+			//copyCard->m_frontActive = cardSide1->m_frontActive;
+			//copyCard->TakeDamage(cardSide1->GetDamageTaken());
+
+			ActiveCard* copyCard = new ActiveCard(cardSide1);
+
 			m_copyBoard->SetSlot(i, 1, copyCard);
 		}
 		ActiveCard* cardSide2 = m_boardRef->GetSlot(i, 2);
 		if (cardSide2 != nullptr)
 		{
-			ActiveCard* copyCard = new ActiveCard(cardSide2->GetData(), i, 2);
-			copyCard->m_frontActive = cardSide2->m_frontActive;
-			copyCard->TakeDamage(cardSide2->GetDamageTaken());
+			//ActiveCard* copyCard = new ActiveCard(cardSide2->GetData(), i, 2);
+			//copyCard->m_frontActive = cardSide2->m_frontActive;
+			//copyCard->TakeDamage(cardSide2->GetDamageTaken());
+
+			ActiveCard* copyCard = new ActiveCard(cardSide2);
+
 			m_copyBoard->SetSlot(i, 2, copyCard);
 		}
 

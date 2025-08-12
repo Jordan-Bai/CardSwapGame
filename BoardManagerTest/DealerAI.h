@@ -2,6 +2,7 @@
 
 #include "BoardManager.h"
 //class BoardManager;
+#include "Behaviour.h"
 
 class DealerAI
 {
@@ -17,6 +18,8 @@ public:
 	~DealerAI();
 
 	void StartTurn();
+	std::vector<Behaviour*> GetPossibleActions();
+	std::pair<int, std::vector<Behaviour*>> GetBestBranch(std::vector<Behaviour*> parentSequence);
 
 	void CopyBoardData();
 	void CopyPlayerData(Player* copyTarget, Player* copySource);

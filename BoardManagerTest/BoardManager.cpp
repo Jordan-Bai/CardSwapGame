@@ -66,6 +66,17 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 	return true;
 }
 
+//bool BoardManager::FlipCard(int slot, int playerIndex)
+//{
+//	ActiveCard* targetSlot = GetSlot(slot, playerIndex);
+//	if (targetSlot != nullptr)
+//	{
+//		return targetSlot->Flip();
+//	}
+//
+//	return false;
+//}
+
 void BoardManager::DoAttackPhase()
 {
 	// Player's cards attack first

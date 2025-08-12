@@ -6,6 +6,13 @@ ActiveCard::ActiveCard(CardData* data, int slot, int side)
 
 }
 
+ActiveCard::ActiveCard(ActiveCard* other)
+	:m_data(other->m_data), m_slot(other->m_slot), m_side(other->m_side), m_damageTaken(other->m_damageTaken), 
+	m_frontActive(other->m_frontActive), m_flippedThisTurn(other->m_flippedThisTurn)
+{
+
+}
+
 CardData* ActiveCard::GetData()
 {
 	return m_data;
@@ -43,9 +50,20 @@ int ActiveCard::GetFlipCost()
 	return GetCurrentFace()->fCost;
 }
 
+
 int ActiveCard::GetDamageTaken()
 {
 	return m_damageTaken;
+}
+
+bool ActiveCard::GetFrontActive()
+{
+	return m_frontActive;
+}
+
+bool ActiveCard::CanFlip()
+{
+	return !m_flippedThisTurn;
 }
 
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
@@ -56,4 +74,16 @@ std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
 void ActiveCard::TakeDamage(int damage)
 {
 	m_damageTaken += damage;
+}
+
+bool ActiveCard::Flip()
+{
+	if (!m_flippedThisTurn)
+	{
+		m_frontActive = !m_frontActive;
+		m_flippedThisTurn = true;
+		return true;
+	}
+
+	return false;
 }

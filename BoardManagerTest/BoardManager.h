@@ -15,6 +15,7 @@ public:
 	~BoardManager();
 
 	bool PlayCard(CardData* data, int slot, int playerIndex);
+	//bool FlipCard(int slot, int playerIndex);
 
 	void DoAttackPhase();
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
