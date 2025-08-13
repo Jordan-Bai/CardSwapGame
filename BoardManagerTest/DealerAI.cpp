@@ -26,40 +26,6 @@ void DealerAI::StartTurn()
 {
 	m_data->StartTurn();
 
-	//CopyBoardData();
-	//
-	//std::vector<Behaviour*> possibleActions = GetPossibleActions();
-	//
-	//// Evaluate each action 
-	////==============================================================
-	//float bestScore = -FLT_MAX;
-	//Behaviour* bestAction = nullptr;
-	//
-	//for (Behaviour* action : possibleActions)
-	//{
-	//	CopyBoardData();
-	//	action->DoAction(m_copyDealer);
-	//
-	//	m_copyBoard->DoAttackPhase();
-	//	float actionScore = EvaluateBoard();
-	//	
-	//	if (actionScore > bestScore)
-	//	{
-	//		bestScore = actionScore;
-	//		bestAction = action;
-	//	}
-	//}
-	//
-	//// After evaluating each action, actually do the best one
-	//if (bestAction == nullptr)
-	//{
-	//	std::cout << "ERROR: Dealer can't do any actions\n";
-	//}
-	//else
-	//{
-	//	bestAction->DoAction(m_data);
-	//}
-
 	std::pair<int, std::vector<Behaviour*>> bestBranch = GetBestBranch(std::vector<Behaviour*>());
 
 	for (Behaviour* action : bestBranch.second)
@@ -133,6 +99,28 @@ std::vector<Behaviour*> DealerAI::GetPossibleActions()
 		}
 	}
 
+	// Create "Swap Slots" actions - CURRENTLY DISABLED FOR PERFORMANCE
+	//==============================================================
+	//if (availableEnergy >= CostToSwap)
+	//{
+	//	for (int i = 0; i < filledSlots.size(); i++)
+	//	{
+	//		// Swaping this slot with an empty slot
+	//		for (int slot : emptySlots)
+	//		{
+	//			Behaviour* swapSlotsAction = new SwapSlots(filledSlots[i], slot);
+	//			possibleActions.push_back(swapSlotsAction);
+	//		}
+	//
+	//		// Swapping this slot with another filled slot (making sure not to make 2 behaviours for each of these)
+	//		for (int j = i + 1; j < filledSlots.size(); j++)
+	//		{
+	//			Behaviour* swapSlotsAction = new SwapSlots(filledSlots[i], filledSlots[j]);
+	//			possibleActions.push_back(swapSlotsAction);
+	//		}
+	//	}
+	//}
+
 	return possibleActions;
 }
 
@@ -190,19 +178,6 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::GetBestBranch(std::vector<Beha
 		}
 	}
 
-	//std::vector<Behaviour*> bestSequence = parentSequence;
-	//if (bestActionIndex != -1)
-	//{
-	//	bestSequence.push_back(possibleActions[bestActionIndex]);
-	//}
-	// NEED TO DELETE ACTIONS THAT AREN'T PART OF FINAL PATH
-
-	//std::vector<Behaviour*> bestSequence = parentSequence;
-	//for (Behaviour* action : childSequence)
-	//{
-	//	bestSequence.push_back(action);
-	//}
-
 	return std::pair<int, std::vector<Behaviour*>>(bestScore, childSequence);
 }
 
@@ -219,10 +194,6 @@ void DealerAI::CopyBoardData()
 		ActiveCard* cardSide1 = m_boardRef->GetSlot(i, 1);
 		if (cardSide1 != nullptr)
 		{
-			//ActiveCard* copyCard = new ActiveCard(cardSide1->GetData(), i, 1);
-			//copyCard->m_frontActive = cardSide1->m_frontActive;
-			//copyCard->TakeDamage(cardSide1->GetDamageTaken());
-
 			ActiveCard* copyCard = new ActiveCard(cardSide1);
 
 			m_copyBoard->SetSlot(i, 1, copyCard);
@@ -230,10 +201,6 @@ void DealerAI::CopyBoardData()
 		ActiveCard* cardSide2 = m_boardRef->GetSlot(i, 2);
 		if (cardSide2 != nullptr)
 		{
-			//ActiveCard* copyCard = new ActiveCard(cardSide2->GetData(), i, 2);
-			//copyCard->m_frontActive = cardSide2->m_frontActive;
-			//copyCard->TakeDamage(cardSide2->GetDamageTaken());
-
 			ActiveCard* copyCard = new ActiveCard(cardSide2);
 
 			m_copyBoard->SetSlot(i, 2, copyCard);

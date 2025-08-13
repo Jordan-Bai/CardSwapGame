@@ -2,8 +2,9 @@
 
 #include "BoardManager.h"
 
-const int StartingEnergy = 3;
-const int MaxHandSize = 5;
+//const int StartingEnergy = 3;
+//const int MaxHandSize = 5;
+//const int CostToSwap = 1;
 
 void Player::StartTurn()
 {
@@ -66,24 +67,8 @@ bool Player::PlayCard(int cardIndex, int targetSlot)
 
 bool Player::FlipCard(int cardSlot)
 {
-	//ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
-	//if (targetSlot != nullptr)
-	//{
-	//	if (m_energy >= targetSlot->GetFlipCost())
-	//	{
-	//		targetSlot->m_frontActive = !targetSlot->m_frontActive;
-	//		m_energy -= targetSlot->GetFlipCost();
-	//		return true;
-	//	}
-	//}
-
-	//if (m_boardRef->FlipCard(cardSlot, m_playerIndex))
-	//{
-	//	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
-	//	m_energy -= targetSlot->GetFlipCost();
-	//}
 	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
-	if (targetSlot != nullptr && targetSlot->CanFlip())
+	if (targetSlot != nullptr && targetSlot->CanFlip() && m_energy >= targetSlot->GetFlipCost())
 	{
 		m_energy -= targetSlot->GetFlipCost();
 		targetSlot->Flip();
@@ -91,5 +76,20 @@ bool Player::FlipCard(int cardSlot)
 		return true;
 	}
 	
+	return false;
+}
+
+bool Player::SwapCards(int slot1, int slot2)
+{
+	ActiveCard* target1 = m_boardRef->GetSlot(slot1, m_playerIndex);
+	ActiveCard* target2 = m_boardRef->GetSlot(slot2, m_playerIndex);
+
+	if ((target1 != nullptr || target2 != nullptr) && m_energy >= CostToSwap)
+	{
+		m_energy -= CostToSwap;
+		m_boardRef->SetSlot(slot2, m_playerIndex, target1);
+		m_boardRef->SetSlot(slot1, m_playerIndex, target2);
+	}
+
 	return false;
 }

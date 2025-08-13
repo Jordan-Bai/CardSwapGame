@@ -5,6 +5,10 @@
 
 class BoardManager;
 
+const int StartingEnergy = 3;
+const int MaxHandSize = 5;
+const int CostToSwap = 1;
+
 class Player
 {
 public:
@@ -22,4 +26,5 @@ public:
 
 	bool PlayCard(int cardIndex, int targetSlot);
 	bool FlipCard(int cardSlot);
+	bool SwapCards(int slot1, int slot2);
 };

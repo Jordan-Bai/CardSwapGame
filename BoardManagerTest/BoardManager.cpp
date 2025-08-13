@@ -94,7 +94,8 @@ void BoardManager::DoAttackPhase()
 
 	if (m_player1->m_hp <= 0) // If the dealer is dead
 	{
-		// TODO: End game when participant dies
+		m_gameShouldEnd = true;
+		return;
 	}
 
 	// Dealer's cards attack second
@@ -112,7 +113,7 @@ void BoardManager::DoAttackPhase()
 
 	if (m_player2->m_hp <= 0) // If the player is dead
 	{
-		// TODO: End game when participant dies
+		m_gameShouldEnd = true;
 	}
 }
 
@@ -309,10 +310,20 @@ void BoardManager::SetSlot(int slot, int side, ActiveCard* newCard)
 	{
 		m_side2[slot] = newCard;
 	}
+
+	if (newCard != nullptr)
+	{
+		newCard->m_slot = slot;
+	}
 }
 
 
 int BoardManager::GetSlotCount()
 {
 	return m_slots;
+}
+
+bool BoardManager::ShouldGameEnd()
+{
+	return m_gameShouldEnd;
 }

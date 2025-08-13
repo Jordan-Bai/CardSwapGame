@@ -10,6 +10,8 @@ class BoardManager
 	Player* m_player1;
 	Player* m_player2;
 
+	bool m_gameShouldEnd = false;
+
 public:
 	BoardManager(Player* dealer, Player* player, int slotsPerSide);
 	~BoardManager();
@@ -30,4 +32,5 @@ public:
 	void SetSlot(int slot, int side, ActiveCard* newCard);
 
 	int GetSlotCount();
+	bool ShouldGameEnd();
 };

@@ -17,3 +17,8 @@ void DestroyCard::DoAction(Player* playerRef)
 {
 	playerRef->m_boardRef->DestroyCard(m_target, playerRef->m_playerIndex);
 }
+
+void SwapSlots::DoAction(Player* playerRef)
+{
+	playerRef->SwapCards(m_target1, m_target2);
+}
