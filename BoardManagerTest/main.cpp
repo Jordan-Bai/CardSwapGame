@@ -5,8 +5,8 @@
 
 int main()
 {
-	//srand(2);
-	srand(time(0));
+	srand(2);
+	//srand(time(0));
 
 	Player dealer;
 	Player player;
