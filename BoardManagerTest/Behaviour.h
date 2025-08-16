@@ -2,6 +2,9 @@
 
 //#include "BoardManager.h"
 //#include "Player.h"
+
+extern int behaviours;
+
 class Player;
 
 class Behaviour
@@ -9,11 +12,14 @@ class Behaviour
 protected:
 	//int m_cost;
 public:
+	Behaviour();
+	virtual ~Behaviour();
 	virtual void DoAction(Player* playerRef) = 0;
 };
 
 class PlayCard : public Behaviour
 {
+public:
 	int m_card;
 	int m_target;
 public:
@@ -28,6 +34,7 @@ public:
 
 class FlipCard : public Behaviour
 {
+public:
 	int m_target;
 public:
 	FlipCard(int targetSlot, int flipCost)

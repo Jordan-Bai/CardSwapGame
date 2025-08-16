@@ -14,6 +14,9 @@ class BoardManager
 
 public:
 	BoardManager(Player* dealer, Player* player, int slotsPerSide);
+	//rule oof 3
+	BoardManager(const BoardManager& ref) = delete; //copy constructor
+	BoardManager& operator=(const BoardManager& ref) = delete; //assignment operator
 	~BoardManager();
 
 	bool PlayCard(CardData* data, int slot, int playerIndex);

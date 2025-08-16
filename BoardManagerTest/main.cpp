@@ -39,7 +39,7 @@ int main()
 
 	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
 	//==============================================================
-	if (false)
+	if (true)
 	{
 		CreatureData* creature1 = new CreatureData(1, 5, 4);
 		creatures.push_back(creature1);
@@ -57,10 +57,12 @@ int main()
 		cards.push_back(card3);
 
 		dealer.m_drawPile.clear();
-		//dealer.m_hand.push_back(card2);
+		dealer.m_hand.push_back(card2);
 
+		//board.PlayCard(card1, 0, dealer.m_playerIndex);
 		board.PlayCard(card1, 1, dealer.m_playerIndex);
 		board.PlayCard(card2, 2, dealer.m_playerIndex);
+		//board.PlayCard(card1, 3, dealer.m_playerIndex);
 		board.PlayCard(card3, 1, player.m_playerIndex);
 	}
 	//==============================================================
@@ -71,9 +73,27 @@ int main()
 
 	//board.DisplayBoard();
 
+	// FOR TESTING MEMORY LEAK
+	//==============================================================
+	dealer.StartTurn();
+	for (int i = 0; i < 1; i++)
+	{
+		//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
+		//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
+		captain.StartTurn();
+		//captain.CopyBoardData();
+	
+		//board.PlayCard(cards[0], 1, 1);
+		//board.DestroyCard(1, 1);
+	}
+	board.DisplayBoard();
+
+	std::cout << "B: " << behaviours << '\n';
+	//==============================================================
+
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
-		captain.StartTurn();
+		//captain.StartTurn();
 		player.StartTurn();
 		board.DisplayBoard();
 
