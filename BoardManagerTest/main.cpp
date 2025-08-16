@@ -5,8 +5,8 @@
 
 int main()
 {
-	srand(2);
-	//srand(time(0));
+	//srand(2);
+	srand(time(0));
 
 	Player dealer;
 	Player player;
@@ -36,10 +36,11 @@ int main()
 	}
 
 	BoardManager board(&dealer, &player, 4);
+	DealerAI captain(&board, &dealer);
 
 	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
 	//==============================================================
-	if (true)
+	if (false)
 	{
 		CreatureData* creature1 = new CreatureData(1, 5, 4);
 		creatures.push_back(creature1);
@@ -67,33 +68,32 @@ int main()
 	}
 	//==============================================================
 
-	DealerAI captain(&board, & dealer);
+	// FOR TESTING MEMORY LEAK
+	//==============================================================
+	if (false)
+	{
+		dealer.StartTurn();
+		for (int i = 0; i < 50; i++)
+		{
+			//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
+			//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
+			captain.StartTurn();
+			//captain.CopyBoardData();
+
+			//board.PlayCard(cards[0], 1, 1);
+			//board.DestroyCard(1, 1);
+		}
+		//board.DisplayBoard();
+
+		std::cout << "B: " << behaviours << '\n';
+	}
+	//==============================================================
 
 	std::string playerInput = " ";
 
-	//board.DisplayBoard();
-
-	// FOR TESTING MEMORY LEAK
-	//==============================================================
-	dealer.StartTurn();
-	for (int i = 0; i < 1; i++)
-	{
-		//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
-		//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
-		captain.StartTurn();
-		//captain.CopyBoardData();
-	
-		//board.PlayCard(cards[0], 1, 1);
-		//board.DestroyCard(1, 1);
-	}
-	board.DisplayBoard();
-
-	std::cout << "B: " << behaviours << '\n';
-	//==============================================================
-
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
-		//captain.StartTurn();
+		captain.StartTurn();
 		player.StartTurn();
 		board.DisplayBoard();
 

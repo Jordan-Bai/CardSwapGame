@@ -290,6 +290,12 @@ Player* BoardManager::GetPlayer(int side)
 
 ActiveCard* BoardManager::GetSlot(int slot, int side)
 {
+	if (slot < 0 || slot >= m_slots)
+	{
+		std::cout << "ERROR: Accessing slot out of range (BoardManager::GetSlot)\n";
+		return nullptr;
+	}
+
 	if (side == 1)
 	{
 		return m_side1[slot];
@@ -302,6 +308,12 @@ ActiveCard* BoardManager::GetSlot(int slot, int side)
 
 void BoardManager::SetSlot(int slot, int side, ActiveCard* newCard)
 {
+	if (slot < 0 || slot >= m_slots)
+	{
+		std::cout << "ERROR: Accessing slot out of range (BoardManager::SetSlot)\n";
+		return;
+	}
+
 	if (side == 1)
 	{
 		m_side1[slot] = newCard;
