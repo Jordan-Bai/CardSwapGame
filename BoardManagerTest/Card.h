@@ -58,4 +58,6 @@ public:
 
 	void TakeDamage(int damage);
 	bool Flip(); // Should this return a bool since Player.FlipCard() already uses CanFlip()?
+
+	void OnStartTurn();
 };

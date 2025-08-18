@@ -25,6 +25,7 @@ void SwapSlots::DoAction(Player* playerRef)
 	playerRef->SwapCards(m_target1, m_target2);
 }
 
+// FOR TESTING MEMORY LEAK
 Behaviour::Behaviour()
 {
 	behaviours++;

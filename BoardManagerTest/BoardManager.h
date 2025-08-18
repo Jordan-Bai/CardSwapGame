@@ -14,13 +14,14 @@ class BoardManager
 
 public:
 	BoardManager(Player* dealer, Player* player, int slotsPerSide);
-	//rule oof 3
+	// Rule of 3
 	BoardManager(const BoardManager& ref) = delete; //copy constructor
 	BoardManager& operator=(const BoardManager& ref) = delete; //assignment operator
 	~BoardManager();
 
 	bool PlayCard(CardData* data, int slot, int playerIndex);
-	//bool FlipCard(int slot, int playerIndex);
+	bool FlipCard(int slot, int playerIndex);
+	bool FlipCard(ActiveCard* card);
 
 	void DoAttackPhase();
 	void PerformAttack(ActiveCard* attacker, int targetSlot);

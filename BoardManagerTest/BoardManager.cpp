@@ -66,16 +66,44 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 	return true;
 }
 
-//bool BoardManager::FlipCard(int slot, int playerIndex)
-//{
-//	ActiveCard* targetSlot = GetSlot(slot, playerIndex);
-//	if (targetSlot != nullptr)
-//	{
-//		return targetSlot->Flip();
-//	}
-//
-//	return false;
-//}
+bool BoardManager::FlipCard(int slot, int playerIndex)
+{
+	ActiveCard* targetSlot = GetSlot(slot, playerIndex);
+	//if (targetSlot != nullptr)
+	//{
+	//	//return targetSlot->Flip();
+	//	if (targetSlot->Flip())
+	//	{
+	//		if (targetSlot->GetHP() <= 0)
+	//		{
+	//			DestroyCard(targetSlot);
+	//		}
+	//
+	//		return true;
+	//	}
+	//}
+	//
+	//return false;
+	return FlipCard(targetSlot);
+}
+
+bool BoardManager::FlipCard(ActiveCard* card)
+{
+	if (card != nullptr)
+	{
+		if (card->Flip())
+		{
+			if (card->GetHP() <= 0)
+			{
+				DestroyCard(card);
+			}
+
+			return true;
+		}
+	}
+
+	return false;
+}
 
 void BoardManager::DoAttackPhase()
 {

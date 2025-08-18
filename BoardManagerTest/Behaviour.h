@@ -9,8 +9,6 @@ class Player;
 
 class Behaviour
 {
-protected:
-	//int m_cost;
 public:
 	Behaviour();
 	virtual ~Behaviour();
@@ -26,7 +24,6 @@ public:
 	PlayCard(int cardToPlay, int targetSlot, int cardCost)
 		: m_card(cardToPlay), m_target(targetSlot)
 	{
-		//m_cost = cardCost;
 	}
 
 	void DoAction(Player* playerRef) override;
@@ -40,7 +37,6 @@ public:
 	FlipCard(int targetSlot, int flipCost)
 		: m_target(targetSlot)
 	{
-		//m_cost = flipCost;
 	}
 
 	void DoAction(Player* playerRef) override;
@@ -53,7 +49,6 @@ public:
 	DestroyCard(int targetSlot)
 		: m_target(targetSlot)
 	{
-		//m_cost = 0;
 	}
 
 	void DoAction(Player* playerRef) override;
@@ -67,7 +62,6 @@ public:
 	SwapSlots(int slot1, int slot2)
 		: m_target1(slot1), m_target2(slot2)
 	{
-		//m_cost = 0;
 	}
 
 	void DoAction(Player* playerRef) override;

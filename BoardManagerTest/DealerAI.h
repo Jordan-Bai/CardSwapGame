@@ -15,12 +15,13 @@ class DealerAI
 
 public:
 	DealerAI(BoardManager* board, Player* playerData);
+	// Rule of 3
+	DealerAI(const DealerAI& ref) = delete; //copy constructor
+	DealerAI& operator=(const DealerAI& ref) = delete; //assignment operator
 	~DealerAI();
 
 	void StartTurn();
 	std::vector<Behaviour*> GetPossibleActions();
-		//<<<<<<< HEAD
-		//std::pair<int, std::vector<Behaviour*>> GetBestBranch(std::vector<Behaviour*> parentSequence);
 	// OPTIMIZATION V1
 	//==============================================================
 	std::vector<Behaviour*> GetDestroyActions();
@@ -28,12 +29,11 @@ public:
 	std::vector<Behaviour*> GetFlipActions();
 	std::vector<Behaviour*> GetSwapActions();
 
-	std::pair<int, std::vector<Behaviour*>> CheckDestroyPhase(std::vector<Behaviour*> parentSequence);
-	std::pair<int, std::vector<Behaviour*>> CheckPlacePhase(std::vector<Behaviour*> parentSequence);
-	std::pair<int, std::vector<Behaviour*>> CheckFlipPhase(std::vector<Behaviour*> parentSequence);
-	std::pair<int, std::vector<Behaviour*>> CheckSwapPhase(std::vector<Behaviour*> parentSequence);
+	std::pair<float, std::vector<Behaviour*>> CheckDestroyPhase(std::vector<Behaviour*> parentSequence);
+	std::pair<float, std::vector<Behaviour*>> CheckPlacePhase(std::vector<Behaviour*> parentSequence);
+	std::pair<float, std::vector<Behaviour*>> CheckFlipPhase(std::vector<Behaviour*> parentSequence);
+	std::pair<float, std::vector<Behaviour*>> CheckSwapPhase(std::vector<Behaviour*> parentSequence);
 	//==============================================================
-		//=======
 	std::pair<float, std::vector<Behaviour*>> GetBestBranch(std::vector<Behaviour*> parentSequence);
 	// OPTIMIZATION V2
 	//==============================================================
@@ -48,7 +48,6 @@ public:
 	//==============================================================
 
 	std::pair<float, std::vector<Behaviour*>> BestBranch(std::pair<float, std::vector<Behaviour*>> branch1, std::pair<float, std::vector<Behaviour*>> branch2);
-		//>>>>>>> origin/Optimization
 
 	void CopyBoardData();
 	void CopyPlayerData(Player* copyTarget, Player* copySource);

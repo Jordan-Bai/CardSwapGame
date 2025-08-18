@@ -5,7 +5,7 @@
 #include <string>
 
 const float HealthWeight = 2.0f;
-const float CardWeight = 0.5f;
+const float CardWeight = 0.4f;
 
 int branchCount = 0;
 
@@ -32,10 +32,11 @@ void DealerAI::StartTurn()
 	branchCount = 0;
 
 	//std::pair<int, std::vector<Behaviour*>> bestBranch = GetBestBranch(std::vector<Behaviour*>());
-	//std::pair<int, std::vector<Behaviour*>> bestBranch = CheckDestroyPhase(std::vector<Behaviour*>());
+	//std::pair<float, std::vector<Behaviour*>> bestBranch = CheckDestroyPhase(std::vector<Behaviour*>());
 	std::pair<float, std::vector<Behaviour*>> bestBranch = CheckDestroyPhase(std::vector<Behaviour*>(), 0);
 
-	std::cout << branchCount << '\n';
+	//std::cout << "Branches: " << branchCount << '\n';
+	//std::cout << "Score: " << bestBranch.first << '\n';
 
 	for (Behaviour* action : bestBranch.second)
 	{
@@ -303,7 +304,7 @@ std::vector<Behaviour*> DealerAI::GetSwapActions()
 }
 
 
-std::pair<int, std::vector<Behaviour*>> DealerAI::CheckDestroyPhase(std::vector<Behaviour*> parentSequence)
+std::pair<float, std::vector<Behaviour*>> DealerAI::CheckDestroyPhase(std::vector<Behaviour*> parentSequence)
 {
 	CopyBoardData();
 	for (Behaviour* action : parentSequence)
@@ -314,7 +315,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckDestroyPhase(std::vector<
 	std::vector<Behaviour*> possibleActions = GetDestroyActions();
 
 	// First, evaluate moving on to the next phase
-	std::pair<int, std::vector<Behaviour*>> branchScore = CheckPlacePhase(parentSequence);
+	std::pair<float, std::vector<Behaviour*>> branchScore = CheckPlacePhase(parentSequence);
 
 	float bestScore = branchScore.first;
 	std::vector<Behaviour*> childSequence = branchScore.second;
@@ -325,7 +326,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckDestroyPhase(std::vector<
 	{
 		std::vector<Behaviour*> totalSequence = parentSequence;
 		totalSequence.push_back(possibleActions[i]);
-		std::pair<int, std::vector<Behaviour*>> branchScore = CheckDestroyPhase(totalSequence);
+		branchScore = CheckDestroyPhase(totalSequence);
 
 		if (branchScore.first > bestScore)
 		{
@@ -351,10 +352,10 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckDestroyPhase(std::vector<
 		}
 	}
 
-	return std::pair<int, std::vector<Behaviour*>>(bestScore, childSequence);
+	return std::pair<float, std::vector<Behaviour*>>(bestScore, childSequence);
 }
 
-std::pair<int, std::vector<Behaviour*>> DealerAI::CheckPlacePhase(std::vector<Behaviour*> parentSequence)
+std::pair<float, std::vector<Behaviour*>> DealerAI::CheckPlacePhase(std::vector<Behaviour*> parentSequence)
 {
 	CopyBoardData();
 	for (Behaviour* action : parentSequence)
@@ -365,7 +366,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckPlacePhase(std::vector<Be
 	std::vector<Behaviour*> possibleActions = GetPlaceActions();
 
 	// First, evaluate moving on to the next phase
-	std::pair<int, std::vector<Behaviour*>> branchScore = CheckFlipPhase(parentSequence);
+	std::pair<float, std::vector<Behaviour*>> branchScore = CheckFlipPhase(parentSequence);
 
 	float bestScore = branchScore.first;
 	std::vector<Behaviour*> childSequence = branchScore.second;
@@ -376,7 +377,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckPlacePhase(std::vector<Be
 	{
 		std::vector<Behaviour*> totalSequence = parentSequence;
 		totalSequence.push_back(possibleActions[i]);
-		std::pair<int, std::vector<Behaviour*>> branchScore = CheckPlacePhase(totalSequence);
+		branchScore = CheckPlacePhase(totalSequence);
 
 		if (branchScore.first > bestScore)
 		{
@@ -402,10 +403,10 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckPlacePhase(std::vector<Be
 		}
 	}
 
-	return std::pair<int, std::vector<Behaviour*>>(bestScore, childSequence);
+	return std::pair<float, std::vector<Behaviour*>>(bestScore, childSequence);
 }
 
-std::pair<int, std::vector<Behaviour*>> DealerAI::CheckFlipPhase(std::vector<Behaviour*> parentSequence)
+std::pair<float, std::vector<Behaviour*>> DealerAI::CheckFlipPhase(std::vector<Behaviour*> parentSequence)
 {
 	CopyBoardData();
 	for (Behaviour* action : parentSequence)
@@ -416,7 +417,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckFlipPhase(std::vector<Beh
 	std::vector<Behaviour*> possibleActions = GetFlipActions();
 
 	// First, evaluate moving on to the next phase
-	std::pair<int, std::vector<Behaviour*>> branchScore = CheckSwapPhase(parentSequence);
+	std::pair<float, std::vector<Behaviour*>> branchScore = CheckSwapPhase(parentSequence);
 	
 	float bestScore = branchScore.first;
 	std::vector<Behaviour*> childSequence = branchScore.second;
@@ -432,7 +433,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckFlipPhase(std::vector<Beh
 	{
 		std::vector<Behaviour*> totalSequence = parentSequence;
 		totalSequence.push_back(possibleActions[i]);
-		std::pair<int, std::vector<Behaviour*>> branchScore = CheckFlipPhase(totalSequence);
+		branchScore = CheckFlipPhase(totalSequence);
 
 		if (branchScore.first > bestScore)
 		{
@@ -458,11 +459,10 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckFlipPhase(std::vector<Beh
 		}
 	}
 
-	//branchCount++;
-	return std::pair<int, std::vector<Behaviour*>>(bestScore, childSequence);
+	return std::pair<float, std::vector<Behaviour*>>(bestScore, childSequence);
 }
 
-std::pair<int, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<Behaviour*> parentSequence)
+std::pair<float, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<Behaviour*> parentSequence)
 {
 	CopyBoardData();
 	for (Behaviour* action : parentSequence)
@@ -483,7 +483,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<Beh
 	{
 		std::vector<Behaviour*> totalSequence = parentSequence;
 		totalSequence.push_back(possibleActions[i]);
-		std::pair<int, std::vector<Behaviour*>> branchScore = CheckSwapPhase(totalSequence);
+		std::pair<float, std::vector<Behaviour*>> branchScore = CheckSwapPhase(totalSequence);
 
 		if (branchScore.first > bestScore)
 		{
@@ -509,8 +509,7 @@ std::pair<int, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<Beh
 		}
 	}
 
-	//branchCount++;
-	return std::pair<int, std::vector<Behaviour*>>(bestScore, childSequence);
+	return std::pair<float, std::vector<Behaviour*>>(bestScore, childSequence);
 }
 //==============================================================
 
@@ -591,52 +590,41 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::CheckDestroyPhase(std::vecto
 	float bestScore = 0;
 	std::vector<Behaviour*> childSequence;
 
-	// Check if this should move on to the next phase
-	//if (slot >= m_copyBoard->GetSlotCount())
-	//{
-	//	std::pair<float, std::vector<Behaviour*>> branchScore = CheckPlacePhase(parentSequence, 0);
-	//	bestScore = branchScore.first;
-	//	childSequence = branchScore.second;
-	//}
-	//else
+	// First, evaluate skipping this slot
+	std::pair<float, std::vector<Behaviour*>> branchScore = CheckDestroyPhase(parentSequence, slot + 1);
+	bestScore = branchScore.first;
+	childSequence = branchScore.second;
+
+	// Then, evaluate all actions for this slot
+	for (int i = 0; i < possibleActions.size(); i++)
 	{
-		// First, evaluate skipping this slot
-		std::pair<float, std::vector<Behaviour*>> branchScore = CheckDestroyPhase(parentSequence, slot + 1);
-		bestScore = branchScore.first;
-		childSequence = branchScore.second;
+		std::vector<Behaviour*> totalSequence = parentSequence;
+		totalSequence.push_back(possibleActions[i]);
+		branchScore = CheckDestroyPhase(totalSequence, slot + 1);
 
-		// Then, evaluate all actions for this slot
-		//std::vector<Behaviour*> possibleActions = GetDestroyActions(slot);
-		for (int i = 0; i < possibleActions.size(); i++)
+		if (branchScore.first > bestScore)
 		{
-			std::vector<Behaviour*> totalSequence = parentSequence;
-			totalSequence.push_back(possibleActions[i]);
-			branchScore = CheckDestroyPhase(totalSequence, slot + 1);
+			bestScore = branchScore.first;
 
-			if (branchScore.first > bestScore)
+			// Delete previous best branch
+			for (Behaviour* action : childSequence)
 			{
-				bestScore = branchScore.first;
-
-				// Delete previous best branch
-				for (Behaviour* action : childSequence)
-				{
-					delete action;
-				}
-				childSequence.clear();
-
-				childSequence = branchScore.second;
-				childSequence.insert(childSequence.begin(), possibleActions[i]);
+				delete action;
 			}
-			else
+			childSequence.clear();
+
+			childSequence = branchScore.second;
+			childSequence.insert(childSequence.begin(), possibleActions[i]);
+		}
+		else
+		{
+			for (Behaviour* action : branchScore.second)
 			{
-				for (Behaviour* action : branchScore.second)
-				{
-					delete action;
-				}
-				branchScore.second.clear();
-
-				delete possibleActions[i];
+				delete action;
 			}
+			branchScore.second.clear();
+
+			delete possibleActions[i];
 		}
 	}
 
@@ -660,51 +648,41 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::CheckPlacePhase(std::vector<
 	float bestScore = -FLT_MAX;
 	std::vector<Behaviour*> childSequence;
 
-	//if (slot >= m_copyBoard->GetSlotCount())
-	//{
-	//	std::pair<float, std::vector<Behaviour*>> branchScore = CheckFlipPhase(parentSequence, 0);
-	//	bestScore = branchScore.first;
-	//	childSequence = branchScore.second;
-	//}
-	//else
-	{
-		// First, evaluate skipping this slot
-		std::pair<float, std::vector<Behaviour*>> branchScore = CheckPlacePhase(parentSequence, slot + 1);
-		bestScore = branchScore.first;
-		childSequence = branchScore.second;
-		
-		// Then, evaluate all actions for this slot
-		//std::vector<Behaviour*> possibleActions = GetPlaceActions(slot);
-		for (int i = 0; i < possibleActions.size(); i++)
-		{
-			std::vector<Behaviour*> totalSequence = parentSequence;
-			totalSequence.push_back(possibleActions[i]); // POSSIBLE ACTIONS NOT BEING DELETED PROPERLY
-			branchScore = CheckPlacePhase(totalSequence, slot + 1);
-		
-			if (branchScore.first > bestScore)
-			{
-				bestScore = branchScore.first;
-		
-				// Delete previous best branch
-				for (Behaviour* action : childSequence)
-				{
-					delete action;
-				}
-				childSequence.clear();
-		
-				childSequence = branchScore.second;
-				childSequence.insert(childSequence.begin(), possibleActions[i]);
-			}
-			else
-			{
-				for (Behaviour* action : branchScore.second)
-				{
-					delete action;
-				}
-				branchScore.second.clear();
+	// First, evaluate skipping this slot
+	std::pair<float, std::vector<Behaviour*>> branchScore = CheckPlacePhase(parentSequence, slot + 1);
+	bestScore = branchScore.first;
+	childSequence = branchScore.second;
 
-				delete possibleActions[i];
+	// Then, evaluate all actions for this slot
+	for (int i = 0; i < possibleActions.size(); i++)
+	{
+		std::vector<Behaviour*> totalSequence = parentSequence;
+		totalSequence.push_back(possibleActions[i]); // POSSIBLE ACTIONS NOT BEING DELETED PROPERLY
+		branchScore = CheckPlacePhase(totalSequence, slot + 1);
+
+		if (branchScore.first > bestScore)
+		{
+			bestScore = branchScore.first;
+
+			// Delete previous best branch
+			for (Behaviour* action : childSequence)
+			{
+				delete action;
 			}
+			childSequence.clear();
+
+			childSequence = branchScore.second;
+			childSequence.insert(childSequence.begin(), possibleActions[i]);
+		}
+		else
+		{
+			for (Behaviour* action : branchScore.second)
+			{
+				delete action;
+			}
+			branchScore.second.clear();
+
+			delete possibleActions[i];
 		}
 	}
 
@@ -804,22 +782,6 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::CheckFlipPhase(std::vector<B
 
 std::pair<float, std::vector<Behaviour*>> DealerAI::BestBranch(std::pair<float, std::vector<Behaviour*>> branch1, std::pair<float, std::vector<Behaviour*>> branch2)
 {
-	//std::pair<float, std::vector<Behaviour*>> betterBranch = branch1;
-	//std::vector<Behaviour*> branchToDelete = branch2.second;
-	//if (branch2.first > branch1.first)
-	//{
-	//	betterBranch = branch2;
-	//	branchToDelete = branch1.second;
-	//}
-	//
-	//for (Behaviour* action : branchToDelete)
-	//{
-	//	delete action;
-	//}
-	//branchToDelete.clear();
-	//
-	//return betterBranch;
-
 	if (branch1.first > branch2.first)
 	{
 		for (Behaviour* action : branch2.second)

@@ -13,6 +13,7 @@ ActiveCard::ActiveCard(ActiveCard* other)
 
 }
 
+
 CardData* ActiveCard::GetData()
 {
 	return m_data;
@@ -78,7 +79,7 @@ void ActiveCard::TakeDamage(int damage)
 
 bool ActiveCard::Flip()
 {
-	if (!m_flippedThisTurn)
+	if (CanFlip())
 	{
 		m_frontActive = !m_frontActive;
 		m_flippedThisTurn = true;
@@ -86,4 +87,9 @@ bool ActiveCard::Flip()
 	}
 
 	return false;
+}
+
+void ActiveCard::OnStartTurn()
+{
+	m_flippedThisTurn = false;
 }

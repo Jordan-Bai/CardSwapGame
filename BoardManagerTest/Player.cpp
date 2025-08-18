@@ -13,6 +13,16 @@ void Player::StartTurn()
 	{
 
 	};
+
+	// Reset whether each card was flipped this turn
+	for (int i = 0; i < m_boardRef->GetSlotCount(); i++)
+	{
+		ActiveCard* card = m_boardRef->GetSlot(i, m_playerIndex);
+		if (card != nullptr)
+		{
+			card->OnStartTurn();
+		}
+	}
 }
 
 bool Player::DrawCard()
@@ -68,12 +78,16 @@ bool Player::PlayCard(int cardIndex, int targetSlot)
 bool Player::FlipCard(int cardSlot)
 {
 	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
-	if (targetSlot != nullptr && targetSlot->CanFlip() && m_energy >= targetSlot->GetFlipCost())
-	{
-		m_energy -= targetSlot->GetFlipCost();
-		targetSlot->Flip();
 
-		return true;
+	if (targetSlot != nullptr)
+	{
+		int cost = targetSlot->GetFlipCost();
+
+		if (m_energy >= cost && m_boardRef->FlipCard(targetSlot))
+		{
+			m_energy -= cost;
+			return true;
+		}
 	}
 	
 	return false;
