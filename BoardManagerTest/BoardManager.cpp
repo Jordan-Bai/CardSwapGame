@@ -122,7 +122,7 @@ void BoardManager::DoAttackPhase()
 
 	if (m_player1->m_hp <= 0) // If the dealer is dead
 	{
-		m_gameShouldEnd = true;
+		EndMatch();
 		return;
 	}
 
@@ -141,7 +141,7 @@ void BoardManager::DoAttackPhase()
 
 	if (m_player2->m_hp <= 0) // If the player is dead
 	{
-		m_gameShouldEnd = true;
+		EndMatch();
 	}
 }
 
@@ -196,6 +196,14 @@ void BoardManager::DestroyCard(int slot, int side)
 		DestroyCard(cardToDestroy);
 	}
 }
+
+void BoardManager::EndMatch()
+{
+	m_player1->EndMatch();
+	m_player2->EndMatch();
+	m_gameShouldEnd = true;
+}
+
 
 void BoardManager::DisplayBoard()
 {

@@ -3,7 +3,7 @@
 ActiveCard::ActiveCard(CardData* data, int slot, int side)
 	:m_data(data), m_slot(slot), m_side(side), m_damageTaken(0)
 {
-
+	// Call "OnPlayed"
 }
 
 ActiveCard::ActiveCard(ActiveCard* other)

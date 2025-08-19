@@ -27,6 +27,7 @@ public:
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
 	void DestroyCard(ActiveCard* card);
 	void DestroyCard(int slot, int side);
+	void EndMatch();
 
 	void DisplayBoard();
 

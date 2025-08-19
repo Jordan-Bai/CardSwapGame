@@ -31,9 +31,12 @@ int main()
 		CardData* newCard = new CardData(cost, frontCreature, backCreature);
 		cards.push_back(newCard);
 
-		dealer.m_drawPile.push_back(newCard);
-		player.m_drawPile.push_back(newCard);
+		//dealer.m_drawPile.push_back(newCard);
+		//player.m_drawPile.push_back(newCard);
 	}
+
+	dealer.StartMatch(cards);
+	player.StartMatch(cards);
 
 	BoardManager board(&dealer, &player, 4);
 	DealerAI captain(&board, &dealer);

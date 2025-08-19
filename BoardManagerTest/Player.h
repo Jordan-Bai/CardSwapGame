@@ -11,6 +11,7 @@ const int CostToSwap = 1;
 
 class Player
 {
+	int m_maxHP = 20;
 public:
 	int m_hp = 20;
 	int m_energy;
@@ -21,6 +22,8 @@ public:
 	std::vector<CardData*> m_discardPile;
 	std::vector<CardData*> m_hand;
 
+	void StartMatch(std::vector<CardData*> deck);
+	void EndMatch();
 	void StartTurn();
 	bool DrawCard();
 
