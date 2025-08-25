@@ -9,7 +9,14 @@ void GDBoard::_bind_methods()
 	ClassDB::bind_method(D_METHOD("DoPlayerTurn"), &GDBoard::DoPlayerTurn);
 	ClassDB::bind_method(D_METHOD("DoDealerTurn"), &GDBoard::DoDealerTurn);
 	ClassDB::bind_method(D_METHOD("DoAttackPhase"), &GDBoard::DoAttackPhase);
+
+	ClassDB::bind_method(D_METHOD("PlayCard", "cardIndex", "targetSlot"), &GDBoard::PlayCard);
+	ClassDB::bind_method(D_METHOD("FlipCard", "targetSlot"), &GDBoard::FlipCard);
+	ClassDB::bind_method(D_METHOD("SwapCards", "targetSlot1", "targetSlot2"), &GDBoard::SwapCards);
+	ClassDB::bind_method(D_METHOD("DestroyCard", "targetSlot"), &GDBoard::DestroyCard);
+
 	ClassDB::bind_method(D_METHOD("IsOccupied", "slot", "side"), &GDBoard::IsOccupied);
+	//ClassDB::bind_method(D_METHOD("GetCard"), &GDBoard::GetCard);
 }
 
 GDBoard::GDBoard()
@@ -69,7 +76,8 @@ GDBoard::~GDBoard()
 
 void GDBoard::DoPlayerTurn()
 {
-	m_testPlayerAI->StartTurn();
+	//m_testPlayerAI->StartTurn();
+	m_playerData->StartTurn();
 }
 
 void GDBoard::DoDealerTurn()
@@ -82,7 +90,46 @@ void GDBoard::DoAttackPhase()
 	m_board->DoAttackPhase();
 }
 
-bool godot::GDBoard::IsOccupied(int slot, int side)
+bool GDBoard::IsOccupied(int slot, int side)
 {
 	return m_board->GetSlot(slot, side) != nullptr;
+}
+
+//GDCard GDBoard::GetCard(int slot, int side)
+//{
+//	ActiveCard* targetCard = m_board->GetSlot(slot, side);
+//	CardData* data = nullptr;
+//	if (targetCard != nullptr)
+//	{
+//		data = targetCard->GetData();
+//	}
+//
+//	//Ref<GDCard> cardRef;
+//	//cardRef.instantiate();
+//	//cardRef()
+//
+//	return GDCard(data);
+//}
+
+
+bool GDBoard::PlayCard(int cardIndex, int targetSlot)
+{
+	return m_playerData->PlayCard(cardIndex, targetSlot);
+}
+
+bool GDBoard::FlipCard(int targetSlot)
+{
+	return m_playerData->FlipCard(targetSlot);
+}
+
+bool GDBoard::SwapCards(int targetSlot1, int targetSlot2)
+{
+	return m_playerData->SwapCards(targetSlot1, targetSlot2);
+}
+
+bool GDBoard::DestroyCard(int targetSlot)
+{
+	bool slotOccupied = (m_board->GetSlot(targetSlot, m_playerData->m_playerIndex) != nullptr);
+	m_board->DestroyCard(targetSlot, m_playerData->m_playerIndex);
+	return slotOccupied;
 }

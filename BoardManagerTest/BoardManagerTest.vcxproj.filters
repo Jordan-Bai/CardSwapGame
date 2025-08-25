@@ -78,7 +78,7 @@
       <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GDCard.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

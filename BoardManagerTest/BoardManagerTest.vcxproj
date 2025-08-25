@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\..\..\BelowTheDeckProject\bin</OutDir>
-    <IncludePath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gdextension;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gen\include;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\godot-cpp\gdextension;..\..\..\godot-cpp\gen\include;..\..\..\godot-cpp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\godot-cpp\bin;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)-Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\..\..\BelowTheDeckProject\bin</OutDir>
-    <IncludePath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gdextension;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gen\include;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\bin;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\..\..\godot-cpp\gdextension;..\..\..\godot-cpp\gen\include;..\..\..\godot-cpp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\..\..\godot-cpp\bin;$(LibraryPath)</LibraryPath>
     <TargetName>$(ProjectName)-Release</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

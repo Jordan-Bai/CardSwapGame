@@ -2,6 +2,7 @@
 
 #include "BoardManager.h"
 #include "DealerAI.h"
+#include "GDCard.h"
 
 #include <godot_cpp/classes/node3d.hpp>
 
@@ -43,5 +44,11 @@ namespace godot
 		void DoAttackPhase();
 
 		bool IsOccupied(int slot, int side);
+		//GDCard GetCard(int slot, int side);
+
+		bool PlayCard(int cardIndex, int targetSlot);
+		bool FlipCard(int targetSlot);
+		bool SwapCards(int targetSlot1, int targetSlot2);
+		bool DestroyCard(int targetSlot);
 	};
 }
