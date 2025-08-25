@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="GodotIntegration">
+      <UniqueIdentifier>{a8fe588f-668f-41a4-ae5c-3e1284725880}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GodotIntegration\Header Files">
+      <UniqueIdentifier>{58e4955b-8965-4413-856b-24544f402795}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GodotIntegration\Source Files">
+      <UniqueIdentifier>{1ffbc660-2be1-4e7c-9f95-4b8dc48c599a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardManager.h">
@@ -33,6 +42,15 @@
     <ClInclude Include="Ability.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GDBoard.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterTypes.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDCard.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -51,6 +69,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Behaviour.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RegisterTypes.cpp">
+      <Filter>GodotIntegration\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDBoard.cpp">
+      <Filter>GodotIntegration\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDCard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

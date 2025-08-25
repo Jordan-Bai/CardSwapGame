@@ -40,13 +40,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -70,6 +70,18 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>..\..\..\BelowTheDeckProject\bin</OutDir>
+    <IncludePath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gdextension;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gen\include;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\bin;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)-Debug</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>..\..\..\BelowTheDeckProject\bin</OutDir>
+    <IncludePath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gdextension;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\gen\include;C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\s215209\Downloads\BelowTheDeck\godot-cpp\bin;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)-Release</TargetName>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -102,12 +114,15 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);TYPED_METHOD_BIND</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libgodot-cpp.windows.template_debug.x86_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -116,31 +131,40 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);TYPED_METHOD_BIND</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libgodot-cpp.windows.template_debug.x86_64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="BoardManager.h" />
+    <ClInclude Include="GDBoard.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="DealerAI.h" />
+    <ClInclude Include="GDCard.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RegisterTypes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="BoardManager.cpp" />
+    <ClCompile Include="GDBoard.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="DealerAI.cpp" />
+    <ClCompile Include="GDCard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RegisterTypes.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
