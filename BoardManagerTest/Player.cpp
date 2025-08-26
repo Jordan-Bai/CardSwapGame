@@ -6,6 +6,16 @@
 //const int MaxHandSize = 5;
 //const int CostToSwap = 1;
 
+Player::Player()
+	: m_boardRef(nullptr), m_energy(0), m_playerIndex(-1)
+{
+}
+
+Player::~Player()
+{
+	EndMatch(); // Destroy all cards in draw pile/ discard pile
+}
+
 void Player::StartMatch(std::vector<CardData*> deck)
 {
 	// Copy deck into draw pile & shuffle it: allows cards to be created/ destroyed during

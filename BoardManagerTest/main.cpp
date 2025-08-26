@@ -2,11 +2,19 @@
 #include "DealerAI.h"
 #include <iostream>
 #include <string>
+#include <fstream>
 
 int main()
 {
+	int seed = time(0);
 	//srand(2);
-	srand(time(0));
+	srand(seed);
+
+	std::ofstream testOutput;
+	testOutput.open("testOutput.txt");
+	testOutput << "Seed: " << seed << '\n';
+	//testOutput.close();
+
 
 	Player dealer;
 	Player player;
@@ -40,6 +48,13 @@ int main()
 
 	BoardManager board(&dealer, &player, 4);
 	DealerAI captain(&board, &dealer);
+
+	//std::function<void()> showBoardUpdate = [&board]()
+	//	{
+	//		std::cout << "BOARD UPDATE:\n";
+	//		board.DisplayBoard();
+	//	};
+	//board.OnBoardUpdates = showBoardUpdate;
 
 	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
 	//==============================================================
@@ -80,7 +95,8 @@ int main()
 		{
 			//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
 			//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
-			captain.StartTurn();
+			dealer.StartTurn();
+			captain.DoActions();
 			//captain.CopyBoardData();
 
 			//board.PlayCard(cards[0], 1, 1);
@@ -93,10 +109,18 @@ int main()
 	//==============================================================
 
 	std::string playerInput = " ";
+	int turn = 0;
 
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
-		captain.StartTurn();
+		if (turn != 0)
+		{
+			testOutput << ", ";
+		}
+		testOutput << turn;
+
+		dealer.StartTurn();
+		captain.DoActions();
 		player.StartTurn();
 		board.DisplayBoard();
 
@@ -200,4 +224,7 @@ int main()
 	{
 		delete card;
 	}
+
+	testOutput << " - Exited Normally";
+	testOutput.close();
 }

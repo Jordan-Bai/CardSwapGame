@@ -3,7 +3,7 @@
 #include <vector>
 #include <functional>
 
-//class ActiveCard;
+class ActiveCard;
 
 struct CreatureData
 {
@@ -13,16 +13,17 @@ struct CreatureData
 
 	// Ability triggers:
 	//std::function<void(ActiveCard* owningCard)> OnPlayed;
-	std::function<void(int slot, int side)> OnPlayed;
-	std::function<void(int slot, int side)> OnDeath;
-	std::function<void(int slot, int side)> OnTurnStarts;
-	std::function<void(int slot, int side)> OnTurnEnds;
+	std::function<void()> OnPlayed;
+	std::function<void()> OnDeath;
+	std::function<void(ActiveCard* target)> OnAttack;
+	std::function<void(ActiveCard* attacker)> OnAttacked;
+	std::function<void()> OnFlippedTo;
+	std::function<void()> OnActivate;
 
-	std::function<void(int slot, int side)> OnAttack;
-	std::function<void(int slot, int side)> OnAttacked;
-	std::function<void(int slot, int side)> OnFlippedTo;
-	std::function<void(int slot, int side)> OnActivate;
-	std::function<void(int slot, int side)> OnBoardUpdates;
+	std::function<void()> OnTurnStarts;
+	std::function<void()> OnTurnEnds;
+	std::function<void()> OnCardDies;
+	std::function<void()> OnBoardUpdates;
 	// Might want to add OnStack/ OnPickup
 
 	CreatureData(int health, int attack, int flipCost)
