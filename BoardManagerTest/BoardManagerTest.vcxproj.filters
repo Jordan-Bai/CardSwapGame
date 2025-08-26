@@ -51,6 +51,9 @@
     <ClInclude Include="GDCard.h">
       <Filter>GodotIntegration\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GDPlayer.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Card.cpp">
@@ -79,6 +82,9 @@
     </ClCompile>
     <ClCompile Include="GDCard.cpp">
       <Filter>GodotIntegration\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDPlayer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

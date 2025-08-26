@@ -1,0 +1,48 @@
+#pragma once
+
+#include "Player.h"
+#include "GDCard.h"
+
+//#include <godot_cpp/classes/node3d.hpp>
+#include <godot_cpp/classes/object.hpp>
+
+// Namespace that everything in GDExtension is defined in
+namespace godot
+{
+	class GDBoard;
+
+	class GDPlayer : public Object
+	{
+		GDCLASS(GDPlayer, Object); // Macro that "sets up a few things for us"?
+		// Arguments are the class, and the class it inherits from
+
+	private:
+
+	protected:
+		Player* m_data;
+		std::vector<GDCard*> m_hand;
+		//Array m_hand;
+
+		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
+
+	public:
+		GDPlayer();
+		GDPlayer(Player* data);
+		GDPlayer(const GDPlayer& ref) = delete; //copy constructor
+		//GDPlayer& operator=(const GDPlayer& ref) = delete; //assignment operator
+		~GDPlayer();
+
+		//void Init(GDBoard* board);
+		void StartTurn();
+
+		int GetHealth();
+		int GetEnergy();
+		GDCard* GetCard(int cardIndex);
+		int GetHandSize();
+
+		bool PlayCard(int cardIndex, int targetSlot);
+		bool FlipCard(int targetSlot);
+		bool SwapCards(int targetSlot1, int targetSlot2);
+		bool DestroyCard(int targetSlot);
+	};
+}

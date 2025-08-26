@@ -2,7 +2,8 @@
 
 #include "Card.h"
 
-#include <godot_cpp/classes/object.hpp>
+//#include <godot_cpp/classes/object.hpp>
+#include <godot_cpp/classes/node3d.hpp>
 
 // Namespace that everything in GDExtension is defined in
 namespace godot
@@ -27,9 +28,9 @@ namespace godot
 		int GetFlipCost();
 	};
 
-	class GDCard : public Object
+	class GDCard : public Node3D
 	{
-		GDCLASS(GDCard, Object); // Macro that "sets up a few things for us"?
+		GDCLASS(GDCard, Node3D); // Macro that "sets up a few things for us"?
 		// Arguments are the class, and the class it inherits from
 
 	private:

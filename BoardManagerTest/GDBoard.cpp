@@ -6,27 +6,30 @@ using namespace godot;
 
 void GDBoard::_bind_methods()
 {
-	ClassDB::bind_method(D_METHOD("DoPlayerTurn"), &GDBoard::DoPlayerTurn);
+	//ClassDB::bind_method(D_METHOD("StartPlayerTurn"), &GDBoard::StartPlayerTurn);
+	//ClassDB::bind_method(D_METHOD("StartDealerTurn"), &GDBoard::StartDealerTurn);
 	ClassDB::bind_method(D_METHOD("DoDealerTurn"), &GDBoard::DoDealerTurn);
 	ClassDB::bind_method(D_METHOD("DoAttackPhase"), &GDBoard::DoAttackPhase);
 
-	ClassDB::bind_method(D_METHOD("PlayCard", "cardIndex", "targetSlot"), &GDBoard::PlayCard);
-	ClassDB::bind_method(D_METHOD("FlipCard", "targetSlot"), &GDBoard::FlipCard);
-	ClassDB::bind_method(D_METHOD("SwapCards", "targetSlot1", "targetSlot2"), &GDBoard::SwapCards);
-	ClassDB::bind_method(D_METHOD("DestroyCard", "targetSlot"), &GDBoard::DestroyCard);
+	//ClassDB::bind_method(D_METHOD("PlayCard", "cardIndex", "targetSlot"), &GDBoard::PlayCard);
+	//ClassDB::bind_method(D_METHOD("FlipCard", "targetSlot"), &GDBoard::FlipCard);
+	//ClassDB::bind_method(D_METHOD("SwapCards", "targetSlot1", "targetSlot2"), &GDBoard::SwapCards);
+	//ClassDB::bind_method(D_METHOD("DestroyCard", "targetSlot"), &GDBoard::DestroyCard);
 
 	ClassDB::bind_method(D_METHOD("IsOccupied", "slot", "side"), &GDBoard::IsOccupied);
 	//ClassDB::bind_method(D_METHOD("GetCard"), &GDBoard::GetCard);
+
+	ClassDB::bind_method(D_METHOD("GetDealer"), &GDBoard::GetDealer);
+	ClassDB::bind_method(D_METHOD("GetPlayer"), &GDBoard::GetPlayer);
 }
 
 GDBoard::GDBoard()
-//	: m_dealerData(new Player()), m_playerData(new Player())
-//	m_board(new BoardManager(m_dealerData, m_playerData, m_slots))
-//	m_board(m_dealerData, m_playerData, m_slots), 
-//	m_dealerAI(&m_board, m_dealerData), m_testPlayerAI(&m_board, m_playerData)
 {
 	m_dealerData = new Player();
 	m_playerData = new Player();
+
+	m_dealer = memnew(GDPlayer(m_dealerData));
+	m_player = memnew(GDPlayer(m_playerData));
 
 	m_board = new BoardManager(m_dealerData, m_playerData, m_slots);
 
@@ -63,6 +66,9 @@ GDBoard::~GDBoard()
 	delete m_board;
 	delete m_dealerAI;
 	delete m_testPlayerAI;
+
+	memdelete(m_dealer);
+	memdelete(m_player);
 }
 
 //int godot::GDBoard::GetNumSlots()
@@ -74,15 +80,24 @@ GDBoard::~GDBoard()
 //{
 //}
 
-void GDBoard::DoPlayerTurn()
-{
-	//m_testPlayerAI->StartTurn();
-	m_playerData->StartTurn();
-}
+//void GDBoard::StartPlayerTurn()
+//{
+//	m_playerData->StartTurn(); // TODO: REWORK HOW TURN STARTING WORKS
+//	m_player->StartTurn();
+//}
+//
+//void GDBoard::StartDealerTurn()
+//{
+//	m_dealerAI->StartTurn();
+//	m_dealer->StartTurn();
+//}
+
 
 void GDBoard::DoDealerTurn()
 {
-	m_dealerAI->StartTurn();
+	m_dealer->StartTurn();
+	m_dealerAI->StartTurn(); 
+	// TODO: Make sure dealer AI doesn't run player.TurnStart() since that's already done by GDPlayer
 }
 
 void GDBoard::DoAttackPhase()
@@ -93,6 +108,16 @@ void GDBoard::DoAttackPhase()
 bool GDBoard::IsOccupied(int slot, int side)
 {
 	return m_board->GetSlot(slot, side) != nullptr;
+}
+
+GDPlayer* GDBoard::GetDealer()
+{
+	return m_dealer;
+}
+
+GDPlayer* GDBoard::GetPlayer()
+{
+	return m_player;
 }
 
 //GDCard GDBoard::GetCard(int slot, int side)
@@ -112,24 +137,24 @@ bool GDBoard::IsOccupied(int slot, int side)
 //}
 
 
-bool GDBoard::PlayCard(int cardIndex, int targetSlot)
-{
-	return m_playerData->PlayCard(cardIndex, targetSlot);
-}
-
-bool GDBoard::FlipCard(int targetSlot)
-{
-	return m_playerData->FlipCard(targetSlot);
-}
-
-bool GDBoard::SwapCards(int targetSlot1, int targetSlot2)
-{
-	return m_playerData->SwapCards(targetSlot1, targetSlot2);
-}
-
-bool GDBoard::DestroyCard(int targetSlot)
-{
-	bool slotOccupied = (m_board->GetSlot(targetSlot, m_playerData->m_playerIndex) != nullptr);
-	m_board->DestroyCard(targetSlot, m_playerData->m_playerIndex);
-	return slotOccupied;
-}
+//bool GDBoard::PlayCard(int cardIndex, int targetSlot)
+//{
+//	return m_playerData->PlayCard(cardIndex, targetSlot);
+//}
+//
+//bool GDBoard::FlipCard(int targetSlot)
+//{
+//	return m_playerData->FlipCard(targetSlot);
+//}
+//
+//bool GDBoard::SwapCards(int targetSlot1, int targetSlot2)
+//{
+//	return m_playerData->SwapCards(targetSlot1, targetSlot2);
+//}
+//
+//bool GDBoard::DestroyCard(int targetSlot)
+//{
+//	bool slotOccupied = (m_board->GetSlot(targetSlot, m_playerData->m_playerIndex) != nullptr);
+//	m_board->DestroyCard(targetSlot, m_playerData->m_playerIndex);
+//	return slotOccupied;
+//}

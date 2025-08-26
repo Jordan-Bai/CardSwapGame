@@ -152,6 +152,7 @@
     <ClInclude Include="Card.h" />
     <ClInclude Include="DealerAI.h" />
     <ClInclude Include="GDCard.h" />
+    <ClInclude Include="GDPlayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RegisterTypes.h" />
   </ItemGroup>
@@ -162,6 +163,7 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="DealerAI.cpp" />
     <ClCompile Include="GDCard.cpp" />
+    <ClCompile Include="GDPlayer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RegisterTypes.cpp" />

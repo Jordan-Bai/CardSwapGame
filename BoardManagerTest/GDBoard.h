@@ -3,6 +3,7 @@
 #include "BoardManager.h"
 #include "DealerAI.h"
 #include "GDCard.h"
+#include "GDPlayer.h"
 
 #include <godot_cpp/classes/node3d.hpp>
 
@@ -27,6 +28,8 @@ namespace godot
 		
 		Player* m_dealerData;
 		Player* m_playerData;
+		GDPlayer* m_dealer;
+		GDPlayer* m_player;
 
 		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
 
@@ -39,16 +42,20 @@ namespace godot
 		//int GetNumSlots();
 		//void SetNumSlots(int num);
 
-		void DoPlayerTurn();
+		//void StartPlayerTurn();
+		//void StartDealerTurn();
 		void DoDealerTurn();
 		void DoAttackPhase();
 
 		bool IsOccupied(int slot, int side);
 		//GDCard GetCard(int slot, int side);
 
-		bool PlayCard(int cardIndex, int targetSlot);
-		bool FlipCard(int targetSlot);
-		bool SwapCards(int targetSlot1, int targetSlot2);
-		bool DestroyCard(int targetSlot);
+		GDPlayer* GetDealer();
+		GDPlayer* GetPlayer();
+
+		//bool PlayCard(int cardIndex, int targetSlot);
+		//bool FlipCard(int targetSlot);
+		//bool SwapCards(int targetSlot1, int targetSlot2);
+		//bool DestroyCard(int targetSlot);
 	};
 }
