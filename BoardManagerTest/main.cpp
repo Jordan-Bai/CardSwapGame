@@ -2,18 +2,39 @@
 #include "DealerAI.h"
 #include <iostream>
 #include <string>
-#include <fstream>
+#include <fstream>}
 
 int main()
 {
 	int seed = time(0);
-	//srand(2);
+	//seed = 1756251145;
 	srand(seed);
 
-	std::ofstream testOutput;
-	testOutput.open("testOutput.txt");
-	testOutput << "Seed: " << seed << '\n';
-	//testOutput.close();
+	bool doOutput = false;
+	bool doAppend = true;
+
+	std::fstream testOutput;
+	if (doOutput)
+	{
+		// Read what's already in the file
+		testOutput.open("testOutput.txt", std::fstream::in); // Open in input mode
+		std::string txt;
+		std::getline(testOutput, txt);
+		testOutput.close();
+		// Start outputing stuff to file
+		std::ios_base::openmode fileMode = std::ofstream::out;
+		if (doAppend)
+		{
+			fileMode = fileMode | std::ofstream::app;
+		}
+		testOutput.open("testOutput.txt", fileMode); // Open in output/ append mode
+		if (txt.length() > 1)
+		{
+			testOutput << "\n";
+		}
+		testOutput << "Seed: " << seed << '\n';
+		testOutput.close();
+	}
 
 
 	Player dealer;
@@ -113,11 +134,16 @@ int main()
 
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
-		if (turn != 0)
+		if (doOutput)
 		{
-			testOutput << ", ";
+			testOutput.open("testOutput.txt", std::ofstream::out | std::ofstream::app); // Open in output/ append mode
+			if (turn != 0)
+			{
+				testOutput << ", ";
+			}
+			testOutput << turn;
+			testOutput.close();
 		}
-		testOutput << turn;
 
 		dealer.StartTurn();
 		captain.DoActions();
@@ -225,6 +251,10 @@ int main()
 		delete card;
 	}
 
-	testOutput << " - Exited Normally";
-	testOutput.close();
+	if (doOutput)
+	{
+		testOutput.open("testOutput.txt", std::ofstream::out | std::ofstream::app); // Open in output/ append mode
+		testOutput << " - Exited Normally\n";
+		testOutput.close();
+	}
 }

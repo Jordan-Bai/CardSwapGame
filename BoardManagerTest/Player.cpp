@@ -13,7 +13,7 @@ Player::Player()
 
 Player::~Player()
 {
-	EndMatch(); // Destroy all cards in draw pile/ discard pile
+	EndMatch(); // Destroy all cards in draw pile/ discard pile/ hand
 }
 
 void Player::StartMatch(std::vector<CardData*> deck)
