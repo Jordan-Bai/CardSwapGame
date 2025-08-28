@@ -37,6 +37,7 @@ struct CardData
 	int cost;
 	CreatureData* frontCreature;
 	CreatureData* backCreature;
+	bool isTemp = false;
 
 	CardData(int _cost, CreatureData* _frontCreature, CreatureData* _backCreature)
 		:cost(_cost), frontCreature(_frontCreature), backCreature(_backCreature)

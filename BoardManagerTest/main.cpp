@@ -2,7 +2,7 @@
 #include "DealerAI.h"
 #include <iostream>
 #include <string>
-#include <fstream>}
+#include <fstream>
 
 int main()
 {
@@ -10,7 +10,7 @@ int main()
 	//seed = 1756251145;
 	srand(seed);
 
-	bool doOutput = false;
+	bool doOutput = true;
 	bool doAppend = true;
 
 	std::fstream testOutput;
@@ -40,6 +40,7 @@ int main()
 	Player dealer;
 	Player player;
 
+	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
 	for (int i = 0; i < 10; i++)
@@ -59,9 +60,6 @@ int main()
 
 		CardData* newCard = new CardData(cost, frontCreature, backCreature);
 		cards.push_back(newCard);
-
-		//dealer.m_drawPile.push_back(newCard);
-		//player.m_drawPile.push_back(newCard);
 	}
 
 	dealer.StartMatch(cards);
@@ -112,7 +110,7 @@ int main()
 	if (false)
 	{
 		dealer.StartTurn();
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
 			//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
@@ -134,10 +132,11 @@ int main()
 
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
+		turn++;
 		if (doOutput)
 		{
 			testOutput.open("testOutput.txt", std::ofstream::out | std::ofstream::app); // Open in output/ append mode
-			if (turn != 0)
+			if (turn != 1)
 			{
 				testOutput << ", ";
 			}
@@ -164,6 +163,57 @@ int main()
 				num2Index = playerInput.find_first_of("0123456789", num1Index + 1);
 			}
 
+			// Debug commands
+			int commandIndex = playerInput.find("/");
+			if (commandIndex != std::string::npos && num1Index != std::string::npos)
+			{
+				int numEnd = playerInput.find_first_not_of("0123456789", num1Index);
+				if (numEnd == std::string::npos)
+				{
+					numEnd = playerInput.length();
+				}
+				std::string numStr = playerInput.substr(num1Index, numEnd - num1Index);
+				int num = std::stoi(numStr);
+
+				// Gain energy
+				int eIndex = playerInput.find("e");
+				if (eIndex != std::string::npos)
+				{
+					if (num1Index != std::string::npos)
+					{
+						// Get energy to add
+						player.m_energy += num;
+					}
+				}
+
+				// Gain health
+				int hIndex = playerInput.find("h");
+				if (hIndex != std::string::npos)
+				{
+					if (num1Index != std::string::npos)
+					{
+						// Get health to add
+						player.m_hp += num;
+					}
+				}
+
+				// Draw cards
+				int dIndex = playerInput.find("d");
+				if (dIndex != std::string::npos)
+				{
+					if (num1Index != std::string::npos)
+					{
+						// Get cards to draw
+						for (int i = 0; i < num; i++)
+						{
+							player.DrawCard();
+						}
+					}
+				}
+
+				board.DisplayBoard();
+				continue;
+			}
 
 			// Flip card
 			int fIndex = playerInput.find("f");

@@ -18,15 +18,7 @@ Player::~Player()
 
 void Player::StartMatch(std::vector<CardData*> deck)
 {
-	// Copy deck into draw pile & shuffle it: allows cards to be created/ destroyed during
-	// match & deleted afterwards without messing with memory management
-	
-	//for (CardData* card : deck)
-	//{
-	//	CardData* copyCard = new CardData(card);
-	//	m_drawPile.push_back(copyCard);
-	//}
-
+	// Copy deck into draw pile & shuffle it
 	std::vector<int> cardIndexs;
 
 	for (int i = 0; i < deck.size(); i++)
@@ -37,9 +29,11 @@ void Player::StartMatch(std::vector<CardData*> deck)
 	for (int i = 0; i < deck.size(); i++)
 	{
 		int chosenIndex = rand() % cardIndexs.size();
-		CardData* copyCard = new CardData(deck[cardIndexs[chosenIndex]]);
-		m_drawPile.push_back(copyCard);
+		//CardData* copyCard = new CardData(deck[cardIndexs[chosenIndex]]);
+		//m_drawPile.push_back(copyCard);
+		m_drawPile.push_back(deck[cardIndexs[chosenIndex]]);
 		cardIndexs.erase(cardIndexs.begin() + chosenIndex);
+		//copyCard->REAL = true;
 	}
 
 	m_hp = m_maxHP;
@@ -47,22 +41,31 @@ void Player::StartMatch(std::vector<CardData*> deck)
 
 void Player::EndMatch()
 {
-	// Destroy all cards
+	// Destroy any temp cards
 	for (CardData* card : m_drawPile)
 	{
-		delete card;
+		if (card->isTemp)
+		{
+			delete card;
+		}
 	}
 	m_drawPile.clear();
 
 	for (CardData* card : m_discardPile)
 	{
-		delete card;
+		if (card->isTemp)
+		{
+			delete card;
+		}
 	}
 	m_discardPile.clear();
 
 	for (CardData* card : m_hand)
 	{
-		delete card;
+		if (card->isTemp)
+		{
+			delete card;
+		}
 	}
 	m_hand.clear();
 }

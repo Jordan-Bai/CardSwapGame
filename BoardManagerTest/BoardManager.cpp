@@ -73,21 +73,6 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 bool BoardManager::FlipCard(int slot, int playerIndex)
 {
 	ActiveCard* targetSlot = GetSlot(slot, playerIndex);
-	//if (targetSlot != nullptr)
-	//{
-	//	//return targetSlot->Flip();
-	//	if (targetSlot->Flip())
-	//	{
-	//		if (targetSlot->GetHP() <= 0)
-	//		{
-	//			DestroyCard(targetSlot);
-	//		}
-	//
-	//		return true;
-	//	}
-	//}
-	//
-	//return false;
 	return FlipCard(targetSlot);
 }
 

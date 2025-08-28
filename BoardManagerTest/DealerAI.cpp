@@ -19,6 +19,17 @@ DealerAI::DealerAI(BoardManager* board, Player* playerData)
 
 DealerAI::~DealerAI()
 {
+	// Since the cards in the fake match are already being managed by the real match, don't want to delete them again
+	// Clear dealer cards
+	m_copyDealer->m_drawPile.clear();
+	m_copyDealer->m_discardPile.clear();
+	m_copyDealer->m_hand.clear();
+
+	// Clear player cards
+	m_copyPlayer->m_drawPile.clear();
+	m_copyPlayer->m_discardPile.clear();
+	m_copyPlayer->m_hand.clear();
+
 	delete m_copyDealer;
 	delete m_copyPlayer;
 	delete m_copyBoard;
@@ -400,6 +411,8 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<B
 				delete action;
 			}
 			branchScore.second.clear();
+
+			delete possibleActions[i];
 		}
 	}
 
@@ -458,6 +471,7 @@ void DealerAI::CopyBoardData()
 		// Copy player data
 		CopyPlayerData(m_copyDealer, m_data);
 		CopyPlayerData(m_copyPlayer, m_boardRef->GetPlayer(m_boardRef->OppositeSide(m_data->m_playerIndex)));
+		// Could probably simplify this, since we only really need to copy the player's health, since the dealer doesn't know what cards they have anyway
 	}
 }
 
@@ -465,15 +479,20 @@ void DealerAI::CopyPlayerData(Player* copyTarget, Player* copySource)
 {
 	copyTarget->m_hp = copySource->m_hp;
 	copyTarget->m_energy = copySource->m_energy;
+
 	copyTarget->m_drawPile.clear();
-	//copyTarget->m_drawPile = copySource->m_drawPile;
-	CopyCards(copyTarget->m_drawPile, copySource->m_drawPile);
+	copyTarget->m_drawPile = copySource->m_drawPile;
 	copyTarget->m_discardPile.clear();
-	//copyTarget->m_discardPile = copySource->m_discardPile;
-	CopyCards(copyTarget->m_discardPile, copySource->m_discardPile);
+	copyTarget->m_discardPile = copySource->m_discardPile;
 	copyTarget->m_hand.clear();
-	//copyTarget->m_hand = copySource->m_hand;
-	CopyCards(copyTarget->m_hand, copySource->m_hand);
+	copyTarget->m_hand = copySource->m_hand;
+
+	//CopyCards(copyTarget->m_drawPile, copySource->m_drawPile);
+	//CopyCards(copyTarget->m_discardPile, copySource->m_discardPile);
+	//CopyCards(copyTarget->m_hand, copySource->m_hand); 
+
+	// Hand is currently the only one that really needs to be copied, but cards that allow you to choose a card from the deck might be relevant
+	// ^ SHOULD PROBABLY THINK ABOUT HOW I WOULD HANDLE THAT
 }
 
 void DealerAI::CopyCards(std::vector<CardData*>& copyTarget, std::vector<CardData*>& copySource)
