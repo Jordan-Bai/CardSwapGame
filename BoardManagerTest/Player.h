@@ -22,6 +22,11 @@ public:
 	std::vector<CardData*> m_discardPile;
 	std::vector<CardData*> m_hand;
 
+	Player();
+	Player(const Player& ref) = delete; //copy constructor
+	Player& operator=(const Player& ref) = delete; //assignment operator
+	~Player();
+
 	void StartMatch(std::vector<CardData*> deck);
 	void EndMatch();
 	void StartTurn();

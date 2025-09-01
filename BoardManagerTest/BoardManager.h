@@ -38,4 +38,20 @@ public:
 
 	int GetSlotCount();
 	bool ShouldGameEnd();
+
+
+	// Events
+	void CardPlayed(ActiveCard* newCard);
+	void CardDies();
+	void TurnStarts(int playerIndex);
+	void TurnEnds(int playerIndex);
+	void BoardUpdates();
+
+	std::function<void(ActiveCard* cardPlayed)> OnCardPlayed;
+	std::function<void()> OnCardDies;
+	std::function<void()> OnDealerTurnStarts;
+	std::function<void()> OnDealerTurnEnds;
+	std::function<void()> OnPlayerTurnStarts;
+	std::function<void()> OnPlayerTurnEnds;
+	std::function<void()> OnBoardUpdates;
 };

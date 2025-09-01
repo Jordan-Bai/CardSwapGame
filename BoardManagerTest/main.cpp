@@ -2,15 +2,45 @@
 #include "DealerAI.h"
 #include <iostream>
 #include <string>
+#include <fstream>
 
 int main()
 {
-	//srand(2);
-	srand(time(0));
+	int seed = time(0);
+	//seed = 1756251145;
+	srand(seed);
+
+	bool doOutput = true;
+	bool doAppend = true;
+
+	std::fstream testOutput;
+	if (doOutput)
+	{
+		// Read what's already in the file
+		testOutput.open("testOutput.txt", std::fstream::in); // Open in input mode
+		std::string txt;
+		std::getline(testOutput, txt);
+		testOutput.close();
+		// Start outputing stuff to file
+		std::ios_base::openmode fileMode = std::ofstream::out;
+		if (doAppend)
+		{
+			fileMode = fileMode | std::ofstream::app;
+		}
+		testOutput.open("testOutput.txt", fileMode); // Open in output/ append mode
+		if (txt.length() > 1)
+		{
+			testOutput << "\n";
+		}
+		testOutput << "Seed: " << seed << '\n';
+		testOutput.close();
+	}
+
 
 	Player dealer;
 	Player player;
 
+	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
 	for (int i = 0; i < 10; i++)
@@ -30,9 +60,6 @@ int main()
 
 		CardData* newCard = new CardData(cost, frontCreature, backCreature);
 		cards.push_back(newCard);
-
-		//dealer.m_drawPile.push_back(newCard);
-		//player.m_drawPile.push_back(newCard);
 	}
 
 	dealer.StartMatch(cards);
@@ -40,6 +67,13 @@ int main()
 
 	BoardManager board(&dealer, &player, 4);
 	DealerAI captain(&board, &dealer);
+
+	//std::function<void()> showBoardUpdate = [&board]()
+	//	{
+	//		std::cout << "BOARD UPDATE:\n";
+	//		board.DisplayBoard();
+	//	};
+	//board.OnBoardUpdates = showBoardUpdate;
 
 	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
 	//==============================================================
@@ -76,11 +110,12 @@ int main()
 	if (false)
 	{
 		dealer.StartTurn();
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 5; i++)
 		{
 			//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
 			//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
-			captain.StartTurn();
+			dealer.StartTurn();
+			captain.DoActions();
 			//captain.CopyBoardData();
 
 			//board.PlayCard(cards[0], 1, 1);
@@ -93,10 +128,24 @@ int main()
 	//==============================================================
 
 	std::string playerInput = " ";
+	int turn = 0;
 
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
-		captain.StartTurn();
+		turn++;
+		if (doOutput)
+		{
+			testOutput.open("testOutput.txt", std::ofstream::out | std::ofstream::app); // Open in output/ append mode
+			if (turn != 1)
+			{
+				testOutput << ", ";
+			}
+			testOutput << turn;
+			testOutput.close();
+		}
+
+		dealer.StartTurn();
+		captain.DoActions();
 		player.StartTurn();
 		board.DisplayBoard();
 
@@ -114,6 +163,57 @@ int main()
 				num2Index = playerInput.find_first_of("0123456789", num1Index + 1);
 			}
 
+			// Debug commands
+			int commandIndex = playerInput.find("/");
+			if (commandIndex != std::string::npos && num1Index != std::string::npos)
+			{
+				int numEnd = playerInput.find_first_not_of("0123456789", num1Index);
+				if (numEnd == std::string::npos)
+				{
+					numEnd = playerInput.length();
+				}
+				std::string numStr = playerInput.substr(num1Index, numEnd - num1Index);
+				int num = std::stoi(numStr);
+
+				// Gain energy
+				int eIndex = playerInput.find("e");
+				if (eIndex != std::string::npos)
+				{
+					if (num1Index != std::string::npos)
+					{
+						// Get energy to add
+						player.m_energy += num;
+					}
+				}
+
+				// Gain health
+				int hIndex = playerInput.find("h");
+				if (hIndex != std::string::npos)
+				{
+					if (num1Index != std::string::npos)
+					{
+						// Get health to add
+						player.m_hp += num;
+					}
+				}
+
+				// Draw cards
+				int dIndex = playerInput.find("d");
+				if (dIndex != std::string::npos)
+				{
+					if (num1Index != std::string::npos)
+					{
+						// Get cards to draw
+						for (int i = 0; i < num; i++)
+						{
+							player.DrawCard();
+						}
+					}
+				}
+
+				board.DisplayBoard();
+				continue;
+			}
 
 			// Flip card
 			int fIndex = playerInput.find("f");
@@ -199,5 +299,12 @@ int main()
 	for (CardData* card : cards)
 	{
 		delete card;
+	}
+
+	if (doOutput)
+	{
+		testOutput.open("testOutput.txt", std::ofstream::out | std::ofstream::app); // Open in output/ append mode
+		testOutput << " - Exited Normally\n";
+		testOutput.close();
 	}
 }
