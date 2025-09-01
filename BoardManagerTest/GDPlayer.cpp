@@ -90,6 +90,7 @@ bool GDPlayer::PlayCard(int cardIndex, int targetSlot)
 		// If card was played, remove it from hand
 		memdelete(m_hand[cardIndex]);
 		m_hand.erase(m_hand.begin() + cardIndex);
+		return true;
 	}
 	return false;
 }

@@ -90,3 +90,36 @@ GDCreature* GDCard::GetBackFace()
 	//return GDCreature(m_data->backCreature);
 	return m_backFace;
 }
+
+void GDDisplayCard::_bind_methods()
+{
+	ClassDB::bind_method(D_METHOD("GetCost"), &GDDisplayCard::GetCost);
+	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDDisplayCard::GetFlipCost);
+	ClassDB::bind_method(D_METHOD("GetHP"), &GDDisplayCard::GetHP);
+	ClassDB::bind_method(D_METHOD("GetAtk"), &GDDisplayCard::GetAtk);
+}
+
+GDDisplayCard::GDDisplayCard()
+	: m_cost(-1), m_flipCost(-1), m_hp(-1), m_atk(-1)
+{
+}
+
+int GDDisplayCard::GetCost()
+{
+	return m_cost;
+}
+
+int GDDisplayCard::GetFlipCost()
+{
+	return m_flipCost;
+}
+
+int GDDisplayCard::GetHP()
+{
+	return m_hp;
+}
+
+int GDDisplayCard::GetAtk()
+{
+	return m_atk;
+}

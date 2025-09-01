@@ -19,8 +19,8 @@ namespace godot
 		int m_slots = 4;
 
 	protected:
-		std::vector<CreatureData*> creatures;
-		std::vector<CardData*> cards;
+		std::vector<CreatureData*> creatures; // FOR TESTING
+		std::vector<CardData*> cards; // FOR TESTING
 
 		DealerAI* m_dealerAI;
 		DealerAI* m_testPlayerAI; // FOR TESTING
@@ -31,6 +31,9 @@ namespace godot
 		GDPlayer* m_dealer;
 		GDPlayer* m_player;
 
+		std::vector<GDDisplayCard*> m_side1;
+		std::vector<GDDisplayCard*> m_side2;
+
 		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
 
 	public:
@@ -39,16 +42,14 @@ namespace godot
 		//GDBoard& operator=(const GDBoard& ref) = delete; //assignment operator
 		~GDBoard();
 
-		//int GetNumSlots();
-		//void SetNumSlots(int num);
-
-		//void StartPlayerTurn();
-		//void StartDealerTurn();
 		void DoDealerTurn();
 		void DoAttackPhase();
 
+		void UpdateBoardState();
+		void UpdateCardStats(GDDisplayCard* displayCard, ActiveCard* realCard);
+
 		bool IsOccupied(int slot, int side);
-		//GDCard GetCard(int slot, int side);
+		GDDisplayCard* GetCard(int slot, int side);
 
 		GDPlayer* GetDealer();
 		GDPlayer* GetPlayer();

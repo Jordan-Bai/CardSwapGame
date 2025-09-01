@@ -84,7 +84,7 @@
       <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GDPlayer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

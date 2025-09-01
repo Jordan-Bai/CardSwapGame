@@ -20,9 +20,10 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 
 	// Do this for each class we need to register
 	GDREGISTER_RUNTIME_CLASS(GDBoard);
+	GDREGISTER_RUNTIME_CLASS(GDPlayer);
 	GDREGISTER_RUNTIME_CLASS(GDCreature);
 	GDREGISTER_RUNTIME_CLASS(GDCard);
-	GDREGISTER_RUNTIME_CLASS(GDPlayer);
+	GDREGISTER_RUNTIME_CLASS(GDDisplayCard);
 }
 
 // Called when godot unloads this

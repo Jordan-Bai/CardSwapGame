@@ -6,10 +6,9 @@ using namespace godot;
 
 void GDBoard::_bind_methods()
 {
-	//ClassDB::bind_method(D_METHOD("StartPlayerTurn"), &GDBoard::StartPlayerTurn);
-	//ClassDB::bind_method(D_METHOD("StartDealerTurn"), &GDBoard::StartDealerTurn);
 	ClassDB::bind_method(D_METHOD("DoDealerTurn"), &GDBoard::DoDealerTurn);
 	ClassDB::bind_method(D_METHOD("DoAttackPhase"), &GDBoard::DoAttackPhase);
+	ClassDB::bind_method(D_METHOD("UpdateBoardState"), &GDBoard::UpdateBoardState);
 
 	//ClassDB::bind_method(D_METHOD("PlayCard", "cardIndex", "targetSlot"), &GDBoard::PlayCard);
 	//ClassDB::bind_method(D_METHOD("FlipCard", "targetSlot"), &GDBoard::FlipCard);
@@ -17,7 +16,7 @@ void GDBoard::_bind_methods()
 	//ClassDB::bind_method(D_METHOD("DestroyCard", "targetSlot"), &GDBoard::DestroyCard);
 
 	ClassDB::bind_method(D_METHOD("IsOccupied", "slot", "side"), &GDBoard::IsOccupied);
-	//ClassDB::bind_method(D_METHOD("GetCard"), &GDBoard::GetCard);
+	ClassDB::bind_method(D_METHOD("GetCard", "slot", "side"), &GDBoard::GetCard);
 
 	ClassDB::bind_method(D_METHOD("GetDealer"), &GDBoard::GetDealer);
 	ClassDB::bind_method(D_METHOD("GetPlayer"), &GDBoard::GetPlayer);
@@ -55,6 +54,13 @@ GDBoard::GDBoard()
 		cards.push_back(newCard);
 	}
 
+	// Setup each side of the board
+	for (int i = 0; i < m_board->GetSlotCount(); i++)
+	{
+		m_side1.push_back(nullptr);
+		m_side2.push_back(nullptr);
+	}
+
 	m_dealerData->StartMatch(cards);
 	m_playerData->StartMatch(cards);
 }
@@ -71,33 +77,11 @@ GDBoard::~GDBoard()
 	memdelete(m_player);
 }
 
-//int godot::GDBoard::GetNumSlots()
-//{
-//	return 0;
-//}
-//
-//void godot::GDBoard::SetNumSlots(int num)
-//{
-//}
-
-//void GDBoard::StartPlayerTurn()
-//{
-//	m_playerData->StartTurn(); // TODO: REWORK HOW TURN STARTING WORKS
-//	m_player->StartTurn();
-//}
-//
-//void GDBoard::StartDealerTurn()
-//{
-//	m_dealerAI->StartTurn();
-//	m_dealer->StartTurn();
-//}
-
 
 void GDBoard::DoDealerTurn()
 {
 	m_dealer->StartTurn();
-	m_dealerAI->StartTurn(); 
-	// TODO: Make sure dealer AI doesn't run player.TurnStart() since that's already done by GDPlayer
+	m_dealerAI->DoActions();
 }
 
 void GDBoard::DoAttackPhase()
@@ -105,9 +89,92 @@ void GDBoard::DoAttackPhase()
 	m_board->DoAttackPhase();
 }
 
+void GDBoard::UpdateBoardState()
+{
+	for (int i = 0; i < m_board->GetSlotCount(); i++)
+	{
+		GDDisplayCard* displayCard = m_side1[i];
+		ActiveCard* realCard = m_board->GetSlot(i, 1);
+		// If there's a display card at this slot
+		if (displayCard != nullptr)
+		{
+			// If there's a display card but not a real card at this slot, destroy the display card
+			if (realCard == nullptr)
+			{
+				memdelete(m_side1[i]);
+				m_side1[i] = nullptr;
+			}
+			else // Otherwise, make sure the display card matches the real card's stats
+			{
+				UpdateCardStats(displayCard, realCard);
+			}
+		}
+		else if (realCard != nullptr)
+		{
+			// If there's a real card but not a display card at this slot, create a display card
+			GDDisplayCard* newCard = memnew(GDDisplayCard());
+			m_side1[i] = newCard;
+			UpdateCardStats(newCard, realCard);
+		}
+
+		// Same thing for side 2
+		displayCard = m_side2[i];
+		realCard = m_board->GetSlot(i, 2);
+		// If there's a display card at this slot
+		if (displayCard != nullptr)
+		{
+			// If there's a display card but not a real card at this slot, destroy the display card
+			if (realCard == nullptr)
+			{
+				memdelete(m_side2[i]);
+				m_side2[i] = nullptr;
+			}
+			else // Otherwise, make sure the display card matches the real card's stats
+			{
+				UpdateCardStats(displayCard, realCard);
+			}
+		}
+		else if (realCard != nullptr)
+		{
+			// If there's a real card but not a display card at this slot, create a display card
+			GDDisplayCard* newCard = memnew(GDDisplayCard());
+			m_side2[i] = newCard;
+			UpdateCardStats(newCard, realCard);
+		}
+	}
+}
+
+void GDBoard::UpdateCardStats(GDDisplayCard* displayCard, ActiveCard* realCard)
+{
+	displayCard->m_cost = realCard->GetCost();
+	displayCard->m_flipCost = realCard->GetFlipCost();
+	displayCard->m_hp = realCard->GetHP();
+	displayCard->m_atk = realCard->GetAtk();
+}
+
 bool GDBoard::IsOccupied(int slot, int side)
 {
 	return m_board->GetSlot(slot, side) != nullptr;
+}
+
+GDDisplayCard* GDBoard::GetCard(int slot, int side)
+{
+	if (slot < 0 || slot >= m_board->GetSlotCount())
+	{
+		UtilityFunctions::print("ERROR: Slot not in range (GDBoard::GetCard)");
+		return nullptr;
+	}
+
+	switch (side)
+	{
+	case 1:
+		return m_side1[slot];
+	case 2:
+		return m_side2[slot];
+	default:
+		UtilityFunctions::print("ERROR: Invalid side (GDBoard::GetCard)");
+		return nullptr;
+	}
 }
 
 GDPlayer* GDBoard::GetDealer()
