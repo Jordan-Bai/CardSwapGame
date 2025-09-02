@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <functional>
+#include <string>
 
 class ActiveCard;
 
@@ -10,6 +11,7 @@ struct CreatureData
 	int hp;
 	int atk;
 	int fCost;
+	std::string name;
 
 	// Ability triggers:
 	//std::function<void(ActiveCard* owningCard)> OnPlayed;
@@ -27,7 +29,7 @@ struct CreatureData
 	// Might want to add OnStack/ OnPickup
 
 	CreatureData(int health, int attack, int flipCost)
-		:hp(health), atk(attack), fCost(flipCost)
+		:hp(health), atk(attack), fCost(flipCost), name("[EMPTY]")
 	{
 	}
 };

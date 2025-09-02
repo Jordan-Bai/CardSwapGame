@@ -167,6 +167,7 @@ bool Player::SwapCards(int slot1, int slot2)
 		m_energy -= CostToSwap;
 		m_boardRef->SetSlot(slot2, m_playerIndex, target1);
 		m_boardRef->SetSlot(slot1, m_playerIndex, target2);
+		return true;
 	}
 
 	return false;
