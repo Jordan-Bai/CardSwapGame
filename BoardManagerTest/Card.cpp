@@ -31,6 +31,18 @@ CreatureData* ActiveCard::GetCurrentFace()
 	}
 }
 
+CreatureData* ActiveCard::GetOpositeFace()
+{
+	if (m_frontActive)
+	{
+		return m_data->backCreature;
+	}
+	else
+	{
+		return m_data->frontCreature;
+	}
+}
+
 int ActiveCard::GetCost()
 {
 	return m_data->cost;
@@ -64,7 +76,7 @@ bool ActiveCard::GetFrontActive()
 
 bool ActiveCard::CanFlip()
 {
-	return !m_flippedThisTurn;
+	return !m_flippedThisTurn && GetOpositeFace() != nullptr;
 }
 
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot

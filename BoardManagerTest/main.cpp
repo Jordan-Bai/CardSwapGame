@@ -43,7 +43,7 @@ int main()
 	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 1; i++)
 	{
 		int stat1 = (rand() % 5) + 1;
 		int stat2 = (rand() % 5) + 1;
@@ -61,6 +61,11 @@ int main()
 		CardData* newCard = new CardData(cost, frontCreature, backCreature);
 		cards.push_back(newCard);
 	}
+
+	CreatureData* frontCreature = new CreatureData(1, 1, 2);
+	creatures.push_back(frontCreature);
+	CardData* newCard = new CardData(1, frontCreature, nullptr);
+	cards.push_back(newCard);
 
 	dealer.StartMatch(cards);
 	player.StartMatch(cards);
