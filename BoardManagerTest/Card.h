@@ -70,6 +70,7 @@ public:
 
 	CardData* GetData();
 	CreatureData* GetCurrentFace();
+	CreatureData* GetOpositeFace();
 	int GetCost();
 	int GetHP();
 	int GetAtk();
