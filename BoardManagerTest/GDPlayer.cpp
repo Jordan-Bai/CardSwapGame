@@ -9,10 +9,13 @@ using namespace godot;
 
 void GDPlayer::_bind_methods()
 {
+	ClassDB::bind_method(D_METHOD("AddCardToDeck", "card"), &GDPlayer::AddCardToDeckGD);
+
+	ClassDB::bind_method(D_METHOD("StartMatch"), &GDPlayer::StartMatch);
 	ClassDB::bind_method(D_METHOD("StartTurn"), &GDPlayer::StartTurn);
 	ClassDB::bind_method(D_METHOD("GetHealth"), &GDPlayer::GetHealth);
 	ClassDB::bind_method(D_METHOD("GetEnergy"), &GDPlayer::GetEnergy);
-	ClassDB::bind_method(D_METHOD("GetCard", "cardIndex"), &GDPlayer::GetCard);
+	ClassDB::bind_method(D_METHOD("GetCard", "cardIndex"), &GDPlayer::GetDisplayCard);
 	ClassDB::bind_method(D_METHOD("GetHandSize"), &GDPlayer::GetHandSize);
 
 	ClassDB::bind_method(D_METHOD("PlayCard", "cardIndex", "targetSlot"), &GDPlayer::PlayCard);
@@ -33,11 +36,21 @@ GDPlayer::GDPlayer(Player* data)
 
 GDPlayer::~GDPlayer()
 {
-	for (GDCard* card : m_hand)
+	for (GDDisplayCard* card : m_hand)
 	{
 		memdelete(card);
 	}
 	m_hand.clear();
+}
+
+void GDPlayer::AddCardToDeckGD(GDCard* card)
+{
+	m_deck.push_back(card->GetData());
+}
+
+void GDPlayer::AddCardToDeck(CardData* card)
+{
+	m_deck.push_back(card);
 }
 
 
@@ -46,12 +59,17 @@ GDPlayer::~GDPlayer()
 //	m_data = 
 //}
 
+void GDPlayer::StartMatch()
+{
+	m_data->StartMatch(m_deck);
+}
+
 void GDPlayer::StartTurn()
 {
 	m_data->StartTurn();
 	for (int i = m_hand.size(); i < m_data->m_hand.size(); i++) // For each card that was just picked up, add it to hand
 	{
-		GDCard* newCard = memnew(GDCard(m_data->m_hand[i]));
+		GDDisplayCard* newCard = memnew(GDDisplayCard(m_data->m_hand[i]));
 		m_hand.push_back(newCard);
 	}
 }
@@ -67,7 +85,7 @@ int GDPlayer::GetEnergy()
 	return m_data->m_energy;
 }
 
-GDCard* GDPlayer::GetCard(int cardIndex)
+GDDisplayCard* GDPlayer::GetDisplayCard(int cardIndex)
 {
 	if (cardIndex < 0 || cardIndex >= m_hand.size())
 	{

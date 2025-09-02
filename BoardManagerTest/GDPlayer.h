@@ -20,8 +20,8 @@ namespace godot
 
 	protected:
 		Player* m_data;
-		std::vector<GDCard*> m_hand;
-		//Array m_hand;
+		std::vector<GDDisplayCard*> m_hand;
+		std::vector<CardData*> m_deck;
 
 		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
 
@@ -32,12 +32,16 @@ namespace godot
 		//GDPlayer& operator=(const GDPlayer& ref) = delete; //assignment operator
 		~GDPlayer();
 
+		void AddCardToDeckGD(GDCard* card);
+		void AddCardToDeck(CardData* card);
+
 		//void Init(GDBoard* board);
+		void StartMatch();
 		void StartTurn();
 
 		int GetHealth();
 		int GetEnergy();
-		GDCard* GetCard(int cardIndex);
+		GDDisplayCard* GetDisplayCard(int cardIndex);
 		int GetHandSize();
 
 		bool PlayCard(int cardIndex, int targetSlot);

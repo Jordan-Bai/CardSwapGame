@@ -6,6 +6,8 @@ using namespace godot;
 
 void GDBoard::_bind_methods()
 {
+	ClassDB::bind_method(D_METHOD("StartMatch"), &GDBoard::StartMatch);
+
 	ClassDB::bind_method(D_METHOD("DoDealerTurn"), &GDBoard::DoDealerTurn);
 	ClassDB::bind_method(D_METHOD("DoAttackPhase"), &GDBoard::DoAttackPhase);
 	ClassDB::bind_method(D_METHOD("UpdateBoardState"), &GDBoard::UpdateBoardState);
@@ -33,26 +35,29 @@ GDBoard::GDBoard()
 	m_board = new BoardManager(m_dealerData, m_playerData, m_slots);
 
 	m_dealerAI = new DealerAI(m_board, m_dealerData);
-	m_testPlayerAI = new DealerAI(m_board, m_playerData);
+	//m_testPlayerAI = new DealerAI(m_board, m_playerData);
 
 
 	// DECK CREATION FOR TESTING
 	srand(time(0));
 
-	for (int i = 0; i < 10; i++)
-	{
-		int stat1 = (rand() % 5) + 1;
-		int stat2 = (rand() % 5) + 1;
-		CreatureData* frontCreature = new CreatureData(stat1, stat2, 2);
-		creatures.push_back(frontCreature);
-		CreatureData* backCreature = new CreatureData(stat2 + 2, stat1 + 2, 1);
-		creatures.push_back(backCreature);
-
-		int cost = (stat1 + stat2) / 4;
-
-		CardData* newCard = new CardData(cost, frontCreature, backCreature);
-		cards.push_back(newCard);
-	}
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	int stat1 = (rand() % 5) + 1;
+	//	int stat2 = (rand() % 5) + 1;
+	//	CreatureData* frontCreature = new CreatureData(stat1, stat2, 2);
+	//	creatures.push_back(frontCreature);
+	//	CreatureData* backCreature = new CreatureData(stat2 + 2, stat1 + 2, 1);
+	//	creatures.push_back(backCreature);
+	//
+	//	int cost = (stat1 + stat2) / 4;
+	//
+	//	CardData* newCard = new CardData(cost, frontCreature, backCreature);
+	//	cards.push_back(newCard);
+	//
+	//	m_dealer->AddCardToDeck(newCard);
+	//	m_player->AddCardToDeck(newCard);
+	//}
 
 	// Setup each side of the board
 	for (int i = 0; i < m_board->GetSlotCount(); i++)
@@ -61,8 +66,8 @@ GDBoard::GDBoard()
 		m_side2.push_back(nullptr);
 	}
 
-	m_dealerData->StartMatch(cards);
-	m_playerData->StartMatch(cards);
+	//m_dealerData->StartMatch(cards);
+	//m_playerData->StartMatch(cards);
 }
 
 GDBoard::~GDBoard()
@@ -71,10 +76,16 @@ GDBoard::~GDBoard()
 	delete m_playerData;
 	delete m_board;
 	delete m_dealerAI;
-	delete m_testPlayerAI;
+	//delete m_testPlayerAI;
 
 	memdelete(m_dealer);
 	memdelete(m_player);
+}
+
+void GDBoard::StartMatch()
+{
+	m_dealer->StartMatch();
+	m_player->StartMatch();
 }
 
 
@@ -150,6 +161,7 @@ void GDBoard::UpdateCardStats(GDDisplayCard* displayCard, ActiveCard* realCard)
 	displayCard->m_flipCost = realCard->GetFlipCost();
 	displayCard->m_hp = realCard->GetHP();
 	displayCard->m_atk = realCard->GetAtk();
+	displayCard->m_name = String(realCard->GetCurrentFace()->name.c_str());
 }
 
 bool GDBoard::IsOccupied(int slot, int side)

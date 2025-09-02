@@ -19,11 +19,10 @@ namespace godot
 		int m_slots = 4;
 
 	protected:
-		std::vector<CreatureData*> creatures; // FOR TESTING
-		std::vector<CardData*> cards; // FOR TESTING
+		//std::vector<CreatureData*> creatures; // FOR TESTING
+		//std::vector<CardData*> cards; // FOR TESTING
 
 		DealerAI* m_dealerAI;
-		DealerAI* m_testPlayerAI; // FOR TESTING
 		BoardManager* m_board; // The actual board itself
 		
 		Player* m_dealerData;
@@ -41,6 +40,8 @@ namespace godot
 		GDBoard(const GDBoard& ref) = delete; //copy constructor
 		//GDBoard& operator=(const GDBoard& ref) = delete; //assignment operator
 		~GDBoard();
+
+		void StartMatch();
 
 		void DoDealerTurn();
 		void DoAttackPhase();
