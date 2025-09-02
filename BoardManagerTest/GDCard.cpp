@@ -106,10 +106,10 @@ GDCard::GDCard()
 	//CreatureData* front = new CreatureData(1, 1, 1);
 	//CreatureData* back = new CreatureData(2, 2, 2);
 
-	m_frontFace = memnew(GDCreature());
-	m_backFace = memnew(GDCreature());
+	//m_frontFace = memnew(GDCreature());
+	//m_backFace = memnew(GDCreature());
 	
-	m_data = new CardData(0, m_frontFace->GetData(), m_backFace->GetData());
+	m_data = new CardData(0, nullptr, nullptr);
 }
 
 //GDCard::GDCard(CardData* data)
@@ -121,14 +121,14 @@ GDCard::GDCard()
 
 GDCard::~GDCard()
 {
-	if (m_frontFace != nullptr)
-	{
-		memdelete(m_frontFace);
-	}
-	if (m_backFace != nullptr)
-	{
-		memdelete(m_backFace);
-	}
+	//if (m_frontFace != nullptr)
+	//{
+	//	memdelete(m_frontFace);
+	//}
+	//if (m_backFace != nullptr)
+	//{
+	//	memdelete(m_backFace);
+	//}
 	delete m_data;
 }
 
