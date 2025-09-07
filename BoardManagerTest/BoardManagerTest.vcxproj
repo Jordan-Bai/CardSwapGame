@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />
+    <ClInclude Include="ActiveCard.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="BoardManager.h" />
     <ClInclude Include="Card.h" />
@@ -135,9 +136,10 @@
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ability.cpp" />
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="BoardManager.cpp" />
-    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="ActiveCard.cpp" />
     <ClCompile Include="DealerAI.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />

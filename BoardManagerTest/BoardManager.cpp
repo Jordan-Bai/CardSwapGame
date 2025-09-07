@@ -65,6 +65,11 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 		m_side2[slot] = placedCard;
 	}
 
+	if (placedCard->GetCurrentFace()->OnPlayed != nullptr)
+	{
+		placedCard->GetCurrentFace()->OnPlayed();
+	}
+
 	CardPlayed(placedCard);
 
 	return true;
@@ -465,7 +470,7 @@ void BoardManager::TurnEnds(int playerIndex)
 	for (int i = 0; i < m_slots; i++)
 	{
 		ActiveCard* targetCard = GetSlot(i, playerIndex);
-		if (targetCard != nullptr)
+		if (targetCard != nullptr && targetCard->GetCurrentFace()->OnTurnEnds != nullptr)
 		{
 			targetCard->GetCurrentFace()->OnTurnEnds();
 		}

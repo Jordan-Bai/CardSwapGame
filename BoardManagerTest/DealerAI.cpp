@@ -456,14 +456,14 @@ void DealerAI::CopyBoardData()
 		ActiveCard* cardSide1 = m_boardRef->GetSlot(i, 1);
 		if (cardSide1 != nullptr)
 		{
-			ActiveCard* copyCard = new ActiveCard(cardSide1);
+			ActiveCard* copyCard = new ActiveCard(*cardSide1);
 
 			m_copyBoard->SetSlot(i, 1, copyCard);
 		}
 		ActiveCard* cardSide2 = m_boardRef->GetSlot(i, 2);
 		if (cardSide2 != nullptr)
 		{
-			ActiveCard* copyCard = new ActiveCard(cardSide2);
+			ActiveCard* copyCard = new ActiveCard(*cardSide2);
 
 			m_copyBoard->SetSlot(i, 2, copyCard);
 		}

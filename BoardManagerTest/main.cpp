@@ -1,5 +1,6 @@
 #include "BoardManager.h"
 #include "DealerAI.h"
+#include "Ability.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -10,7 +11,7 @@ int main()
 	//seed = 1756251145;
 	srand(seed);
 
-	bool doOutput = true;
+	bool doOutput = false;
 	bool doAppend = true;
 
 	std::fstream testOutput;
@@ -40,6 +41,14 @@ int main()
 	Player dealer;
 	Player player;
 
+	// TEST ABILITY
+	std::function<void(ActiveCreature* owner)> testEffect = [](ActiveCreature* owner)
+		{
+			//std::cout << "ABILITY ACTIVATED:\n";
+			owner->SetHP(9);
+		};
+	Ability testAbility(AbilityTrigger::OnPlayed, testEffect);
+
 	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
@@ -52,6 +61,8 @@ int main()
 		CreatureData* backCreature = new CreatureData(stat2 + 2, stat1 + 2, 1);
 		creatures.push_back(backCreature);
 
+		//frontCreature->abilities.push_back(&testAbility);
+
 		int cost = (stat1 + stat2) / 4;
 		//if (cost == 0)
 		//{
@@ -63,6 +74,7 @@ int main()
 	}
 
 	CreatureData* frontCreature = new CreatureData(1, 1, 2);
+	frontCreature->abilities.push_back(&testAbility);
 	creatures.push_back(frontCreature);
 	CardData* newCard = new CardData(1, frontCreature, nullptr);
 	cards.push_back(newCard);

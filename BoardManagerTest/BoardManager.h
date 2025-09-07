@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "ActiveCard.h"
 
 class BoardManager
 {
