@@ -75,6 +75,11 @@ int ActiveCreature::GetAbilityCost()
 	return m_data->aCost;
 }
 
+std::string ActiveCreature::GetName()
+{
+	return m_data->name;
+}
+
 void ActiveCreature::SetHP(int hp)
 {
 	m_overrideStats = true;
@@ -96,7 +101,7 @@ void ActiveCreature::SetFlipCost(int fCost)
 void ActiveCreature::SetAbilityCost(int aCost)
 {
 	m_overrideStats = true;
-	m_fCostOverride = aCost;
+	m_aCostOverride = aCost;
 }
 
 bool ActiveCreature::HasActivateAbility()
@@ -224,6 +229,11 @@ int ActiveCard::GetFlipCost()
 int ActiveCard::GetAbilityCost()
 {
 	return GetCurrentFace()->GetAbilityCost();
+}
+
+std::string ActiveCard::GetName()
+{
+	return GetCurrentFace()->GetName();
 }
 
 BoardManager* ActiveCard::GetBoard()

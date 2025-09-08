@@ -44,11 +44,13 @@ public:
 	int GetAtk();
 	int GetFlipCost();
 	int GetAbilityCost();
+	std::string GetName();
 
 	void SetHP(int hp);
 	void SetAtk(int atk);
 	void SetFlipCost(int fCost);
 	void SetAbilityCost(int aCost);
+	//void SetName(std::string name); // Really shouldn't be necessary
 
 	bool HasActivateAbility();
 };
@@ -85,6 +87,7 @@ public:
 	int GetAtk();
 	int GetFlipCost();
 	int GetAbilityCost();
+	std::string GetName();
 
 	BoardManager* GetBoard();
 	void SetBoard(BoardManager* board);
