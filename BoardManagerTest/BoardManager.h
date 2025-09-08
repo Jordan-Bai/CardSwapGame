@@ -33,6 +33,9 @@ public:
 	void EndMatch();
 
 	void DisplayBoard();
+	std::vector<std::string> GetCardText(CardData* card);
+	std::vector<std::string> GetCardText(ActiveCard* card);
+	std::string AbilityToString(CreatureData* face, int abilityIndex);
 
 	int OppositeSide(int side);
 	Player* GetPlayer(int side);

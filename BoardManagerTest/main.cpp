@@ -8,11 +8,11 @@
 int main()
 {
 	int seed = time(0);
-	seed = 1757305014;
+	//seed = 1757305014;
 	srand(seed);
 
-	bool doOutput = false;
-	bool doAppend = true;
+	bool doOutput = true;
+	bool doAppend = false;
 
 	std::fstream testOutput;
 	if (doOutput)
@@ -88,7 +88,7 @@ int main()
 
 	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
 	frontCreature->abilities.push_back(&testAbility);
-	frontCreature->abilities.push_back(&healAbility);
+	//frontCreature->abilities.push_back(&healAbility);
 	creatures.push_back(frontCreature);
 	CardData* newCard = new CardData(1, frontCreature, nullptr);
 	cards.push_back(newCard);
@@ -96,12 +96,6 @@ int main()
 	PickupCard pickupEffect(newCard);
 	Ability pickupAbility(AbilityTrigger::OnActivate, &pickupEffect);
 	//frontCreature->abilities.push_back(&pickupAbility);
-
-	//CreatureData* frontCreature2 = new CreatureData(1, 1, 2, 1);
-	//frontCreature2->abilities.push_back(&testAbility);
-	//creatures.push_back(frontCreature2);
-	//CardData* newCard2 = new CardData(1, frontCreature2, nullptr);
-	//cards.push_back(newCard2);
 
 	dealer.StartMatch(cards);
 	player.StartMatch(cards);

@@ -36,6 +36,10 @@ public:
 	ActiveCreature(CreatureData* data, ActiveCard* owner);
 	ActiveCreature(const ActiveCreature& other, ActiveCard* owner);
 
+	CreatureData* GetData();
+	ActiveCard* GetOwner();
+	void SetOwner(ActiveCard* owner);
+
 	int GetHP();
 	int GetAtk();
 	int GetFlipCost();
@@ -47,9 +51,6 @@ public:
 	void SetAbilityCost(int aCost);
 
 	bool HasActivateAbility();
-
-	ActiveCard* GetOwner();
-	void SetOwner(ActiveCard* owner);
 };
 
 class BoardManager;

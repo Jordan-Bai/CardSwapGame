@@ -24,6 +24,21 @@ ActiveCreature::ActiveCreature(const ActiveCreature& other, ActiveCard* owner)
 	}
 }
 
+CreatureData* ActiveCreature::GetData()
+{
+	return m_data;
+}
+
+ActiveCard* ActiveCreature::GetOwner()
+{
+	return m_owner;
+}
+
+void ActiveCreature::SetOwner(ActiveCard* owner)
+{
+	m_owner = owner;
+}
+
 int ActiveCreature::GetHP()
 {
 	if (m_overrideStats)
@@ -87,16 +102,6 @@ void ActiveCreature::SetAbilityCost(int aCost)
 bool ActiveCreature::HasActivateAbility()
 {
 	return OnActivate != nullptr;
-}
-
-ActiveCard* ActiveCreature::GetOwner()
-{
-	return m_owner;
-}
-
-void ActiveCreature::SetOwner(ActiveCard* owner)
-{
-	m_owner = owner;
 }
 
 
