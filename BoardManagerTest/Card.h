@@ -12,13 +12,19 @@ struct CreatureData
 	int hp;
 	int atk;
 	int fCost;
+	int aCost;
 	std::string name;
 	std::vector<Ability*> abilities;
 
-	CreatureData(int health, int attack, int flipCost)
-		:hp(health), atk(attack), fCost(flipCost), name("[EMPTY]")
+	CreatureData(int health, int attack, int flipCost, int abilityCost = 0)
+		:hp(health), atk(attack), fCost(flipCost), aCost(abilityCost), name("[EMPTY]")
 	{
 	}
+
+	//~CreatureData()
+	//{
+	//	abilities.clear();
+	//}
 };
 
 struct CardData

@@ -23,6 +23,8 @@ public:
 	bool PlayCard(CardData* data, int slot, int playerIndex);
 	bool FlipCard(int slot, int playerIndex);
 	bool FlipCard(ActiveCard* card);
+	bool ActivateCard(int slot, int playerIndex);
+	bool ActivateCard(ActiveCard* card);
 
 	void DoAttackPhase();
 	void PerformAttack(ActiveCard* attacker, int targetSlot);

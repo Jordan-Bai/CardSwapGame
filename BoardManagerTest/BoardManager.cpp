@@ -51,7 +51,7 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 			return false;
 		}
 
-		placedCard = new ActiveCard(data, slot, playerIndex);
+		placedCard = new ActiveCard(data, slot, playerIndex, this);
 		m_side1[slot] = placedCard;
 	}
 	else
@@ -61,14 +61,15 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 			return false;
 		}
 
-		placedCard = new ActiveCard(data, slot, playerIndex);
+		placedCard = new ActiveCard(data, slot, playerIndex, this);
 		m_side2[slot] = placedCard;
 	}
 
-	if (placedCard->GetCurrentFace()->OnPlayed != nullptr)
-	{
-		placedCard->GetCurrentFace()->OnPlayed();
-	}
+	//if (placedCard->GetCurrentFace()->OnPlayed != nullptr)
+	//{
+	//	placedCard->GetCurrentFace()->OnPlayed();
+	//}
+	placedCard->OnPlayed();
 
 	CardPlayed(placedCard);
 
@@ -85,13 +86,39 @@ bool BoardManager::FlipCard(ActiveCard* card)
 {
 	if (card != nullptr)
 	{
-		if (card->Flip())
+		if (card->CanFlip())
 		{
+			card->Flip();
+			card->OnFlip();
+
 			if (card->GetHP() <= 0)
 			{
 				DestroyCard(card);
 			}
 
+			// Send "OnBoardUpdates" signal to all cards
+			BoardUpdates();
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool BoardManager::ActivateCard(int slot, int playerIndex)
+{
+	ActiveCard* targetSlot = GetSlot(slot, playerIndex);
+	return ActivateCard(targetSlot);
+}
+
+bool BoardManager::ActivateCard(ActiveCard* card)
+{
+	if (card != nullptr)
+	{
+		if (card->GetCurrentFace()->HasActivateAbility())
+		{
+			card->OnActivate();
 			// Send "OnBoardUpdates" signal to all cards
 			BoardUpdates();
 
@@ -154,10 +181,11 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 	Player* defendingPlayer = GetPlayer(defendingSide);
 
 	// Send "OnAttack" signal to attacker
-	if (attacker->GetCurrentFace()->OnAttack != nullptr)
-	{
-		attacker->GetCurrentFace()->OnAttack(defendingCard);
-	}
+	//if (attacker->GetCurrentFace()->OnAttack != nullptr)
+	//{
+	//	attacker->GetCurrentFace()->OnAttack(defendingCard);
+	//}
+	attacker->OnAttack(defendingCard);
 
 	if (defendingCard == nullptr)
 	{
@@ -168,10 +196,10 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 	{
 		defendingCard->TakeDamage(attacker->GetAtk());
 		// Send "OnAttacked" signal to defender
-		if (defendingCard->GetCurrentFace()->OnAttacked != nullptr)
-		{
-			defendingCard->GetCurrentFace()->OnAttacked(attacker);
-		}
+		//if (defendingCard->GetCurrentFace()->OnAttacked != nullptr)
+		//{
+		//	defendingCard->GetCurrentFace()->OnAttacked(attacker);
+		//}
 
 		// Check if card died
 		if (defendingCard->GetHP() <= 0)
@@ -180,6 +208,11 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 			defendingPlayer->m_hp += defendingCard->GetHP();
 
 			DestroyCard(defendingCard);
+		}
+		else
+		{
+			// Send "OnAttacked" signal to defender
+			defendingCard->OnAttacked(attacker);
 		}
 
 		// Send "OnBoardUpdates" signal to all cards
@@ -190,10 +223,11 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 void BoardManager::DestroyCard(ActiveCard* card)
 {
 	// Send "OnDeath" signal to card before it gets destroyed
-	if (card->GetCurrentFace()->OnDeath != nullptr)
-	{
-		card->GetCurrentFace()->OnDeath();
-	}
+	//if (card->GetCurrentFace()->OnDeath != nullptr)
+	//{
+	//	card->GetCurrentFace()->OnDeath();
+	//}
+	card->OnDeath();
 
 	// Add card to corresponding discard pile
 	GetPlayer(card->m_side)->m_discardPile.push_back(card->GetData());
@@ -418,9 +452,13 @@ void BoardManager::CardDies()
 		for (int i = 0; i < m_slots; i++)
 		{
 			ActiveCard* targetCard = GetSlot(i, side);
-			if (targetCard != nullptr && targetCard->GetCurrentFace()->OnCardDies != nullptr)
+			//if (targetCard != nullptr && targetCard->GetCurrentFace()->OnCardDies != nullptr)
+			//{
+			//	targetCard->GetCurrentFace()->OnCardDies();
+			//}
+			if (targetCard != nullptr)
 			{
-				targetCard->GetCurrentFace()->OnCardDies();
+				targetCard->OnCardDies();
 			}
 		}
 	}
@@ -441,9 +479,13 @@ void BoardManager::TurnStarts(int playerIndex)
 	for (int i = 0; i < m_slots; i++)
 	{
 		ActiveCard* targetCard = GetSlot(i, playerIndex);
-		if (targetCard != nullptr && targetCard->GetCurrentFace()->OnTurnStarts != nullptr)
+		//if (targetCard != nullptr && targetCard->GetCurrentFace()->OnTurnStarts != nullptr)
+		//{
+		//	targetCard->GetCurrentFace()->OnTurnStarts();
+		//}
+		if (targetCard != nullptr)
 		{
-			targetCard->GetCurrentFace()->OnTurnStarts();
+			targetCard->OnTurnStarts();
 		}
 	}
 
@@ -470,9 +512,13 @@ void BoardManager::TurnEnds(int playerIndex)
 	for (int i = 0; i < m_slots; i++)
 	{
 		ActiveCard* targetCard = GetSlot(i, playerIndex);
-		if (targetCard != nullptr && targetCard->GetCurrentFace()->OnTurnEnds != nullptr)
+		//if (targetCard != nullptr && targetCard->GetCurrentFace()->OnTurnEnds != nullptr)
+		//{
+		//	targetCard->GetCurrentFace()->OnTurnEnds();
+		//}
+		if (targetCard != nullptr)
 		{
-			targetCard->GetCurrentFace()->OnTurnEnds();
+			targetCard->OnTurnEnds();
 		}
 	}
 
@@ -501,9 +547,13 @@ void BoardManager::BoardUpdates()
 		for (int i = 0; i < m_slots; i++)
 		{
 			ActiveCard* targetCard = GetSlot(i, side);
-			if (targetCard != nullptr && targetCard->GetCurrentFace()->OnBoardUpdates != nullptr)
+			//if (targetCard != nullptr && targetCard->GetCurrentFace()->OnBoardUpdates != nullptr)
+			//{
+			//	targetCard->GetCurrentFace()->OnBoardUpdates();
+			//}
+			if (targetCard != nullptr)
 			{
-				targetCard->GetCurrentFace()->OnBoardUpdates();
+				targetCard->OnBoardUpdates();
 			}
 		}
 	}
