@@ -81,6 +81,7 @@ public:
 	ActiveCreature* GetOpositeFace();
 	int GetCost();
 	int GetHP();
+	int GetMaxHP();
 	int GetAtk();
 	int GetFlipCost();
 	int GetAbilityCost();

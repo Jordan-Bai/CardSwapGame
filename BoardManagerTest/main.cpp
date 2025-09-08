@@ -8,7 +8,7 @@
 int main()
 {
 	int seed = time(0);
-	//seed = 1757305014;
+	//seed = 1757373423;
 	srand(seed);
 
 	bool doOutput = true;
@@ -59,6 +59,12 @@ int main()
 	GainEnergy energyEffect(2);
 	Ability energyAbility(AbilityTrigger::OnFlippedTo, &energyEffect);
 
+	RandomizeStats randomizeEffect(1, 3);
+	Ability randomizeAbility(AbilityTrigger::OnPlayed, &randomizeEffect);
+
+	CopyCards copyEffect({-1, 1});
+	Ability copyAbility(AbilityTrigger::OnBoardUpdates, &copyEffect);
+
 	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
@@ -87,7 +93,7 @@ int main()
 	}
 
 	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
-	frontCreature->abilities.push_back(&testAbility);
+	frontCreature->abilities.push_back(&copyAbility);
 	//frontCreature->abilities.push_back(&healAbility);
 	creatures.push_back(frontCreature);
 	CardData* newCard = new CardData(1, frontCreature, nullptr);

@@ -206,6 +206,11 @@ int ActiveCard::GetHP()
 	return GetCurrentFace()->GetHP() - m_damageTaken;
 }
 
+int ActiveCard::GetMaxHP()
+{
+	return GetCurrentFace()->GetHP();
+}
+
 int ActiveCard::GetAtk()
 {
 	return GetCurrentFace()->GetAtk();

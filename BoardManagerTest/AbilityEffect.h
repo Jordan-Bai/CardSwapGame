@@ -60,7 +60,7 @@ struct RandomizeStats : public AbilityEffect
 	int min;
 	int max;
 
-	RandomizeStats(int statMin, int statMax);
+	RandomizeStats(int minInclusive, int maxInclusive);
 
 	virtual std::string GetIcon() override;
 };

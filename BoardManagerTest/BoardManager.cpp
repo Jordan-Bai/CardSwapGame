@@ -509,7 +509,7 @@ ActiveCard* BoardManager::GetSlot(int slot, int side)
 {
 	if (slot < 0 || slot >= m_slots)
 	{
-		std::cout << "ERROR: Accessing slot out of range (BoardManager::GetSlot)\n";
+		//std::cout << "ERROR: Accessing slot out of range (BoardManager::GetSlot)\n";
 		return nullptr;
 	}
 
@@ -543,7 +543,10 @@ void BoardManager::SetSlot(int slot, int side, ActiveCard* newCard)
 	if (newCard != nullptr)
 	{
 		newCard->m_slot = slot;
+		newCard->m_side = side;
 	}
+
+	BoardUpdates();
 }
 
 

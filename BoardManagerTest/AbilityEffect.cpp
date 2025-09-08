@@ -1,6 +1,7 @@
 #include "AbilityEffect.h"
 
 #include "BoardManager.h"
+#include <iostream>
 
 ChangeStats::ChangeStats(int health, int attack, int flipCost)
 	:hp(health), atk(attack), fCost(flipCost)
@@ -74,14 +75,14 @@ PickupCard::PickupCard(CardData* cardToPickup)
 		};
 }
 
-RandomizeStats::RandomizeStats(int statMin, int statMax)
-	:min(statMin), max(statMax)
+RandomizeStats::RandomizeStats(int minInclusive, int maxInclusive)
+	:min(minInclusive), max(maxInclusive)
 {
 	effect = [this](ActiveCreature* owner)
 		{
-			owner->SetHP((rand() % (max - min)) + min);
-			owner->SetAtk((rand() % (max - min)) + min);
-			owner->SetFlipCost((rand() % (max - min)) + min);
+			owner->SetHP((rand() % (max + 1 - min)) + min);
+			owner->SetAtk((rand() % (max + 1 - min)) + min);
+			owner->SetFlipCost((rand() % (max + 1 - min)) + min);
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
@@ -92,6 +93,7 @@ RandomizeStats::RandomizeStats(int statMin, int statMax)
 }
 
 CopyCards::CopyCards(std::vector<int> slotsToCopy)
+	:copyTargets(slotsToCopy)
 {
 	effect = [this](ActiveCreature* owner)
 		{
@@ -106,8 +108,8 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 				if (targetCard != nullptr)
 				{
 					canCopy = true;
-					totalHP += targetCard->GetCurrentFace()->GetHP();
-					totalAtk += targetCard->GetCurrentFace()->GetAtk();
+					totalHP += targetCard->GetMaxHP();
+					totalAtk += targetCard->GetAtk();
 				}
 			}
 
@@ -115,6 +117,12 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 			{
 				owner->SetHP(totalHP);
 				owner->SetAtk(totalAtk);
+			}
+
+			// If updating the card's max hp causes its current hp to go to 0 or below, make sure card dies
+			if (parentCard->GetHP() <= 0)
+			{
+				parentCard->GetBoard()->DestroyCard(parentCard);
 			}
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
@@ -130,8 +138,8 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 				if (targetCard != nullptr)
 				{
 					canCopy = true;
-					totalHP += targetCard->GetCurrentFace()->GetHP();
-					totalAtk += targetCard->GetCurrentFace()->GetAtk();
+					totalHP += targetCard->GetMaxHP();
+					totalAtk += targetCard->GetAtk();
 				}
 			}
 
@@ -139,6 +147,12 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 			{
 				owner->SetHP(totalHP);
 				owner->SetAtk(totalAtk);
+			}
+
+			// If updating the card's max hp causes its current hp to go to 0 or below, make sure card dies
+			if (parentCard->GetHP() <= 0)
+			{
+				parentCard->GetBoard()->DestroyCard(parentCard);
 			}
 		};
 }
