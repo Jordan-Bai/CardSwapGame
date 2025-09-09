@@ -3,6 +3,7 @@
 #include "GDBoard.h"
 #include "GDCard.h"
 #include "GDPlayer.h"
+#include "GDAbility.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -24,6 +25,7 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	GDREGISTER_RUNTIME_CLASS(GDCreature);
 	GDREGISTER_RUNTIME_CLASS(GDCard);
 	GDREGISTER_RUNTIME_CLASS(GDDisplayCard);
+	GDREGISTER_RUNTIME_CLASS(GDAbility);
 }
 
 // Called when godot unloads this

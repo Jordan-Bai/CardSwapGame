@@ -10,16 +10,19 @@ void GDCreature::_bind_methods()
 	ClassDB::bind_method(D_METHOD("GetHP"), &GDCreature::GetHP);
 	ClassDB::bind_method(D_METHOD("GetAtk"), &GDCreature::GetAtk);
 	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDCreature::GetFlipCost);
+	ClassDB::bind_method(D_METHOD("GetAbilityCost"), &GDCreature::GetAbilityCost);
 	ClassDB::bind_method(D_METHOD("GetName"), &GDCreature::GetName);
 
 	ClassDB::bind_method(D_METHOD("SetHP", "hp"), &GDCreature::SetHP);
 	ClassDB::bind_method(D_METHOD("SetAtk", "atk"), &GDCreature::SetAtk);
 	ClassDB::bind_method(D_METHOD("SetFlipCost", "flipCost"), &GDCreature::SetFlipCost);
+	ClassDB::bind_method(D_METHOD("SetAbilityCost", "abilityCost"), &GDCreature::SetAbilityCost);
 	ClassDB::bind_method(D_METHOD("SetName", "name"), &GDCreature::SetName);
 	
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "SetHP", "GetHP");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "atk"), "SetAtk", "GetAtk");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "abilityCost"), "SetAbilityCost", "GetAbilityCost");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name"), "SetName", "GetName");
 }
 
@@ -53,6 +56,11 @@ int GDCreature::GetFlipCost()
 	return m_data->fCost;
 }
 
+int GDCreature::GetAbilityCost()
+{
+	return m_data->aCost;
+}
+
 String GDCreature::GetName()
 {
 	return String(m_data->name.c_str());
@@ -71,6 +79,11 @@ void GDCreature::SetAtk(int atk)
 void GDCreature::SetFlipCost(int fCost)
 {
 	m_data->fCost = fCost;
+}
+
+void GDCreature::SetAbilityCost(int aCost)
+{
+	m_data->aCost = aCost;
 }
 
 void GDCreature::SetName(String name)
@@ -173,56 +186,51 @@ CardData* GDCard::GetData()
 // DISPLAY CARD
 void GDDisplayCard::_bind_methods()
 {
-	ClassDB::bind_method(D_METHOD("GetCost"), &GDDisplayCard::GetCost);
-	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDDisplayCard::GetFlipCost);
 	ClassDB::bind_method(D_METHOD("GetHP"), &GDDisplayCard::GetHP);
 	ClassDB::bind_method(D_METHOD("GetAtk"), &GDDisplayCard::GetAtk);
+	ClassDB::bind_method(D_METHOD("GetCost"), &GDDisplayCard::GetCost);
+	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDDisplayCard::GetFlipCost);
+	ClassDB::bind_method(D_METHOD("GetAbilityCost"), &GDDisplayCard::GetAbilityCost);
 	ClassDB::bind_method(D_METHOD("GetName"), &GDDisplayCard::GetName);
 
-	ClassDB::bind_method(D_METHOD("SetCost", "cost"), &GDDisplayCard::SetCost);
-	ClassDB::bind_method(D_METHOD("SetFlipCost", "flipCost"), &GDDisplayCard::SetFlipCost);
 	ClassDB::bind_method(D_METHOD("SetHP", "hp"), &GDDisplayCard::SetHP);
 	ClassDB::bind_method(D_METHOD("SetAtk", "atk"), &GDDisplayCard::SetAtk);
+	ClassDB::bind_method(D_METHOD("SetCost", "cost"), &GDDisplayCard::SetCost);
+	ClassDB::bind_method(D_METHOD("SetFlipCost", "flipCost"), &GDDisplayCard::SetFlipCost);
+	ClassDB::bind_method(D_METHOD("SetAbilityCost", "abilityCost"), &GDDisplayCard::SetAbilityCost);
 	ClassDB::bind_method(D_METHOD("SetName", "name"), &GDDisplayCard::SetName);
 
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "cost"), "SetCost", "GetCost");
-	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "SetHP", "GetHP");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "atk"), "SetAtk", "GetAtk");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "cost"), "SetCost", "GetCost");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "abilityCost"), "SetAbilityCost", "GetAbilityCost");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name"), "SetName", "GetName");
 }
 
 GDDisplayCard::GDDisplayCard()
-	: m_cost(-1), m_flipCost(-1), m_hp(-1), m_atk(-1)
+	:m_hp(-1), m_atk(-1),  m_cost(-1), m_flipCost(-1), m_abilityCost(-1)
 {
 }
 
 GDDisplayCard::GDDisplayCard(GDCard* card)
 {
-	m_cost = card->GetCost();
-	m_flipCost = card->GetFrontFace()->GetFlipCost();
 	m_hp = card->GetFrontFace()->GetHP();
 	m_atk = card->GetFrontFace()->GetAtk();
+	m_cost = card->GetCost();
+	m_flipCost = card->GetFrontFace()->GetFlipCost();
+	m_abilityCost = card->GetFrontFace()->GetAbilityCost();
 	m_name = card->GetFrontFace()->GetName();
 }
 
 GDDisplayCard::GDDisplayCard(CardData* card)
 {
-	m_cost = card->cost;
-	m_flipCost = card->frontCreature->fCost;
 	m_hp = card->frontCreature->hp;
 	m_atk = card->frontCreature->atk;
+	m_cost = card->cost;
+	m_flipCost = card->frontCreature->fCost;
+	m_abilityCost = card->frontCreature->aCost;
 	m_name = String(card->frontCreature->name.c_str());
-}
-
-int GDDisplayCard::GetCost()
-{
-	return m_cost;
-}
-
-int GDDisplayCard::GetFlipCost()
-{
-	return m_flipCost;
 }
 
 int GDDisplayCard::GetHP()
@@ -235,11 +243,36 @@ int GDDisplayCard::GetAtk()
 	return m_atk;
 }
 
+int GDDisplayCard::GetCost()
+{
+	return m_cost;
+}
+
+int GDDisplayCard::GetFlipCost()
+{
+	return m_flipCost;
+}
+
+int godot::GDDisplayCard::GetAbilityCost()
+{
+	return m_abilityCost;
+}
+
 String GDDisplayCard::GetName()
 {
 	return m_name;
 }
 
+
+void GDDisplayCard::SetHP(int hp)
+{
+	m_hp = hp;
+}
+
+void GDDisplayCard::SetAtk(int atk)
+{
+	m_atk = atk;
+}
 
 void GDDisplayCard::SetCost(int cost)
 {
@@ -251,14 +284,9 @@ void GDDisplayCard::SetFlipCost(int flipCost)
 	m_flipCost = flipCost;
 }
 
-void GDDisplayCard::SetHP(int hp)
+void godot::GDDisplayCard::SetAbilityCost(int abilityCost)
 {
-	m_hp = hp;
-}
-
-void GDDisplayCard::SetAtk(int atk)
-{
-	m_atk = atk;
+	m_abilityCost = abilityCost;
 }
 
 void GDDisplayCard::SetName(String name)

@@ -1,82 +1,31 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="GodotIntegration">
-      <UniqueIdentifier>{a8fe588f-668f-41a4-ae5c-3e1284725880}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GodotIntegration\Header Files">
-      <UniqueIdentifier>{58e4955b-8965-4413-856b-24544f402795}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GodotIntegration\Source Files">
-      <UniqueIdentifier>{1ffbc660-2be1-4e7c-9f95-4b8dc48c599a}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="BoardManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Card.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DealerAI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Behaviour.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Ability.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GDBoard.h">
-      <Filter>GodotIntegration\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="RegisterTypes.h">
-      <Filter>GodotIntegration\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GDCard.h">
-      <Filter>GodotIntegration\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GDPlayer.h">
-      <Filter>GodotIntegration\Header Files</Filter>
-    <ClInclude Include="ActiveCard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AbilityEffect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Ability.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BoardManager.cpp">
+    <ClCompile Include="AbilityEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DealerAI.cpp">
+    <ClCompile Include="ActiveCard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Behaviour.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RegisterTypes.cpp">
+    <ClCompile Include="BoardManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DealerAI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDAbility.cpp">
       <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GDBoard.cpp">
@@ -87,14 +36,67 @@
     </ClCompile>
     <ClCompile Include="GDPlayer.cpp">
       <Filter>GodotIntegration\Source Files</Filter>
-    <ClCompile Include="Ability.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ActiveCard.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="RegisterTypes.cpp">
+      <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AbilityEffect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Ability.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilityEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ActiveCard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Behaviour.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BoardManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DealerAI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDAbility.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDBoard.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDCard.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDPlayer.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RegisterTypes.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{29b66f50-c971-4a57-b84b-c699c2bf6041}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GodotIntegration">
+      <UniqueIdentifier>{50aebcc1-0213-40c2-846a-1867422a1fae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GodotIntegration\Header Files">
+      <UniqueIdentifier>{f48f5bec-fe0a-4e44-b26e-8bad07d87af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GodotIntegration\Source Files">
+      <UniqueIdentifier>{92e6eeb1-d83a-4fec-b5af-56756ea17b6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{f58970fa-dfc2-4e55-8f5a-9e54f49ab088}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

@@ -37,37 +37,12 @@ GDBoard::GDBoard()
 	m_dealerAI = new DealerAI(m_board, m_dealerData);
 	//m_testPlayerAI = new DealerAI(m_board, m_playerData);
 
-
-	// DECK CREATION FOR TESTING
-	srand(time(0));
-
-	//for (int i = 0; i < 10; i++)
-	//{
-	//	int stat1 = (rand() % 5) + 1;
-	//	int stat2 = (rand() % 5) + 1;
-	//	CreatureData* frontCreature = new CreatureData(stat1, stat2, 2);
-	//	creatures.push_back(frontCreature);
-	//	CreatureData* backCreature = new CreatureData(stat2 + 2, stat1 + 2, 1);
-	//	creatures.push_back(backCreature);
-	//
-	//	int cost = (stat1 + stat2) / 4;
-	//
-	//	CardData* newCard = new CardData(cost, frontCreature, backCreature);
-	//	cards.push_back(newCard);
-	//
-	//	m_dealer->AddCardToDeck(newCard);
-	//	m_player->AddCardToDeck(newCard);
-	//}
-
 	// Setup each side of the board
 	for (int i = 0; i < m_board->GetSlotCount(); i++)
 	{
 		m_side1.push_back(nullptr);
 		m_side2.push_back(nullptr);
 	}
-
-	//m_dealerData->StartMatch(cards);
-	//m_playerData->StartMatch(cards);
 }
 
 GDBoard::~GDBoard()
@@ -157,11 +132,12 @@ void GDBoard::UpdateBoardState()
 
 void GDBoard::UpdateCardStats(GDDisplayCard* displayCard, ActiveCard* realCard)
 {
-	displayCard->m_cost = realCard->GetCost();
-	displayCard->m_flipCost = realCard->GetFlipCost();
 	displayCard->m_hp = realCard->GetHP();
 	displayCard->m_atk = realCard->GetAtk();
-	displayCard->m_name = String(realCard->GetCurrentFace()->name.c_str());
+	displayCard->m_cost = realCard->GetCost();
+	displayCard->m_flipCost = realCard->GetFlipCost();
+	displayCard->m_abilityCost = realCard->GetAbilityCost();
+	displayCard->m_name = String(realCard->GetCurrentFace()->GetName().c_str());
 }
 
 bool GDBoard::IsOccupied(int slot, int side)
@@ -198,22 +174,6 @@ GDPlayer* GDBoard::GetPlayer()
 {
 	return m_player;
 }
-
-//GDCard GDBoard::GetCard(int slot, int side)
-//{
-//	ActiveCard* targetCard = m_board->GetSlot(slot, side);
-//	CardData* data = nullptr;
-//	if (targetCard != nullptr)
-//	{
-//		data = targetCard->GetData();
-//	}
-//
-//	//Ref<GDCard> cardRef;
-//	//cardRef.instantiate();
-//	//cardRef()
-//
-//	return GDCard(data);
-//}
 
 
 //bool GDBoard::PlayCard(int cardIndex, int targetSlot)

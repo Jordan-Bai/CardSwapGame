@@ -29,11 +29,13 @@ namespace godot
 		int GetHP();
 		int GetAtk();
 		int GetFlipCost();
+		int GetAbilityCost();
 		String GetName();
 
 		void SetHP(int hp);
 		void SetAtk(int atk);
 		void SetFlipCost(int fCost);
+		void SetAbilityCost(int aCost);
 		void SetName(String name);
 
 		CreatureData* GetData();
@@ -80,6 +82,7 @@ namespace godot
 	public:
 		int m_cost;
 		int m_flipCost;
+		int m_abilityCost;
 		int m_hp;
 		int m_atk;
 		String m_name;
@@ -88,16 +91,18 @@ namespace godot
 		GDDisplayCard(GDCard* card);
 		GDDisplayCard(CardData* card);
 
-		int GetCost();
-		int GetFlipCost();
 		int GetHP();
 		int GetAtk();
+		int GetCost();
+		int GetFlipCost();
+		int GetAbilityCost();
 		String GetName();
 
-		void SetCost(int cost);
-		void SetFlipCost(int flipCost);
 		void SetHP(int hp);
 		void SetAtk(int atk);
+		void SetCost(int cost);
+		void SetFlipCost(int flipCost);
+		void SetAbilityCost(int abilityCost);
 		void SetName(String name);
 
 		// Will set the hp,atk etc to the stats of this creature

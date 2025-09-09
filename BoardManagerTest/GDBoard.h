@@ -19,9 +19,6 @@ namespace godot
 		int m_slots = 4;
 
 	protected:
-		//std::vector<CreatureData*> creatures; // FOR TESTING
-		//std::vector<CardData*> cards; // FOR TESTING
-
 		DealerAI* m_dealerAI;
 		BoardManager* m_board; // The actual board itself
 		
