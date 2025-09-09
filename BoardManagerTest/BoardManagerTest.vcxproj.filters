@@ -40,6 +40,9 @@
     <ClCompile Include="RegisterTypes.cpp">
       <Filter>GodotIntegration\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GDAbilityEffect.cpp">
+      <Filter>GodotIntegration\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h">
@@ -79,6 +82,9 @@
       <Filter>GodotIntegration\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RegisterTypes.h">
+      <Filter>GodotIntegration\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GDAbilityEffect.h">
       <Filter>GodotIntegration\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

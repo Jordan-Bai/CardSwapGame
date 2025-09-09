@@ -12,18 +12,30 @@ void GDCreature::_bind_methods()
 	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDCreature::GetFlipCost);
 	ClassDB::bind_method(D_METHOD("GetAbilityCost"), &GDCreature::GetAbilityCost);
 	ClassDB::bind_method(D_METHOD("GetName"), &GDCreature::GetName);
+	//ClassDB::bind_method(D_METHOD("GetAbilities"), &GDCreature::GetAbilities);
+	//ClassDB::bind_method(D_METHOD("GetAbilitiesRef"), &GDCreature::GetAbilitiesRef);
 
 	ClassDB::bind_method(D_METHOD("SetHP", "hp"), &GDCreature::SetHP);
 	ClassDB::bind_method(D_METHOD("SetAtk", "atk"), &GDCreature::SetAtk);
 	ClassDB::bind_method(D_METHOD("SetFlipCost", "flipCost"), &GDCreature::SetFlipCost);
 	ClassDB::bind_method(D_METHOD("SetAbilityCost", "abilityCost"), &GDCreature::SetAbilityCost);
 	ClassDB::bind_method(D_METHOD("SetName", "name"), &GDCreature::SetName);
+	//ClassDB::bind_method(D_METHOD("SetAbilities", "abilities"), &GDCreature::SetAbilities);
+	//ClassDB::bind_method(D_METHOD("SetAbilitiesRef", "abilities"), &GDCreature::SetAbilitiesRef);
 	
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "SetHP", "GetHP");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "atk"), "SetAtk", "GetAtk");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "abilityCost"), "SetAbilityCost", "GetAbilityCost");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name"), "SetName", "GetName");
+	//ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "abilities", PROPERTY_HINT_TYPE_STRING, 
+	//	String::num(Variant::OBJECT) + "/" + String::num(PROPERTY_HINT_RESOURCE_TYPE) + ":"),
+	//	"SetAbilities", "GetAbilities");
+	//ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "abilities", PROPERTY_HINT_TYPE_STRING,
+	//	String::num(Variant::OBJECT) + ":RefCounted"),
+	//	"SetAbilitiesRef", "GetAbilitiesRef");
+
+	ClassDB::bind_method(D_METHOD("AddAbility", "ability"), &GDCreature::AddAbility);
 }
 
 GDCreature::GDCreature()
@@ -66,6 +78,31 @@ String GDCreature::GetName()
 	return String(m_data->name.c_str());
 }
 
+//TypedArray<GDAbility> GDCreature::GetAbilities()
+//{
+//	TypedArray<GDAbility> returnArray;
+//
+//	for (GDAbility* ability : m_abilities)
+//	{
+//		returnArray.append(ability);
+//	}
+//
+//	return returnArray;
+//}
+
+//TypedArray<Ref<GDAbility>> GDCreature::GetAbilitiesRef()
+//{
+//	TypedArray<Ref<GDAbility>> returnArray;
+//
+//	for (int i = 0; i < m_abilities.size(); i++)
+//	{
+//		Ref<GDAbility> ability = m_abilities[i];
+//		returnArray.append(ability);
+//	}
+//
+//	return returnArray;
+//}
+
 void GDCreature::SetHP(int hp)
 {
 	m_data->hp = hp;
@@ -89,6 +126,44 @@ void GDCreature::SetAbilityCost(int aCost)
 void GDCreature::SetName(String name)
 {
 	m_data->name = name.utf8();
+}
+
+//void GDCreature::SetAbilities(TypedArray<GDAbility> abilities)
+//{
+//	//m_abilities = abilities;
+//	
+//	m_data->abilities.clear();
+//	for (int i = 0; i < abilities.size(); i++)
+//	{
+//		//Ref<GDAbility> abilityRef = abilities[i];
+//		//GDAbility* ability = abilityRef.ptr();
+//		//m_abilities[i] = ability;
+//		
+//		//Object abilityObject = abilities[i];
+//		//GDAbility ability = abilities[i];
+//		//m_abilities[i] = &ability;
+//		//m_data->abilities.push_back(ability->GetData());
+//
+//		//Ref<GDAbility> abilityRef = abilities[i];
+//		//m_abilitiesRef[i] = abilityRef;
+//	}
+//}
+
+//void GDCreature::SetAbilitiesRef(TypedArray<Ref<GDAbility>> abilities)
+//{
+//	m_data->abilities.clear();
+//	for (int i = 0; i < abilities.size(); i++)
+//	{
+//		//Ref<GDAbility> abilityRef = abilities[i];
+//		//m_abilities[i] = abilityRef.ptr();
+//		m_abilitiesRef[i] = abilities[i];
+//		//m_data->abilities.push_back(ability->GetData());
+//	}
+//}
+
+void GDCreature::AddAbility(GDAbility* ability)
+{
+	m_data->abilities.push_back(ability->GetData());
 }
 
 CreatureData* GDCreature::GetData()

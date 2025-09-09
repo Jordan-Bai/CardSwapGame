@@ -26,6 +26,13 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	GDREGISTER_RUNTIME_CLASS(GDCard);
 	GDREGISTER_RUNTIME_CLASS(GDDisplayCard);
 	GDREGISTER_RUNTIME_CLASS(GDAbility);
+	//GDREGISTER_ABSTRACT_CLASS(GDAbilityEffect);
+	GDREGISTER_RUNTIME_CLASS(GDAbilityEffect);
+	GDREGISTER_RUNTIME_CLASS(GDChangeStats);
+	GDREGISTER_RUNTIME_CLASS(GDFlip);
+	GDREGISTER_RUNTIME_CLASS(GDHeal);
+	GDREGISTER_RUNTIME_CLASS(GDGainEnergy);
+	GDREGISTER_RUNTIME_CLASS(GDRandomizeStats);
 }
 
 // Called when godot unloads this

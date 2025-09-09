@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Ability.h"
+#include "GDAbilityEffect.h"
 
-#include <godot_cpp/classes/resource.hpp>
+//#include <godot_cpp/classes/resource.hpp>
 
 namespace godot
 {
@@ -13,15 +14,24 @@ namespace godot
 
 	protected:
 		AbilityTrigger m_trigger;
+		Ref<GDAbilityEffect> m_effectRef;
+		AbilityEffect* m_effect;
+		Ability* m_data;
 
 		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
+
 	public:
 		GDAbility();
 		GDAbility(const GDAbility& ref) = delete; //copy constructor
 		//GDAbility& operator=(const GDAbility& ref) = delete; //assignment operator
 		~GDAbility();
 
-		int GetAbilityTrigger();
-		void SetAbilityTrigger(int newTrigger);
+		int GetTrigger();
+		Ref<GDAbilityEffect> GetEffect();
+
+		void SetTrigger(int newTrigger);
+		void SetEffect(Ref<GDAbilityEffect> effect);
+
+		Ability* GetData();
 	};
 }

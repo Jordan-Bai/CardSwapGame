@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Card.h"
+#include "GDAbility.h"
 
 //#include <godot_cpp/classes/object.hpp>
 #include <godot_cpp/classes/node3d.hpp>
@@ -17,6 +18,11 @@ namespace godot
 		CreatureData* m_data;
 
 	protected:
+		//Ref<GDAbility> m_ability;
+		//TypedArray<GDAbility> m_abilities;
+		//std::vector<GDAbility*> m_abilities;
+		//std::vector<Ref<GDAbility>> m_abilitiesRef;
+
 		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
 
 	public:
@@ -31,12 +37,18 @@ namespace godot
 		int GetFlipCost();
 		int GetAbilityCost();
 		String GetName();
+		//TypedArray<GDAbility> GetAbilities();
+		//TypedArray<Ref<GDAbility>> GetAbilitiesRef();
 
 		void SetHP(int hp);
 		void SetAtk(int atk);
 		void SetFlipCost(int fCost);
 		void SetAbilityCost(int aCost);
 		void SetName(String name);
+		//void SetAbilities(TypedArray<GDAbility> abilities);
+		//void SetAbilitiesRef(TypedArray<Ref<GDAbility>> abilities);
+
+		void AddAbility(GDAbility* ability);
 
 		CreatureData* GetData();
 	};

@@ -151,6 +151,7 @@
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="BoardManager.h" />
     <ClInclude Include="GDAbility.h" />
+    <ClInclude Include="GDAbilityEffect.h" />
     <ClInclude Include="GDBoard.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="DealerAI.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="BoardManager.cpp" />
     <ClCompile Include="GDAbility.cpp" />
+    <ClCompile Include="GDAbilityEffect.cpp" />
     <ClCompile Include="GDBoard.cpp" />
     <ClCompile Include="ActiveCard.cpp" />
     <ClCompile Include="DealerAI.cpp" />
