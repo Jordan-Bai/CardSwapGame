@@ -55,6 +55,8 @@ void DealerAI::DoActions()
 		delete action;
 	}
 	bestBranch.second.clear();
+
+	m_boardRef->TurnEnds(m_data->m_playerIndex);
 }
 
 
@@ -378,7 +380,7 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<B
 	std::vector<Behaviour*> possibleActions = GetSwapActions();
 
 	// First, evaluate the current action sequence
-	m_copyBoard->DoAttackPhase();
+	//m_copyBoard->DoAttackPhase();
 	float bestScore = EvaluateBoard();
 	std::vector<Behaviour*> childSequence;
 
@@ -456,14 +458,16 @@ void DealerAI::CopyBoardData()
 		ActiveCard* cardSide1 = m_boardRef->GetSlot(i, 1);
 		if (cardSide1 != nullptr)
 		{
-			ActiveCard* copyCard = new ActiveCard(cardSide1);
+			ActiveCard* copyCard = new ActiveCard(*cardSide1);
+			copyCard->SetBoard(m_copyBoard);
 
 			m_copyBoard->SetSlot(i, 1, copyCard);
 		}
 		ActiveCard* cardSide2 = m_boardRef->GetSlot(i, 2);
 		if (cardSide2 != nullptr)
 		{
-			ActiveCard* copyCard = new ActiveCard(cardSide2);
+			ActiveCard* copyCard = new ActiveCard(*cardSide2);
+			copyCard->SetBoard(m_copyBoard);
 
 			m_copyBoard->SetSlot(i, 2, copyCard);
 		}
@@ -514,6 +518,11 @@ float DealerAI::EvaluateBoard()
 {
 	branchCount++;
 
+	// Simulate ending the turn
+	m_copyBoard->TurnEnds(m_copyDealer->m_playerIndex);
+	m_copyBoard->DoAttackPhase();
+
+	// Give score for the board
 	float finalScore = 0;
 
 	if (m_copyDealer->m_hp <= 0)

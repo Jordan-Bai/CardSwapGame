@@ -31,8 +31,10 @@ public:
 	void EndMatch();
 	void StartTurn();
 	bool DrawCard();
+	void PickupCard(CardData* card);
 
 	bool PlayCard(int cardIndex, int targetSlot);
 	bool FlipCard(int cardSlot);
 	bool SwapCards(int slot1, int slot2);
+	bool ActivateCard(int cardSlot);
 };

@@ -146,6 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Ability.h" />
+    <ClInclude Include="AbilityEffect.h" />
+    <ClInclude Include="ActiveCard.h" />
     <ClInclude Include="Behaviour.h" />
     <ClInclude Include="BoardManager.h" />
     <ClInclude Include="GDBoard.h" />
@@ -157,10 +159,12 @@
     <ClInclude Include="RegisterTypes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ability.cpp" />
+    <ClCompile Include="AbilityEffect.cpp" />
     <ClCompile Include="Behaviour.cpp" />
     <ClCompile Include="BoardManager.cpp" />
     <ClCompile Include="GDBoard.cpp" />
-    <ClCompile Include="Card.cpp" />
+    <ClCompile Include="ActiveCard.cpp" />
     <ClCompile Include="DealerAI.cpp" />
     <ClCompile Include="GDCard.cpp" />
     <ClCompile Include="GDPlayer.cpp" />

@@ -1,5 +1,6 @@
 #include "BoardManager.h"
 #include "DealerAI.h"
+#include "Ability.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -7,11 +8,11 @@
 int main()
 {
 	int seed = time(0);
-	//seed = 1756251145;
+	//seed = 1757373423;
 	srand(seed);
 
 	bool doOutput = true;
-	bool doAppend = true;
+	bool doAppend = false;
 
 	std::fstream testOutput;
 	if (doOutput)
@@ -40,17 +41,46 @@ int main()
 	Player dealer;
 	Player player;
 
+	// TEST ABILITY
+	//std::function<void(ActiveCreature* owner)> testEffect = [](ActiveCreature* owner)
+	//	{
+	//		//std::cout << "ABILITY ACTIVATED:\n";
+	//		owner->SetHP(9);
+	//	};
+	ChangeStats testEffect(8, 0, 0);
+	Ability testAbility(AbilityTrigger::OnPlayed, &testEffect);
+
+	Flip flipEffect;
+	Ability flipAbility(AbilityTrigger::OnActivate, &flipEffect);
+
+	Heal healEffect(2);
+	Ability healAbility(AbilityTrigger::OnCardDies, &healEffect);
+
+	GainEnergy energyEffect(2);
+	Ability energyAbility(AbilityTrigger::OnFlippedTo, &energyEffect);
+
+	RandomizeStats randomizeEffect(1, 3);
+	Ability randomizeAbility(AbilityTrigger::OnPlayed, &randomizeEffect);
+
+	CopyCards copyEffect({-1, 1});
+	Ability copyAbility(AbilityTrigger::OnBoardUpdates, &copyEffect);
+
 	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		int stat1 = (rand() % 5) + 1;
 		int stat2 = (rand() % 5) + 1;
 		CreatureData* frontCreature = new CreatureData(stat1, stat2, 2);
+		//frontCreature->abilities.push_back(&flipAbility);
 		creatures.push_back(frontCreature);
 		CreatureData* backCreature = new CreatureData(stat2 + 2, stat1 + 2, 1);
+		//backCreature->abilities.push_back(&testAbility);
+		//backCreature->abilities.push_back(&energyAbility);
 		creatures.push_back(backCreature);
+
+		//frontCreature->abilities.push_back(&testAbility);
 
 		int cost = (stat1 + stat2) / 4;
 		//if (cost == 0)
@@ -62,10 +92,16 @@ int main()
 		cards.push_back(newCard);
 	}
 
-	CreatureData* frontCreature = new CreatureData(1, 1, 2);
+	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
+	frontCreature->abilities.push_back(&copyAbility);
+	//frontCreature->abilities.push_back(&healAbility);
 	creatures.push_back(frontCreature);
 	CardData* newCard = new CardData(1, frontCreature, nullptr);
 	cards.push_back(newCard);
+
+	PickupCard pickupEffect(newCard);
+	Ability pickupAbility(AbilityTrigger::OnActivate, &pickupEffect);
+	//frontCreature->abilities.push_back(&pickupAbility);
 
 	dealer.StartMatch(cards);
 	player.StartMatch(cards);
@@ -266,6 +302,21 @@ int main()
 				continue;
 			}
 
+			// Activate card ability
+			int aIndex = playerInput.find("a");
+			if (aIndex != std::string::npos)
+			{
+				if (num1Index != std::string::npos)
+				{
+					// Get first slot to swap
+					int num1 = std::stoi(playerInput.substr(num1Index, 1)) - 1;
+					player.ActivateCard(num1);
+
+					board.DisplayBoard();
+				}
+				continue;
+			}
+
 			// Play card
 			if (num1Index != std::string::npos && num2Index != std::string::npos)
 			{
@@ -278,6 +329,7 @@ int main()
 			}
 		}
 
+		board.TurnEnds(player.m_playerIndex);
 		board.DoAttackPhase();
 		board.DisplayBoard();
 

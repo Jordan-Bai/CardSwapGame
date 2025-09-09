@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "ActiveCard.h"
 
 class BoardManager
 {
@@ -22,6 +23,8 @@ public:
 	bool PlayCard(CardData* data, int slot, int playerIndex);
 	bool FlipCard(int slot, int playerIndex);
 	bool FlipCard(ActiveCard* card);
+	bool ActivateCard(int slot, int playerIndex);
+	bool ActivateCard(ActiveCard* card);
 
 	void DoAttackPhase();
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
@@ -30,6 +33,9 @@ public:
 	void EndMatch();
 
 	void DisplayBoard();
+	std::vector<std::string> GetCardText(CardData* card);
+	std::vector<std::string> GetCardText(ActiveCard* card);
+	std::string AbilityToString(CreatureData* face, int abilityIndex);
 
 	int OppositeSide(int side);
 	Player* GetPlayer(int side);

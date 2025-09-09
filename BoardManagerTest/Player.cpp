@@ -78,15 +78,16 @@ void Player::StartTurn()
 
 	};
 
-	// Reset whether each card was flipped this turn
-	for (int i = 0; i < m_boardRef->GetSlotCount(); i++)
-	{
-		ActiveCard* card = m_boardRef->GetSlot(i, m_playerIndex);
-		if (card != nullptr)
-		{
-			card->OnStartTurn();
-		}
-	}
+	m_boardRef->TurnStarts(m_playerIndex);
+	//// Reset whether each card was flipped this turn
+	//for (int i = 0; i < m_boardRef->GetSlotCount(); i++)
+	//{
+	//	ActiveCard* card = m_boardRef->GetSlot(i, m_playerIndex);
+	//	if (card != nullptr)
+	//	{
+	//		card->OnStartTurn();
+	//	}
+	//}
 }
 
 bool Player::DrawCard()
@@ -115,6 +116,11 @@ bool Player::DrawCard()
 	}
 
 	return false;
+}
+
+void Player::PickupCard(CardData* card)
+{
+	m_hand.push_back(card);
 }
 
 bool Player::PlayCard(int cardIndex, int targetSlot)
@@ -168,6 +174,24 @@ bool Player::SwapCards(int slot1, int slot2)
 		m_boardRef->SetSlot(slot2, m_playerIndex, target1);
 		m_boardRef->SetSlot(slot1, m_playerIndex, target2);
 		return true;
+	}
+
+	return false;
+}
+
+bool Player::ActivateCard(int cardSlot)
+{
+	ActiveCard* targetSlot = m_boardRef->GetSlot(cardSlot, m_playerIndex);
+
+	if (targetSlot != nullptr)
+	{
+		int cost = targetSlot->GetAbilityCost();
+
+		if (m_energy >= cost && m_boardRef->ActivateCard(targetSlot))
+		{
+			m_energy -= cost;
+			return true;
+		}
 	}
 
 	return false;
