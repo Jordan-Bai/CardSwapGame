@@ -165,15 +165,13 @@ bool Player::FlipCard(int cardSlot)
 
 bool Player::SwapCards(int slot1, int slot2)
 {
-	ActiveCard* target1 = m_boardRef->GetSlot(slot1, m_playerIndex);
-	ActiveCard* target2 = m_boardRef->GetSlot(slot2, m_playerIndex);
-
-	if ((target1 != nullptr || target2 != nullptr) && m_energy >= CostToSwap)
+	if (m_energy >= CostToSwap)
 	{
-		m_energy -= CostToSwap;
-		m_boardRef->SetSlot(slot2, m_playerIndex, target1);
-		m_boardRef->SetSlot(slot1, m_playerIndex, target2);
-		return true;
+		if (m_boardRef->SwapCards(slot1, slot2, m_playerIndex))
+		{
+			m_energy -= CostToSwap;
+			return true;
+		}
 	}
 
 	return false;

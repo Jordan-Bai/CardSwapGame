@@ -2,9 +2,11 @@
 
 #include "Ability.h"
 
+int activeCards = 0;
+
 // Active creature
 ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
-	: m_data(data), m_owner(owner), m_atkOverride(data->atk), m_hpOverride(data->hp), 
+	: m_data(data), m_owner(owner), m_hpOverride(data->hp), m_atkOverride(data->atk),
 	m_fCostOverride(data->fCost), m_aCostOverride(data->aCost)
 {
 	for (Ability* a : m_data->abilities)
@@ -15,7 +17,7 @@ ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
 
 ActiveCreature::ActiveCreature(const ActiveCreature& other, ActiveCard* owner)
 	:m_data(other.m_data), m_owner(owner), m_overrideStats(other.m_overrideStats),
-	m_atkOverride(other.m_atkOverride), m_hpOverride(other.m_hpOverride),
+	m_hpOverride(other.m_hpOverride), m_atkOverride(other.m_atkOverride),
 	m_fCostOverride(other.m_fCostOverride), m_aCostOverride(other.m_aCostOverride)
 {
 	for (Ability* a : m_data->abilities)
@@ -104,9 +106,51 @@ void ActiveCreature::SetAbilityCost(int aCost)
 	m_aCostOverride = aCost;
 }
 
+void ActiveCreature::SetStatsToDefault()
+{
+	m_hpOverride = m_data->hp;
+	m_atkOverride = m_data->atk;
+	m_fCostOverride = m_data->fCost;
+	m_aCostOverride = m_data->aCost;
+	m_overrideStats = false;
+}
+
 bool ActiveCreature::HasActivateAbility()
 {
 	return OnActivate != nullptr;
+}
+
+bool ActiveCreature::CanStack(CardData* card)
+{
+	StackOptions myStackOptions = m_data->stackOptions;
+	if (myStackOptions.canStack && m_stackedCards.size() + 1 < myStackOptions.stackLimit) // +1 since the original card is included in the stack count
+	{
+		if (m_data->owner->cardID == card->cardID)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ActiveCreature::Stack(CardData* card)
+{
+	if (CanStack(card))
+	{
+		m_stackedCards.push_back(card);
+		if (OnStackMaxed != nullptr && m_stackedCards.size() + 1 == m_data->stackOptions.stackLimit)
+		{
+			OnStackMaxed(this);
+		}
+
+		if (OnStacked != nullptr)
+		{
+			OnStacked(this, card);
+		}
+		return true;
+	}
+
+	return false;
 }
 
 
@@ -132,6 +176,9 @@ ActiveCard::ActiveCard(CardData* data, int slot, int side, BoardManager* boardRe
 		m_backFace = nullptr;
 	}
 	// Call "OnPlayed"
+
+	id = activeCards;
+	activeCards++;
 }
 
 ActiveCard::ActiveCard(const ActiveCard& other)
@@ -157,6 +204,9 @@ ActiveCard::ActiveCard(const ActiveCard& other)
 	{
 		m_backFace = nullptr;
 	}
+
+	id = activeCards;
+	activeCards++;
 }
 
 ActiveCard::~ActiveCard()
@@ -262,6 +312,11 @@ bool ActiveCard::CanFlip()
 	return !m_flippedThisTurn && GetOpositeFace() != nullptr;
 }
 
+bool ActiveCard::CanStack(CardData* card)
+{
+	return GetCurrentFace()->CanStack(card);
+}
+
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
 {
 	return std::vector<int>(1, m_slot);
@@ -299,6 +354,31 @@ void ActiveCard::Flip()
 	else
 	{
 		std::cout << "ERROR: Card has no backface (ActiveCard::Flip)\n";
+	}
+}
+
+bool ActiveCard::Stack(CardData* card)
+{
+	return GetCurrentFace()->Stack(card);
+}
+
+void ActiveCard::Discard(Player* m_owner)
+{
+	m_owner->m_discardPile.push_back(m_data);
+	// Discard all cards that had been stacked on this one
+	if (m_frontFace != nullptr)
+	{
+		for (CardData* card : m_frontFace->m_stackedCards)
+		{
+			m_owner->m_discardPile.push_back(card);
+		}
+	}
+	if (m_backFace != nullptr)
+	{
+		for (CardData* card : m_backFace->m_stackedCards)
+		{
+			m_owner->m_discardPile.push_back(card);
+		}
 	}
 }
 
