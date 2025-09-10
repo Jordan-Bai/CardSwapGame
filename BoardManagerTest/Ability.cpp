@@ -24,6 +24,12 @@ void Ability::Init(ActiveCreature* owner)
 	case AbilityTrigger::OnPlayed:
 		owner->OnPlayed = effect->effect;
 		break;
+	case AbilityTrigger::OnStack:
+		owner->OnStacked = effect->stackEffect;
+		break;
+	case AbilityTrigger::OnStackMaxed:
+		owner->OnStackMaxed = effect->effect;
+		break;
 	case AbilityTrigger::OnDeath:
 		owner->OnDeath = effect->effect;
 		break;

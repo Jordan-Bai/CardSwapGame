@@ -5,6 +5,8 @@
 #include <string>
 #include <fstream>
 
+int cardDataInstances = 0;
+
 int main()
 {
 	int seed = time(0);
@@ -65,6 +67,11 @@ int main()
 	CopyCards copyEffect({-1, 1});
 	Ability copyAbility(AbilityTrigger::OnBoardUpdates, &copyEffect);
 
+	ChangeStats changeStatsEffect(1, 1, 0);
+	Ability stackAbility(AbilityTrigger::OnStack, &changeStatsEffect);
+
+	Ability stackMaxedAbility(AbilityTrigger::OnStackMaxed, &flipEffect);
+
 	// DECK CREATION
 	std::vector<CreatureData*> creatures;
 	std::vector<CardData*> cards;
@@ -93,14 +100,22 @@ int main()
 	}
 
 	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
-	frontCreature->abilities.push_back(&copyAbility);
+	frontCreature->abilities.push_back(&stackAbility);
+	frontCreature->abilities.push_back(&stackMaxedAbility);
+	frontCreature->stackOptions.canStack = true;
+	frontCreature->stackOptions.stackLimit = 3;
+	//frontCreature->abilities.push_back(&copyAbility);
 	//frontCreature->abilities.push_back(&healAbility);
 	creatures.push_back(frontCreature);
-	CardData* newCard = new CardData(1, frontCreature, nullptr);
+	CreatureData* backCreature = new CreatureData(4, 4, 0, 1);
+	creatures.push_back(backCreature);
+	CardData* newCard = new CardData(1, frontCreature, backCreature);
 	cards.push_back(newCard);
 
-	CardData* newCard2 = new CardData(1, frontCreature, nullptr);
+	CardData* newCard2 = new CardData(newCard);
 	cards.push_back(newCard2);
+	CardData* newCard3 = new CardData(newCard);
+	cards.push_back(newCard3);
 
 	PickupCard pickupEffect(newCard);
 	Ability pickupAbility(AbilityTrigger::OnActivate, &pickupEffect);

@@ -6,6 +6,7 @@ struct AbilityEffect
 {
 	std::function<void(ActiveCreature* owner)> effect;
 	std::function<void(ActiveCreature* owner, ActiveCard* other)> attackEffect;
+	std::function<void(ActiveCreature* owner, CardData* card)> stackEffect;
 
 	virtual void Init(ActiveCreature* owner);
 	virtual std::string GetIcon() = 0;

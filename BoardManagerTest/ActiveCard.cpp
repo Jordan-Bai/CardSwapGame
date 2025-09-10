@@ -120,6 +120,39 @@ bool ActiveCreature::HasActivateAbility()
 	return OnActivate != nullptr;
 }
 
+bool ActiveCreature::CanStack(CardData* card)
+{
+	StackOptions myStackOptions = m_data->stackOptions;
+	if (myStackOptions.canStack && m_stackedCards.size() + 1 < myStackOptions.stackLimit) // +1 since the original card is included in the stack count
+	{
+		if (m_data->owner->cardID == card->cardID)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ActiveCreature::Stack(CardData* card)
+{
+	if (CanStack(card))
+	{
+		m_stackedCards.push_back(card);
+		if (OnStackMaxed != nullptr && m_stackedCards.size() + 1 == m_data->stackOptions.stackLimit)
+		{
+			OnStackMaxed(this);
+		}
+
+		if (OnStacked != nullptr)
+		{
+			OnStacked(this, card);
+		}
+		return true;
+	}
+
+	return false;
+}
+
 
 // Active Card
 ActiveCard::ActiveCard(CardData* data, int slot, int side, BoardManager* boardRef)
@@ -279,6 +312,11 @@ bool ActiveCard::CanFlip()
 	return !m_flippedThisTurn && GetOpositeFace() != nullptr;
 }
 
+bool ActiveCard::CanStack(CardData* card)
+{
+	return GetCurrentFace()->CanStack(card);
+}
+
 std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
 {
 	return std::vector<int>(1, m_slot);
@@ -316,6 +354,31 @@ void ActiveCard::Flip()
 	else
 	{
 		std::cout << "ERROR: Card has no backface (ActiveCard::Flip)\n";
+	}
+}
+
+bool ActiveCard::Stack(CardData* card)
+{
+	return GetCurrentFace()->Stack(card);
+}
+
+void ActiveCard::Discard(Player* m_owner)
+{
+	m_owner->m_discardPile.push_back(m_data);
+	// Discard all cards that had been stacked on this one
+	if (m_frontFace != nullptr)
+	{
+		for (CardData* card : m_frontFace->m_stackedCards)
+		{
+			m_owner->m_discardPile.push_back(card);
+		}
+	}
+	if (m_backFace != nullptr)
+	{
+		for (CardData* card : m_backFace->m_stackedCards)
+		{
+			m_owner->m_discardPile.push_back(card);
+		}
 	}
 }
 

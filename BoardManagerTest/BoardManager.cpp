@@ -48,9 +48,10 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 
 	if (playerIndex == 1)
 	{
-		if (m_side1[slot] != nullptr)
+		ActiveCard* targetSlot = m_side1[slot];
+		if (targetSlot != nullptr)
 		{
-			return false;
+			return targetSlot->Stack(data);
 		}
 
 		placedCard = new ActiveCard(data, slot, playerIndex, this);
@@ -58,9 +59,10 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 	}
 	else
 	{
-		if (m_side2[slot] != nullptr)
+		ActiveCard* targetSlot = m_side2[slot];
+		if (targetSlot != nullptr)
 		{
-			return false;
+			return targetSlot->Stack(data);
 		}
 
 		placedCard = new ActiveCard(data, slot, playerIndex, this);
@@ -231,7 +233,8 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 void BoardManager::DestroyCard(ActiveCard* card)
 {
 	// Add card to corresponding discard pile
-	GetPlayer(card->m_side)->m_discardPile.push_back(card->GetData());
+	//GetPlayer(card->m_side)->m_discardPile.push_back(card->GetData());
+	card->Discard(GetPlayer(card->m_side));
 
 	// Remove card from slot
 	SetSlot(card->m_slot, card->m_side, nullptr);
@@ -446,6 +449,9 @@ std::string BoardManager::AbilityToString(CreatureData* face, int abilityIndex)
 	case AbilityTrigger::OnPlayed:
 		abilityStr += "Pl";
 		break;
+	case AbilityTrigger::OnStack:
+		abilityStr += "St";
+		break;
 	case AbilityTrigger::OnDeath:
 		abilityStr += "De";
 		break;
@@ -474,7 +480,7 @@ std::string BoardManager::AbilityToString(CreatureData* face, int abilityIndex)
 		abilityStr += "BU";
 		break;
 	default:
-		std::cout << "ERROR: Ability has no trigger (Ability::Init)\n";
+		std::cout << "ERROR: Ability has no trigger (BoardManager::AbilityToString)\n";
 	}
 
 	abilityStr += ">" + ability->effect->GetIcon();

@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Card.h"
+//#include "Card.h"
+#include "Player.h"
 
-#include <vector>
+//#include <vector>
 #include <functional>
 
 extern int activeCards;
@@ -22,9 +23,12 @@ class ActiveCreature
 
 public:
 	bool m_canCopy = true;
+	std::vector<CardData*> m_stackedCards;
 
 	// Ability triggers:
 	std::function<void(ActiveCreature* owner)> OnPlayed;
+	std::function<void(ActiveCreature* owner, CardData* stackedCard)> OnStacked;
+	std::function<void(ActiveCreature* owner)> OnStackMaxed;
 	std::function<void(ActiveCreature* owner)> OnDeath;
 	std::function<void(ActiveCreature* owner, ActiveCard* target)> OnAttack;
 	std::function<void(ActiveCreature* owner, ActiveCard* attacker)> OnAttacked;
@@ -35,7 +39,7 @@ public:
 	std::function<void(ActiveCreature* owner)> OnTurnEnds;
 	std::function<void(ActiveCreature* owner)> OnCardDies;
 	std::function<void(ActiveCreature* owner)> OnBoardUpdates;
-	// Might want to add OnStack/ OnPickup
+	// Might want to add OnPickup
 
 	ActiveCreature(CreatureData* data, ActiveCard* owner);
 	ActiveCreature(const ActiveCreature& other, ActiveCard* owner);
@@ -58,6 +62,8 @@ public:
 	//void SetName(std::string name); // Really shouldn't be necessary
 
 	bool HasActivateAbility();
+	bool CanStack(CardData* card);
+	bool Stack(CardData* card);
 };
 
 class BoardManager;
@@ -102,12 +108,15 @@ public:
 	int GetDamageTaken();
 	bool GetFrontActive();
 	bool CanFlip();
+	bool CanStack(CardData* card);
 
 	std::vector<int> GetTargets();
 
 	void TakeDamage(int damage);
 	void Heal(int healAmount);
 	void Flip(); // Should this return a bool since Player.FlipCard() already uses CanFlip()?
+	bool Stack(CardData* card);
+	void Discard(Player* m_owner);
 	//bool ActivateEffect();
 
 	//void OnStartTurn();

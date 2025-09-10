@@ -8,6 +8,7 @@ void AbilityEffect::Init(ActiveCreature* owner)
 	// Does nothing by default
 }
 
+
 ChangeStats::ChangeStats(int health, int attack, int flipCost)
 	:hp(health), atk(attack), fCost(flipCost)
 {
@@ -19,9 +20,14 @@ ChangeStats::ChangeStats(int health, int attack, int flipCost)
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			owner->SetHP(owner->GetHP() + hp);
-			owner->SetAtk(owner->GetAtk() + atk);
-			owner->SetFlipCost(owner->GetFlipCost() + fCost);
+			effect(owner);
+			//owner->SetHP(owner->GetHP() + hp);
+			//owner->SetAtk(owner->GetAtk() + atk);
+			//owner->SetFlipCost(owner->GetFlipCost() + fCost);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
@@ -33,7 +39,12 @@ Flip::Flip()
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			owner->GetOwner()->Flip();
+			effect(owner);
+			//owner->GetOwner()->Flip();
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
