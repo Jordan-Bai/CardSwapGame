@@ -5,6 +5,8 @@
 #include <vector>
 #include <functional>
 
+extern int activeCards;
+
 class ActiveCard;
 
 class ActiveCreature
@@ -19,6 +21,8 @@ class ActiveCreature
 	int m_aCostOverride;
 
 public:
+	bool m_canCopy = true;
+
 	// Ability triggers:
 	std::function<void(ActiveCreature* owner)> OnPlayed;
 	std::function<void(ActiveCreature* owner)> OnDeath;
@@ -50,6 +54,7 @@ public:
 	void SetAtk(int atk);
 	void SetFlipCost(int fCost);
 	void SetAbilityCost(int aCost);
+	void SetStatsToDefault();
 	//void SetName(std::string name); // Really shouldn't be necessary
 
 	bool HasActivateAbility();
@@ -64,6 +69,8 @@ class ActiveCard
 	ActiveCreature* m_backFace;
 
 	BoardManager* m_boardRef;
+
+	int id; //FOR TESTING
 
 	int m_damageTaken;
 	bool m_frontActive = true;

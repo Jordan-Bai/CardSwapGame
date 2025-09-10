@@ -8,7 +8,7 @@
 int main()
 {
 	int seed = time(0);
-	//seed = 1757373423;
+	//seed = 1757400999;
 	srand(seed);
 
 	bool doOutput = true;
@@ -99,6 +99,9 @@ int main()
 	CardData* newCard = new CardData(1, frontCreature, nullptr);
 	cards.push_back(newCard);
 
+	CardData* newCard2 = new CardData(1, frontCreature, nullptr);
+	cards.push_back(newCard2);
+
 	PickupCard pickupEffect(newCard);
 	Ability pickupAbility(AbilityTrigger::OnActivate, &pickupEffect);
 	//frontCreature->abilities.push_back(&pickupAbility);
@@ -151,7 +154,7 @@ int main()
 	if (false)
 	{
 		dealer.StartTurn();
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 10; i++)
 		{
 			//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
 			//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);

@@ -23,6 +23,7 @@ public:
 	bool PlayCard(CardData* data, int slot, int playerIndex);
 	bool FlipCard(int slot, int playerIndex);
 	bool FlipCard(ActiveCard* card);
+	bool SwapCards(int slot1, int slot2, int playerIndex);
 	bool ActivateCard(int slot, int playerIndex);
 	bool ActivateCard(ActiveCard* card);
 

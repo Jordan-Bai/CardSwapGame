@@ -2,9 +2,11 @@
 
 #include "Ability.h"
 
+int activeCards = 0;
+
 // Active creature
 ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
-	: m_data(data), m_owner(owner), m_atkOverride(data->atk), m_hpOverride(data->hp), 
+	: m_data(data), m_owner(owner), m_hpOverride(data->hp), m_atkOverride(data->atk),
 	m_fCostOverride(data->fCost), m_aCostOverride(data->aCost)
 {
 	for (Ability* a : m_data->abilities)
@@ -15,7 +17,7 @@ ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
 
 ActiveCreature::ActiveCreature(const ActiveCreature& other, ActiveCard* owner)
 	:m_data(other.m_data), m_owner(owner), m_overrideStats(other.m_overrideStats),
-	m_atkOverride(other.m_atkOverride), m_hpOverride(other.m_hpOverride),
+	m_hpOverride(other.m_hpOverride), m_atkOverride(other.m_atkOverride),
 	m_fCostOverride(other.m_fCostOverride), m_aCostOverride(other.m_aCostOverride)
 {
 	for (Ability* a : m_data->abilities)
@@ -104,6 +106,15 @@ void ActiveCreature::SetAbilityCost(int aCost)
 	m_aCostOverride = aCost;
 }
 
+void ActiveCreature::SetStatsToDefault()
+{
+	m_hpOverride = m_data->hp;
+	m_atkOverride = m_data->atk;
+	m_fCostOverride = m_data->fCost;
+	m_aCostOverride = m_data->aCost;
+	m_overrideStats = false;
+}
+
 bool ActiveCreature::HasActivateAbility()
 {
 	return OnActivate != nullptr;
@@ -132,6 +143,9 @@ ActiveCard::ActiveCard(CardData* data, int slot, int side, BoardManager* boardRe
 		m_backFace = nullptr;
 	}
 	// Call "OnPlayed"
+
+	id = activeCards;
+	activeCards++;
 }
 
 ActiveCard::ActiveCard(const ActiveCard& other)
@@ -157,6 +171,9 @@ ActiveCard::ActiveCard(const ActiveCard& other)
 	{
 		m_backFace = nullptr;
 	}
+
+	id = activeCards;
+	activeCards++;
 }
 
 ActiveCard::~ActiveCard()

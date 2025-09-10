@@ -3,6 +3,11 @@
 #include "BoardManager.h"
 #include <iostream>
 
+void AbilityEffect::Init(ActiveCreature* owner)
+{
+	// Does nothing by default
+}
+
 ChangeStats::ChangeStats(int health, int attack, int flipCost)
 	:hp(health), atk(attack), fCost(flipCost)
 {
@@ -105,7 +110,7 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 			for (int i : copyTargets)
 			{
 				ActiveCard* targetCard = parentCard->GetBoard()->GetSlot(parentCard->m_slot + i, parentCard->m_side);
-				if (targetCard != nullptr)
+				if (targetCard != nullptr && targetCard->GetCurrentFace()->m_canCopy)
 				{
 					canCopy = true;
 					totalHP += targetCard->GetMaxHP();
@@ -117,6 +122,10 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 			{
 				owner->SetHP(totalHP);
 				owner->SetAtk(totalAtk);
+			}
+			else
+			{
+				owner->SetStatsToDefault();
 			}
 
 			// If updating the card's max hp causes its current hp to go to 0 or below, make sure card dies
@@ -155,6 +164,11 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 				parentCard->GetBoard()->DestroyCard(parentCard);
 			}
 		};
+}
+
+void CopyCards::Init(ActiveCreature* owner)
+{
+	owner->m_canCopy = false;
 }
 
 std::string ChangeStats::GetIcon()

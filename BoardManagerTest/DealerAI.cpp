@@ -471,12 +471,12 @@ void DealerAI::CopyBoardData()
 
 			m_copyBoard->SetSlot(i, 2, copyCard);
 		}
-
-		// Copy player data
-		CopyPlayerData(m_copyDealer, m_data);
-		CopyPlayerData(m_copyPlayer, m_boardRef->GetPlayer(m_boardRef->OppositeSide(m_data->m_playerIndex)));
-		// Could probably simplify this, since we only really need to copy the player's health, since the dealer doesn't know what cards they have anyway
 	}
+
+	// Copy player data
+	CopyPlayerData(m_copyDealer, m_data);
+	CopyPlayerData(m_copyPlayer, m_boardRef->GetPlayer(m_boardRef->OppositeSide(m_data->m_playerIndex)));
+	// Could probably simplify this, since we only really need to copy the player's health, since the dealer doesn't know what cards they have anyway
 }
 
 void DealerAI::CopyPlayerData(Player* copyTarget, Player* copySource)

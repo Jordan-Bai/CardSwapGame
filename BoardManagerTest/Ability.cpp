@@ -17,17 +17,7 @@ Ability::Ability(AbilityTrigger _trigger, AbilityEffect* _effect)
 
 void Ability::Init(ActiveCreature* owner)
 {
-	//std::function<void()> caller = [&owner, this]()
-	//	{
-	//		//effect(owner);
-	//		effect->effect(owner);
-	//	};
-	//
-	//std::function<void(ActiveCard* other)> attackCaller = [&owner, this](ActiveCard* other)
-	//	{
-	//		//attackEffect(owner, other);
-	//		effect->attackEffect(owner, other);
-	//	};
+	effect->Init(owner);
 
 	switch (trigger)
 	{
