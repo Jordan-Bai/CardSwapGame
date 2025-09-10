@@ -18,11 +18,6 @@ namespace godot
 		CreatureData* m_data;
 
 	protected:
-		//Ref<GDAbility> m_ability;
-		//TypedArray<GDAbility> m_abilities;
-		//std::vector<GDAbility*> m_abilities;
-		//std::vector<Ref<GDAbility>> m_abilitiesRef;
-
 		static void _bind_methods(); // Godot will call this to check what methods can be called from godot and "which properties it exposes"
 
 	public:
@@ -37,16 +32,16 @@ namespace godot
 		int GetFlipCost();
 		int GetAbilityCost();
 		String GetName();
-		//TypedArray<GDAbility> GetAbilities();
-		//TypedArray<Ref<GDAbility>> GetAbilitiesRef();
+		bool GetCanStack();
+		int GetStackLimit();
 
 		void SetHP(int hp);
 		void SetAtk(int atk);
 		void SetFlipCost(int fCost);
 		void SetAbilityCost(int aCost);
 		void SetName(String name);
-		//void SetAbilities(TypedArray<GDAbility> abilities);
-		//void SetAbilitiesRef(TypedArray<Ref<GDAbility>> abilities);
+		void SetCanStack(bool canStack);
+		void SetStackLimit(int stackLimit);
 
 		void AddAbility(GDAbility* ability);
 
@@ -74,11 +69,14 @@ namespace godot
 		~GDCard();
 
 		int GetCost();
-		void SetCost(int cost);
 		GDCreature* GetFrontFace();
 		GDCreature* GetBackFace();
+		int GetCardID();
+
+		void SetCost(int cost);
 		void SetFrontFace(GDCreature* creature);
 		void SetBackFace(GDCreature* creature);
+		void SetCardID(int id);
 
 		CardData* GetData();
 	};

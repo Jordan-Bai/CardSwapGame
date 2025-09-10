@@ -12,28 +12,24 @@ void GDCreature::_bind_methods()
 	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDCreature::GetFlipCost);
 	ClassDB::bind_method(D_METHOD("GetAbilityCost"), &GDCreature::GetAbilityCost);
 	ClassDB::bind_method(D_METHOD("GetName"), &GDCreature::GetName);
-	//ClassDB::bind_method(D_METHOD("GetAbilities"), &GDCreature::GetAbilities);
-	//ClassDB::bind_method(D_METHOD("GetAbilitiesRef"), &GDCreature::GetAbilitiesRef);
+	ClassDB::bind_method(D_METHOD("GetCanStack"), &GDCreature::GetCanStack);
+	ClassDB::bind_method(D_METHOD("GetStackLimit"), &GDCreature::GetStackLimit);
 
 	ClassDB::bind_method(D_METHOD("SetHP", "hp"), &GDCreature::SetHP);
 	ClassDB::bind_method(D_METHOD("SetAtk", "atk"), &GDCreature::SetAtk);
 	ClassDB::bind_method(D_METHOD("SetFlipCost", "flipCost"), &GDCreature::SetFlipCost);
 	ClassDB::bind_method(D_METHOD("SetAbilityCost", "abilityCost"), &GDCreature::SetAbilityCost);
 	ClassDB::bind_method(D_METHOD("SetName", "name"), &GDCreature::SetName);
-	//ClassDB::bind_method(D_METHOD("SetAbilities", "abilities"), &GDCreature::SetAbilities);
-	//ClassDB::bind_method(D_METHOD("SetAbilitiesRef", "abilities"), &GDCreature::SetAbilitiesRef);
+	ClassDB::bind_method(D_METHOD("SetCanStack", "canStack"), &GDCreature::SetCanStack);
+	ClassDB::bind_method(D_METHOD("SetStackLimit", "stackLimit"), &GDCreature::SetStackLimit);
 	
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "SetHP", "GetHP");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "atk"), "SetAtk", "GetAtk");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "abilityCost"), "SetAbilityCost", "GetAbilityCost");
 	ADD_PROPERTY(PropertyInfo(Variant::STRING, "name"), "SetName", "GetName");
-	//ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "abilities", PROPERTY_HINT_TYPE_STRING, 
-	//	String::num(Variant::OBJECT) + "/" + String::num(PROPERTY_HINT_RESOURCE_TYPE) + ":"),
-	//	"SetAbilities", "GetAbilities");
-	//ADD_PROPERTY(PropertyInfo(Variant::ARRAY, "abilities", PROPERTY_HINT_TYPE_STRING,
-	//	String::num(Variant::OBJECT) + ":RefCounted"),
-	//	"SetAbilitiesRef", "GetAbilitiesRef");
+	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "canStack"), "SetCanStack", "GetCanStack");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "stackLimit"), "SetStackLimit", "GetStackLimit");
 
 	ClassDB::bind_method(D_METHOD("AddAbility", "ability"), &GDCreature::AddAbility);
 }
@@ -78,30 +74,16 @@ String GDCreature::GetName()
 	return String(m_data->name.c_str());
 }
 
-//TypedArray<GDAbility> GDCreature::GetAbilities()
-//{
-//	TypedArray<GDAbility> returnArray;
-//
-//	for (GDAbility* ability : m_abilities)
-//	{
-//		returnArray.append(ability);
-//	}
-//
-//	return returnArray;
-//}
+bool GDCreature::GetCanStack()
+{
+	return m_data->stackOptions.canStack;
+}
 
-//TypedArray<Ref<GDAbility>> GDCreature::GetAbilitiesRef()
-//{
-//	TypedArray<Ref<GDAbility>> returnArray;
-//
-//	for (int i = 0; i < m_abilities.size(); i++)
-//	{
-//		Ref<GDAbility> ability = m_abilities[i];
-//		returnArray.append(ability);
-//	}
-//
-//	return returnArray;
-//}
+int GDCreature::GetStackLimit()
+{
+	return m_data->stackOptions.stackLimit;
+}
+
 
 void GDCreature::SetHP(int hp)
 {
@@ -128,38 +110,16 @@ void GDCreature::SetName(String name)
 	m_data->name = name.utf8();
 }
 
-//void GDCreature::SetAbilities(TypedArray<GDAbility> abilities)
-//{
-//	//m_abilities = abilities;
-//	
-//	m_data->abilities.clear();
-//	for (int i = 0; i < abilities.size(); i++)
-//	{
-//		//Ref<GDAbility> abilityRef = abilities[i];
-//		//GDAbility* ability = abilityRef.ptr();
-//		//m_abilities[i] = ability;
-//		
-//		//Object abilityObject = abilities[i];
-//		//GDAbility ability = abilities[i];
-//		//m_abilities[i] = &ability;
-//		//m_data->abilities.push_back(ability->GetData());
-//
-//		//Ref<GDAbility> abilityRef = abilities[i];
-//		//m_abilitiesRef[i] = abilityRef;
-//	}
-//}
+void GDCreature::SetCanStack(bool canStack)
+{
+	m_data->stackOptions.canStack = canStack;
+}
 
-//void GDCreature::SetAbilitiesRef(TypedArray<Ref<GDAbility>> abilities)
-//{
-//	m_data->abilities.clear();
-//	for (int i = 0; i < abilities.size(); i++)
-//	{
-//		//Ref<GDAbility> abilityRef = abilities[i];
-//		//m_abilities[i] = abilityRef.ptr();
-//		m_abilitiesRef[i] = abilities[i];
-//		//m_data->abilities.push_back(ability->GetData());
-//	}
-//}
+void GDCreature::SetStackLimit(int stackLimit)
+{
+	m_data->stackOptions.stackLimit = stackLimit;
+}
+
 
 void GDCreature::AddAbility(GDAbility* ability)
 {
@@ -178,14 +138,17 @@ void GDCard::_bind_methods()
 	ClassDB::bind_method(D_METHOD("GetCost"), &GDCard::GetCost);
 	ClassDB::bind_method(D_METHOD("GetFrontFace"), &GDCard::GetFrontFace);
 	ClassDB::bind_method(D_METHOD("GetBackFace"), &GDCard::GetBackFace);
+	ClassDB::bind_method(D_METHOD("GetCardID"), &GDCard::GetCardID);
 
 	ClassDB::bind_method(D_METHOD("SetCost", "cost"), &GDCard::SetCost);
 	ClassDB::bind_method(D_METHOD("SetFrontFace", "creature"), &GDCard::SetFrontFace);
 	ClassDB::bind_method(D_METHOD("SetBackFace", "creature"), &GDCard::SetBackFace);
+	ClassDB::bind_method(D_METHOD("SetCardID", "id"), &GDCard::SetCardID);
 	
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "cost"), "SetCost", "GetCost");
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "frontCreature"), "SetFrontFace", "GetFrontFace");
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "backCreature"), "SetBackFace", "GetBackFace");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "cardID"), "SetCardID", "GetCardID");
 }
 
 GDCard::GDCard()
@@ -225,11 +188,6 @@ int GDCard::GetCost()
 	return m_data->cost;
 }
 
-void GDCard::SetCost(int cost)
-{
-	m_data->cost = cost;
-}
-
 GDCreature* GDCard::GetFrontFace()
 {
 	return m_frontFace;
@@ -240,16 +198,34 @@ GDCreature* GDCard::GetBackFace()
 	return m_backFace;
 }
 
+int GDCard::GetCardID()
+{
+	return m_data->cardID;
+}
+
+
+void GDCard::SetCost(int cost)
+{
+	m_data->cost = cost;
+}
+
 void GDCard::SetFrontFace(GDCreature* creature)
 {
 	m_frontFace = creature;
 	m_data->frontCreature = creature->GetData();
+	m_data->frontCreature->owner = m_data;
 }
 
 void GDCard::SetBackFace(GDCreature* creature)
 {
 	m_backFace = creature;
 	m_data->backCreature = creature->GetData();
+	m_data->backCreature->owner = m_data;
+}
+
+void GDCard::SetCardID(int id)
+{
+	m_data->cardID = id;
 }
 
 CardData* GDCard::GetData()

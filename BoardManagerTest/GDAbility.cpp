@@ -12,7 +12,7 @@ void GDAbility::_bind_methods()
 
 	// Property hint tells godot that this is an enum and what the name of each value is
 	ADD_PROPERTY(PropertyInfo(Variant::INT, "abilityTrigger", PROPERTY_HINT_ENUM, 
-		"OnPlayed, OnDeath, OnAttack, OnAttacked, OnFlippedTo, OnActivate, OnTurnStarts, OnTurnEnds, OnCardDies, OnBoardUpdates"),
+		"OnPlayed, OnStack, OnStackMaxed, OnDeath, OnAttack, OnAttacked, OnFlippedTo, OnActivate, OnTurnStarts, OnTurnEnds, OnCardDies, OnBoardUpdates"),
 		"SetTrigger", "GetTrigger");
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "effect"), "SetEffect", "GetEffect");
 }
