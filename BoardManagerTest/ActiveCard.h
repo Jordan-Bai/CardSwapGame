@@ -21,6 +21,11 @@ class ActiveCreature
 	int m_fCostOverride;
 	int m_aCostOverride;
 
+	int m_hpBuff = 0;
+	int m_atkBuff = 0;
+	int m_fCostBuff = 0;
+	int m_aCostBuff = 0;
+
 public:
 	bool m_canCopy = true;
 	std::vector<CardData*> m_stackedCards;
@@ -53,6 +58,7 @@ public:
 	int GetFlipCost();
 	int GetAbilityCost();
 	std::string GetName();
+	Family GetFamily();
 
 	void SetHP(int hp);
 	void SetAtk(int atk);
@@ -60,6 +66,11 @@ public:
 	void SetAbilityCost(int aCost);
 	void SetStatsToDefault();
 	//void SetName(std::string name); // Really shouldn't be necessary
+
+	void ResetBuffs();
+	void AddHPBuff(int hp);
+	void AddAtkBuff(int atk);
+	void AddFlipCostBuff(int fCost);
 
 	bool HasActivateAbility();
 	bool CanStack(CardData* card);
@@ -101,6 +112,12 @@ public:
 	int GetFlipCost();
 	int GetAbilityCost();
 	std::string GetName();
+	Family GetFamily();
+
+	void ResetBuffs();
+	void AddHPBuff(int hp);
+	void AddAtkBuff(int atk);
+	void AddFlipCostBuff(int fCost);
 
 	BoardManager* GetBoard();
 	void SetBoard(BoardManager* board);

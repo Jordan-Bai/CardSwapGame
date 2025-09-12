@@ -43,12 +43,7 @@ int main()
 	Player dealer;
 	Player player;
 
-	// TEST ABILITY
-	//std::function<void(ActiveCreature* owner)> testEffect = [](ActiveCreature* owner)
-	//	{
-	//		//std::cout << "ABILITY ACTIVATED:\n";
-	//		owner->SetHP(9);
-	//	};
+	// Abilities
 	ChangeStats testEffect(8, 0, 0);
 	Ability testAbility(AbilityTrigger::OnPlayed, &testEffect);
 
@@ -67,10 +62,13 @@ int main()
 	CopyCards copyEffect({-1, 1});
 	Ability copyAbility(AbilityTrigger::OnBoardUpdates, &copyEffect);
 
-	ChangeStats changeStatsEffect(1, 1, 0);
-	Ability stackAbility(AbilityTrigger::OnStack, &changeStatsEffect);
-
 	Ability stackMaxedAbility(AbilityTrigger::OnStackMaxed, &flipEffect);
+
+	BuffPerFamilyCard buffPerEffect(Family::Bird, 1, 1, 0);
+	Ability buffBirdAbility(AbilityTrigger::OnBoardUpdates, &buffPerEffect);
+
+	BuffEachFamilyCard buffEachEffect(Family::Bird, 1, 1, 0);
+	Ability buffOtherBirdAbility(AbilityTrigger::OnBoardUpdates, &buffEachEffect);
 
 	// DECK CREATION
 	std::vector<CreatureData*> creatures;
@@ -80,14 +78,14 @@ int main()
 		int stat1 = (rand() % 5) + 1;
 		int stat2 = (rand() % 5) + 1;
 		CreatureData* frontCreature = new CreatureData(stat1, stat2, 2);
-		//frontCreature->abilities.push_back(&flipAbility);
 		creatures.push_back(frontCreature);
 		CreatureData* backCreature = new CreatureData(stat2 + 2, stat1 + 2, 1);
-		//backCreature->abilities.push_back(&testAbility);
-		//backCreature->abilities.push_back(&energyAbility);
 		creatures.push_back(backCreature);
 
-		//frontCreature->abilities.push_back(&testAbility);
+		Family family1 = (Family)(rand() % Family::ERROR);
+		Family family2 = (Family)(rand() % Family::ERROR);
+		frontCreature->family = family1;
+		backCreature->family = family2;
 
 		int cost = (stat1 + stat2) / 4;
 		//if (cost == 0)
@@ -99,23 +97,36 @@ int main()
 		cards.push_back(newCard);
 	}
 
-	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
-	frontCreature->abilities.push_back(&stackAbility);
-	frontCreature->abilities.push_back(&stackMaxedAbility);
-	frontCreature->stackOptions.canStack = true;
-	frontCreature->stackOptions.stackLimit = 3;
-	//frontCreature->abilities.push_back(&copyAbility);
-	//frontCreature->abilities.push_back(&healAbility);
-	creatures.push_back(frontCreature);
-	CreatureData* backCreature = new CreatureData(4, 4, 0, 1);
-	creatures.push_back(backCreature);
-	CardData* newCard = new CardData(1, frontCreature, backCreature);
+	CreatureData* duck = new CreatureData(2, 1, 2, 1);
+	duck->abilities.push_back(&stackMaxedAbility);
+	duck->stackOptions.canStack = true;
+	duck->stackOptions.stackLimit = 3;
+	duck->family = Family::Bird;
+	creatures.push_back(duck);
+	CreatureData* duckTower = new CreatureData(9, 5, 0, 1);
+	duckTower->family = Family::Bird;
+	creatures.push_back(duckTower);
+	CardData* newCard = new CardData(1, duck, duckTower);
 	cards.push_back(newCard);
 
 	CardData* newCard2 = new CardData(newCard);
 	cards.push_back(newCard2);
 	CardData* newCard3 = new CardData(newCard);
 	cards.push_back(newCard3);
+
+	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
+	frontCreature->abilities.push_back(&buffBirdAbility);
+	frontCreature->family = Family::Bird;
+	creatures.push_back(frontCreature);
+	CardData* newCard4 = new CardData(1, frontCreature, nullptr);
+	cards.push_back(newCard4);
+
+	CreatureData* frontCreature2 = new CreatureData(2, 2, 2, 1);
+	frontCreature2->abilities.push_back(&buffOtherBirdAbility);
+	frontCreature2->family = Family::Bird;
+	creatures.push_back(frontCreature2);
+	CardData* newCard5 = new CardData(1, frontCreature2, nullptr);
+	cards.push_back(newCard5);
 
 	PickupCard pickupEffect(newCard);
 	Ability pickupAbility(AbilityTrigger::OnActivate, &pickupEffect);

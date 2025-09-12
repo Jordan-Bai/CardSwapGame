@@ -275,26 +275,19 @@ void BoardManager::DisplayBoard()
 
 	// Print dealer hand
 	//==============================================================
-	//std::string dealerHand;
-	//for (CardData* card : m_player1->m_hand)
-	//{
-	//	dealerHand += " <---> ";
-	//}
-	//std::cout << dealerHand << '\n';
 	std::string dealerHand1;
 	std::string dealerHand2;
 	std::string dealerHand3;
+	std::string dealerHand4;
 	for (CardData* card : m_player1->m_hand)
 	{
-		//CreatureData* frontCreature = card->frontCreature;
-		//dealerHand1 += " <" + std::to_string(card->cost) + "--> ";
-		//dealerHand2 += " <" + std::to_string(frontCreature->atk) + "-" + std::to_string(frontCreature->hp) + "> ";
 		std::vector<std::string> cardText = GetCardText(card);
 		dealerHand1 += cardText[0];
 		dealerHand2 += cardText[1];
 		dealerHand3 += cardText[2];
+		dealerHand4 += cardText[3];
 	}
-	std::cout << dealerHand1 << '\n' << dealerHand2 << '\n' << dealerHand3 << '\n';
+	std::cout << dealerHand1 << '\n' << dealerHand2 << '\n' << dealerHand3 << '\n' << dealerHand4 << '\n';
 
 	// Print dealer side
 	//==============================================================
@@ -303,28 +296,16 @@ void BoardManager::DisplayBoard()
 	std::string dealerSide1;
 	std::string dealerSide2;
 	std::string dealerSide3;
+	std::string dealerSide4;
 	for (int i = 0; i < m_slots; i++)
 	{
-		//dealerSide1 += " |";
-		//dealerSide2 += " |";
-		//if (m_side1[i] == nullptr)
-		//{
-		//	dealerSide1 += "---";
-		//	dealerSide2 += "---";
-		//}
-		//else
-		//{
-		//	dealerSide1 += "--" + std::to_string(m_side1[i]->GetFlipCost());
-		//	dealerSide2 += std::to_string(m_side1[i]->GetAtk()) + "-" + std::to_string(m_side1[i]->GetHP());
-		//}
-		//dealerSide1 += "| ";
-		//dealerSide2 += "| ";
 		std::vector<std::string> cardText = GetCardText(m_side1[i]);
 		dealerSide1 += cardText[0];
 		dealerSide2 += cardText[1];
 		dealerSide3 += cardText[2];
+		dealerSide4 += cardText[3];
 	}
-	std::cout << dealerSide1 << '\n' << dealerSide2 << '\n' << dealerSide3 << "\n\n";
+	std::cout << dealerSide1 << '\n' << dealerSide2 << '\n' << dealerSide3 << '\n' << dealerSide4 << "\n\n";
 
 
 	// Print player side
@@ -332,28 +313,16 @@ void BoardManager::DisplayBoard()
 	std::string playerSide1;
 	std::string playerSide2;
 	std::string playerSide3;
+	std::string playerSide4;
 	for (int i = 0; i < m_slots; i++)
 	{
-		//playerSide1 += " |";
-		//playerSide2 += " |";
-		//if (m_side2[i] == nullptr)
-		//{
-		//	playerSide1 += "---";
-		//	playerSide2 += "---";
-		//}
-		//else
-		//{
-		//	playerSide1 += "--" + std::to_string(m_side2[i]->GetFlipCost());
-		//	playerSide2 += std::to_string(m_side2[i]->GetAtk()) + "-" + std::to_string(m_side2[i]->GetHP());
-		//}
-		//playerSide1 += "| ";
-		//playerSide2 += "| ";
 		std::vector<std::string> cardText = GetCardText(m_side2[i]);
 		playerSide1 += cardText[0];
 		playerSide2 += cardText[1];
 		playerSide3 += cardText[2];
+		playerSide4 += cardText[3];
 	}
-	std::cout << playerSide1 << '\n' << playerSide2 << '\n' << playerSide3 << '\n';
+	std::cout << playerSide1 << '\n' << playerSide2 << '\n' << playerSide3 << '\n' << playerSide4 << '\n';
 
 	std::cout << "================================\n";
 
@@ -363,17 +332,16 @@ void BoardManager::DisplayBoard()
 	std::string playerHand1;
 	std::string playerHand2;
 	std::string playerHand3;
+	std::string playerHand4;
 	for (CardData* card : m_player2->m_hand)
 	{
-		//CreatureData* frontCreature = card->frontCreature;
-		//playerHand1 += " <" + std::to_string(card->cost) + "--> ";
-		//playerHand2 += " <" + std::to_string(frontCreature->atk) + "-" + std::to_string(frontCreature->hp) + "> ";
 		std::vector<std::string> cardText = GetCardText(card);
 		playerHand1 += cardText[0];
 		playerHand2 += cardText[1];
 		playerHand3 += cardText[2];
+		playerHand4 += cardText[3];
 	}
-	std::cout << playerHand1 << '\n' << playerHand2 << '\n' << playerHand3 << '\n';
+	std::cout << playerHand1 << '\n' << playerHand2 << '\n' << playerHand3 << '\n' << playerHand4 << '\n';
 
 
 	// Print player stats
@@ -386,18 +354,31 @@ std::vector<std::string> BoardManager::GetCardText(CardData* card)
 	std::string cardLine1 = " |";
 	std::string cardLine2 = " |";
 	std::string cardLine3 = " |";
+	std::string cardLine4 = " |";
 
 	CreatureData* frontCreature = card->frontCreature;
-	cardLine1 += std::to_string(card->cost) + "---";
+	cardLine1 += std::to_string(card->cost) + "----";
 	// Add text for first ability
 	cardLine2 += AbilityToString(frontCreature, 0);
-	cardLine3 += std::to_string(frontCreature->atk) + "--" + std::to_string(frontCreature->hp);
+	cardLine3 += AbilityToString(frontCreature, 1);
+	cardLine4 += std::to_string(frontCreature->atk);
+	std::string family = FamilyToString(frontCreature->family);
+	if (family.size() == 1)
+	{
+		cardLine4 += "-" + family + "-";
+	}
+	else
+	{
+		cardLine4 += family;
+	}
+	cardLine4 += std::to_string(frontCreature->hp);
 
 	cardLine1 += "| ";
 	cardLine2 += "| ";
 	cardLine3 += "| ";
+	cardLine4 += "| ";
 
-	return std::vector<std::string>{ cardLine1, cardLine2, cardLine3 };
+	return std::vector<std::string>{ cardLine1, cardLine2, cardLine3, cardLine4 };
 }
 
 std::vector<std::string> BoardManager::GetCardText(ActiveCard* card)
@@ -405,40 +386,54 @@ std::vector<std::string> BoardManager::GetCardText(ActiveCard* card)
 	std::string cardLine1 = " |";
 	std::string cardLine2 = " |";
 	std::string cardLine3 = " |";
+	std::string cardLine4 = " |";
 
 	if (card == nullptr)
 	{
-		cardLine1 += "----";
-		cardLine2 += "----";
-		cardLine3 += "----";
+		cardLine1 += "-----";
+		cardLine2 += "-----";
+		cardLine3 += "-----";
+		cardLine4 += "-----";
 	}
 	else
 	{
 		CreatureData* faceData = card->GetCurrentFace()->GetData();
-		cardLine1 += "---" + std::to_string(card->GetFlipCost());
+		cardLine1 += "----" + std::to_string(card->GetFlipCost());
 		// Add text for first ability
-		cardLine2 += AbilityToString(faceData, 0) + "";
-		cardLine3 += std::to_string(card->GetAtk()) + "--" + std::to_string(card->GetHP());
+		cardLine2 += AbilityToString(faceData, 0);
+		cardLine3 += AbilityToString(faceData, 1);
+		cardLine4 += std::to_string(card->GetAtk());
+		std::string family = FamilyToString(card->GetFamily());
+		if (family.size() == 1)
+		{
+			cardLine4 += "-" + family + "-";
+		}
+		else
+		{
+			cardLine4 += family;
+		}
+		cardLine4 += std::to_string(card->GetHP());
 	}
 
 	cardLine1 += "| ";
 	cardLine2 += "| ";
 	cardLine3 += "| ";
+	cardLine4 += "| ";
 
-	return std::vector<std::string>{ cardLine1, cardLine2, cardLine3 };
+	return std::vector<std::string>{ cardLine1, cardLine2, cardLine3, cardLine4 };
 }
 
 std::string BoardManager::AbilityToString(CreatureData* face, int abilityIndex)
 {
 	if (face->abilities.size() <= abilityIndex)
 	{
-		return "----";
+		return "-----";
 	}
 
 	Ability* ability = face->abilities[abilityIndex];
 	if (ability == nullptr)
 	{
-		return "----";
+		return "-----";
 	}
 
 	std::string abilityStr;
@@ -451,6 +446,9 @@ std::string BoardManager::AbilityToString(CreatureData* face, int abilityIndex)
 		break;
 	case AbilityTrigger::OnStack:
 		abilityStr += "St";
+		break;
+	case AbilityTrigger::OnStackMaxed:
+		abilityStr += "S" + std::to_string(face->stackOptions.stackLimit);
 		break;
 	case AbilityTrigger::OnDeath:
 		abilityStr += "De";
@@ -486,6 +484,35 @@ std::string BoardManager::AbilityToString(CreatureData* face, int abilityIndex)
 	abilityStr += ">" + ability->effect->GetIcon();
 
 	return abilityStr;
+}
+
+std::string BoardManager::FamilyToString(Family family)
+{
+	switch (family)
+	{
+	case Cnidaria:
+		return "c";
+	case Bird:
+		return "B";
+	case Fish:
+		return "F";
+	case Shark:
+		return "S";
+	case Pinnipeds:
+		return "P";
+	case Mollusk:
+		return "m";
+	case Crustaceans:
+		return "C";
+	case Bug:
+		return "b";
+	case Mammal:
+		return "M";
+	case Reptile:
+		return "R";
+	case ERROR:
+		return "N/A";
+	}
 }
 
 
@@ -664,6 +691,19 @@ void BoardManager::TurnEnds(int playerIndex)
 
 void BoardManager::BoardUpdates()
 {
+	// First reset buffs, as these may change
+	for (int side = 1; side <= 2; side++)
+	{
+		for (int i = 0; i < m_slots; i++)
+		{
+			ActiveCard* targetCard = GetSlot(i, side);
+			if (targetCard != nullptr)
+			{
+				targetCard->ResetBuffs();
+			}
+		}
+	}
+
 	// Send signal to all cards
 	for (int side = 1; side <= 2; side++)
 	{

@@ -45,27 +45,27 @@ int ActiveCreature::GetHP()
 {
 	if (m_overrideStats)
 	{
-		return m_hpOverride;
+		return m_hpOverride + m_hpBuff;
 	}
-	return m_data->hp;
+	return m_data->hp + m_hpBuff;
 }
 
 int ActiveCreature::GetAtk()
 {
 	if (m_overrideStats)
 	{
-		return m_atkOverride;
+		return m_atkOverride + m_atkBuff;
 	}
-	return m_data->atk;
+	return m_data->atk + m_atkBuff;
 }
 
 int ActiveCreature::GetFlipCost()
 {
 	if (m_overrideStats)
 	{
-		return m_fCostOverride;
+		return m_fCostOverride + m_fCostBuff;
 	}
-	return m_data->fCost;
+	return m_data->fCost + m_fCostBuff;
 }
 
 int ActiveCreature::GetAbilityCost()
@@ -80,6 +80,11 @@ int ActiveCreature::GetAbilityCost()
 std::string ActiveCreature::GetName()
 {
 	return m_data->name;
+}
+
+Family ActiveCreature::GetFamily()
+{
+	return m_data->family;
 }
 
 void ActiveCreature::SetHP(int hp)
@@ -113,6 +118,28 @@ void ActiveCreature::SetStatsToDefault()
 	m_fCostOverride = m_data->fCost;
 	m_aCostOverride = m_data->aCost;
 	m_overrideStats = false;
+}
+
+void ActiveCreature::ResetBuffs()
+{
+	m_hpBuff = 0;
+	m_atkBuff = 0;
+	m_fCostBuff = 0;
+}
+
+void ActiveCreature::AddHPBuff(int hp)
+{
+	m_hpBuff += hp;
+}
+
+void ActiveCreature::AddAtkBuff(int atk)
+{
+	m_atkBuff += atk;
+}
+
+void ActiveCreature::AddFlipCostBuff(int fCost)
+{
+	m_fCostBuff += fCost;
 }
 
 bool ActiveCreature::HasActivateAbility()
@@ -284,6 +311,31 @@ int ActiveCard::GetAbilityCost()
 std::string ActiveCard::GetName()
 {
 	return GetCurrentFace()->GetName();
+}
+
+Family ActiveCard::GetFamily()
+{
+	return GetCurrentFace()->GetFamily();
+}
+
+void ActiveCard::ResetBuffs()
+{
+	GetCurrentFace()->ResetBuffs();
+}
+
+void ActiveCard::AddHPBuff(int hp)
+{
+	GetCurrentFace()->AddHPBuff(hp);
+}
+
+void ActiveCard::AddAtkBuff(int atk)
+{
+	GetCurrentFace()->AddAtkBuff(atk);
+}
+
+void ActiveCard::AddFlipCostBuff(int fCost)
+{
+	GetCurrentFace()->AddFlipCostBuff(fCost);
 }
 
 BoardManager* ActiveCard::GetBoard()

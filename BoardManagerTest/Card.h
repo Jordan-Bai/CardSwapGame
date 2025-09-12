@@ -11,6 +11,21 @@ struct Ability;
 
 struct CardData;
 
+enum Family
+{
+	Cnidaria,
+	Bird,
+	Fish,
+	Shark,
+	Pinnipeds,
+	Mollusk,
+	Crustaceans,
+	Bug,
+	Mammal,
+	Reptile,
+	ERROR
+};
+
 struct StackOptions
 {
 	bool canStack = false;
@@ -24,13 +39,14 @@ struct CreatureData
 	int fCost;
 	int aCost;
 	std::string name;
+	Family family;
 	std::vector<Ability*> abilities;
 	StackOptions stackOptions;
 
 	CardData* owner;
 
 	CreatureData(int health, int attack, int flipCost, int abilityCost = 0)
-		:hp(health), atk(attack), fCost(flipCost), aCost(abilityCost), name("[EMPTY]"), owner(nullptr)
+		:hp(health), atk(attack), fCost(flipCost), aCost(abilityCost), name("[EMPTY]"), family(Family::ERROR), owner(nullptr)
 	{
 	}
 };

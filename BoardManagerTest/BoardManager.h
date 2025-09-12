@@ -37,6 +37,7 @@ public:
 	std::vector<std::string> GetCardText(CardData* card);
 	std::vector<std::string> GetCardText(ActiveCard* card);
 	std::string AbilityToString(CreatureData* face, int abilityIndex);
+	std::string FamilyToString(Family family);
 
 	int OppositeSide(int side);
 	Player* GetPlayer(int side);
