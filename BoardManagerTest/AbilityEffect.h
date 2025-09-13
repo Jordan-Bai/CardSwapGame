@@ -77,6 +77,30 @@ struct CopyCards : public AbilityEffect
 	virtual std::string GetIcon() override;
 };
 
+struct BuffPerFamilyCard : public AbilityEffect
+{
+	Family targetFamily;
+	int hp;
+	int atk;
+	int fCost;
+
+	BuffPerFamilyCard(Family familyType, int health, int attack, int flipCost = 0);
+
+	virtual std::string GetIcon() override;
+};
+
+struct BuffEachFamilyCard : public AbilityEffect
+{
+	Family targetFamily;
+	int hp;
+	int atk;
+	int fCost;
+
+	BuffEachFamilyCard(Family familyType, int health, int attack, int flipCost = 0);
+
+	virtual std::string GetIcon() override;
+};
+
 struct A : public AbilityEffect
 {
 

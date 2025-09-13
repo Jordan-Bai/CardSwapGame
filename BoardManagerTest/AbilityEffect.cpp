@@ -21,9 +21,6 @@ ChangeStats::ChangeStats(int health, int attack, int flipCost)
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
 			effect(owner);
-			//owner->SetHP(owner->GetHP() + hp);
-			//owner->SetAtk(owner->GetAtk() + atk);
-			//owner->SetFlipCost(owner->GetFlipCost() + fCost);
 		};
 	stackEffect = [this](ActiveCreature* owner, CardData* other)
 		{
@@ -40,7 +37,6 @@ Flip::Flip()
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
 			effect(owner);
-			//owner->GetOwner()->Flip();
 		};
 	stackEffect = [this](ActiveCreature* owner, CardData* other)
 		{
@@ -57,7 +53,11 @@ Heal::Heal(int healAmount)
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			owner->GetOwner()->Heal(hp);
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
@@ -71,8 +71,11 @@ GainEnergy::GainEnergy(int energyToGain)
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			ActiveCard* parentCard = owner->GetOwner();
-			parentCard->GetBoard()->GetPlayer(parentCard->m_side)->m_energy += energy;
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
@@ -86,8 +89,11 @@ PickupCard::PickupCard(CardData* cardToPickup)
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			ActiveCard* parentCard = owner->GetOwner();
-			parentCard->GetBoard()->GetPlayer(parentCard->m_side)->PickupCard(card);
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
@@ -102,9 +108,11 @@ RandomizeStats::RandomizeStats(int minInclusive, int maxInclusive)
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			owner->SetHP((rand() % (max - min)) + min);
-			owner->SetAtk((rand() % (max - min)) + min);
-			owner->SetFlipCost((rand() % (max - min)) + min);
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
@@ -147,33 +155,11 @@ CopyCards::CopyCards(std::vector<int> slotsToCopy)
 		};
 	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
 		{
-			bool canCopy = false;
-			int totalHP = 0;
-			int totalAtk = 0;
-
-			ActiveCard* parentCard = owner->GetOwner();
-			for (int i : copyTargets)
-			{
-				ActiveCard* targetCard = parentCard->GetBoard()->GetSlot(parentCard->m_slot + i, parentCard->m_side);
-				if (targetCard != nullptr)
-				{
-					canCopy = true;
-					totalHP += targetCard->GetMaxHP();
-					totalAtk += targetCard->GetAtk();
-				}
-			}
-
-			if (canCopy)
-			{
-				owner->SetHP(totalHP);
-				owner->SetAtk(totalAtk);
-			}
-
-			// If updating the card's max hp causes its current hp to go to 0 or below, make sure card dies
-			if (parentCard->GetHP() <= 0)
-			{
-				parentCard->GetBoard()->DestroyCard(parentCard);
-			}
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
 		};
 }
 
@@ -182,37 +168,123 @@ void CopyCards::Init(ActiveCreature* owner)
 	owner->m_canCopy = false;
 }
 
+BuffPerFamilyCard::BuffPerFamilyCard(Family familyType, int health, int attack, int flipCost)
+	:targetFamily(familyType), hp(health), atk(attack), fCost(flipCost)
+{
+	effect = [this](ActiveCreature* owner)
+		{
+			int cardCount = 0;
+			ActiveCard* ownerCardRef = owner->GetOwner();
+			BoardManager* boardRef = ownerCardRef->GetBoard();
+			for (int i = 0; i < boardRef->GetSlotCount(); i++)
+			{
+				if (i == ownerCardRef->m_slot)
+				{
+					continue;
+				}
+
+				ActiveCard* card = boardRef->GetSlot(i, ownerCardRef->m_side);
+				if (card != nullptr)
+				{
+					if (card->GetCurrentFace()->GetFamily() == targetFamily)
+					{
+						cardCount++;
+					}
+				}
+			}
+
+			owner->AddHPBuff(hp * cardCount);
+			owner->AddAtkBuff(atk * cardCount);
+			owner->AddFlipCostBuff(fCost * cardCount);
+		};
+	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
+		{
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
+		};
+}
+
+BuffEachFamilyCard::BuffEachFamilyCard(Family familyType, int health, int attack, int flipCost)
+	:targetFamily(familyType), hp(health), atk(attack), fCost(flipCost)
+{
+	effect = [this](ActiveCreature* owner)
+		{
+			ActiveCard* ownerCardRef = owner->GetOwner();
+			BoardManager* boardRef = ownerCardRef->GetBoard();
+			for (int i = 0; i < boardRef->GetSlotCount(); i++)
+			{
+				if (i == ownerCardRef->m_slot)
+				{
+					continue;
+				}
+
+				ActiveCard* card = boardRef->GetSlot(i, ownerCardRef->m_side);
+				if (card != nullptr)
+				{
+					if (card->GetCurrentFace()->GetFamily() == targetFamily)
+					{
+						card->AddHPBuff(hp);
+						card->AddAtkBuff(atk);
+						card->AddFlipCostBuff(fCost);
+					}
+				}
+			}
+		};
+	attackEffect = [this](ActiveCreature* owner, ActiveCard* other)
+		{
+			effect(owner);
+		};
+	stackEffect = [this](ActiveCreature* owner, CardData* other)
+		{
+			effect(owner);
+		};
+}
+
+
 std::string ChangeStats::GetIcon()
 {
-	return "S";
+	return "IS";
 }
 
 std::string Flip::GetIcon()
 {
-	return "F";
+	return "Fl";
 }
 
 std::string Heal::GetIcon()
 {
-	return "H";
+	return "He";
 }
 
 std::string GainEnergy::GetIcon()
 {
-	return "E";
+	return "En";
 }
 
 std::string PickupCard::GetIcon()
 {
-	return "P";
+	return "Pi";
 }
 
 std::string RandomizeStats::GetIcon()
 {
-	return "R";
+	return "RS";
 }
 
 std::string CopyCards::GetIcon()
 {
-	return "C";
+	return "CC";
+}
+
+std::string BuffPerFamilyCard::GetIcon()
+{
+	return "BP";
+}
+
+std::string BuffEachFamilyCard::GetIcon()
+{
+	return "BE";
 }
