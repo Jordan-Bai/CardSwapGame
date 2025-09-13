@@ -159,3 +159,135 @@ void GDRandomizeStats::SetMax(int max)
 {
 	m_max = max;
 }
+
+
+void GDBuffPerFamilyCard::_bind_methods()
+{
+	ClassDB::bind_method(D_METHOD("GetFamily"), &GDBuffPerFamilyCard::GetFamily);
+	ClassDB::bind_method(D_METHOD("GetHP"), &GDBuffPerFamilyCard::GetHP);
+	ClassDB::bind_method(D_METHOD("GetAtk"), &GDBuffPerFamilyCard::GetAtk);
+	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDBuffPerFamilyCard::GetFlipCost);
+
+	ClassDB::bind_method(D_METHOD("SetFamily", "family"), &GDBuffPerFamilyCard::SetFamily);
+	ClassDB::bind_method(D_METHOD("SetHP", "hp"), &GDBuffPerFamilyCard::SetHP);
+	ClassDB::bind_method(D_METHOD("SetAtk", "atk"), &GDBuffPerFamilyCard::SetAtk);
+	ClassDB::bind_method(D_METHOD("SetFlipCost", "cost"), &GDBuffPerFamilyCard::SetFlipCost);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "targetFamily", PROPERTY_HINT_ENUM,
+		"Cnidaria, Bird, Fish, Shark, Pinnipeds, Mollusk, Crustaceans, Bug, Mammal, Reptile, ERROR"),
+		"SetFamily", "GetFamily");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "SetHP", "GetHP");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "atk"), "SetAtk", "GetAtk");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
+}
+
+AbilityEffect* GDBuffPerFamilyCard::CreateEffect()
+{
+	return new BuffPerFamilyCard(m_targetFamily, m_hp, m_atk, m_fCost);
+}
+
+int GDBuffPerFamilyCard::GetFamily()
+{
+	return m_targetFamily;
+}
+
+int GDBuffPerFamilyCard::GetHP()
+{
+	return m_hp;
+}
+
+int GDBuffPerFamilyCard::GetAtk()
+{
+	return m_atk;
+}
+
+int GDBuffPerFamilyCard::GetFlipCost()
+{
+	return m_fCost;
+}
+
+void GDBuffPerFamilyCard::SetFamily(int newFamily)
+{
+	m_targetFamily = (Family)newFamily;
+}
+
+void GDBuffPerFamilyCard::SetHP(int hp)
+{
+	m_hp = hp;
+}
+
+void GDBuffPerFamilyCard::SetAtk(int atk)
+{
+	m_atk = atk;
+}
+
+void GDBuffPerFamilyCard::SetFlipCost(int fCost)
+{
+	m_fCost = fCost;
+}
+
+
+void GDBuffEachFamilyCard::_bind_methods()
+{
+	ClassDB::bind_method(D_METHOD("GetFamily"), &GDBuffEachFamilyCard::GetFamily);
+	ClassDB::bind_method(D_METHOD("GetHP"), &GDBuffEachFamilyCard::GetHP);
+	ClassDB::bind_method(D_METHOD("GetAtk"), &GDBuffEachFamilyCard::GetAtk);
+	ClassDB::bind_method(D_METHOD("GetFlipCost"), &GDBuffEachFamilyCard::GetFlipCost);
+
+	ClassDB::bind_method(D_METHOD("SetFamily", "family"), &GDBuffEachFamilyCard::SetFamily);
+	ClassDB::bind_method(D_METHOD("SetHP", "hp"), &GDBuffEachFamilyCard::SetHP);
+	ClassDB::bind_method(D_METHOD("SetAtk", "atk"), &GDBuffEachFamilyCard::SetAtk);
+	ClassDB::bind_method(D_METHOD("SetFlipCost", "cost"), &GDBuffEachFamilyCard::SetFlipCost);
+
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "targetFamily", PROPERTY_HINT_ENUM,
+		"Cnidaria, Bird, Fish, Shark, Pinnipeds, Mollusk, Crustaceans, Bug, Mammal, Reptile, ERROR"),
+		"SetFamily", "GetFamily");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "hp"), "SetHP", "GetHP");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "atk"), "SetAtk", "GetAtk");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "flipCost"), "SetFlipCost", "GetFlipCost");
+}
+
+AbilityEffect* GDBuffEachFamilyCard::CreateEffect()
+{
+	return new BuffEachFamilyCard(m_targetFamily, m_hp, m_atk, m_fCost);
+}
+
+int GDBuffEachFamilyCard::GetFamily()
+{
+	return m_targetFamily;
+}
+
+int GDBuffEachFamilyCard::GetHP()
+{
+	return m_hp;
+}
+
+int GDBuffEachFamilyCard::GetAtk()
+{
+	return m_atk;
+}
+
+int GDBuffEachFamilyCard::GetFlipCost()
+{
+	return m_fCost;
+}
+
+void GDBuffEachFamilyCard::SetFamily(int newFamily)
+{
+	m_targetFamily = (Family)newFamily;
+}
+
+void GDBuffEachFamilyCard::SetHP(int hp)
+{
+	m_hp = hp;
+}
+
+void GDBuffEachFamilyCard::SetAtk(int atk)
+{
+	m_atk = atk;
+}
+
+void GDBuffEachFamilyCard::SetFlipCost(int fCost)
+{
+	m_fCost = fCost;
+}

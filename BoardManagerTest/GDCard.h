@@ -32,6 +32,7 @@ namespace godot
 		int GetFlipCost();
 		int GetAbilityCost();
 		String GetName();
+		int GetFamily();
 		bool GetCanStack();
 		int GetStackLimit();
 
@@ -40,6 +41,7 @@ namespace godot
 		void SetFlipCost(int fCost);
 		void SetAbilityCost(int aCost);
 		void SetName(String name);
+		void SetFamily(int newFamily);
 		void SetCanStack(bool canStack);
 		void SetStackLimit(int stackLimit);
 
@@ -91,11 +93,12 @@ namespace godot
 
 	public:
 		int m_cost;
-		int m_flipCost;
-		int m_abilityCost;
 		int m_hp;
 		int m_atk;
+		int m_flipCost;
+		int m_abilityCost;
 		String m_name;
+		Family m_family;
 
 		GDDisplayCard();
 		GDDisplayCard(GDCard* card);
@@ -107,6 +110,7 @@ namespace godot
 		int GetFlipCost();
 		int GetAbilityCost();
 		String GetName();
+		int GetFamily();
 
 		void SetHP(int hp);
 		void SetAtk(int atk);
@@ -114,6 +118,7 @@ namespace godot
 		void SetFlipCost(int flipCost);
 		void SetAbilityCost(int abilityCost);
 		void SetName(String name);
+		void SetFamily(int newFamily);
 
 		// Will set the hp,atk etc to the stats of this creature
 		void SetStats(GDCreature* card);

@@ -33,6 +33,8 @@ void initialize_example_module(ModuleInitializationLevel p_level)
 	GDREGISTER_RUNTIME_CLASS(GDHeal);
 	GDREGISTER_RUNTIME_CLASS(GDGainEnergy);
 	GDREGISTER_RUNTIME_CLASS(GDRandomizeStats);
+	GDREGISTER_RUNTIME_CLASS(GDBuffPerFamilyCard);
+	GDREGISTER_RUNTIME_CLASS(GDBuffEachFamilyCard);
 }
 
 // Called when godot unloads this

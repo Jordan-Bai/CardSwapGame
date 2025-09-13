@@ -149,6 +149,64 @@ namespace godot
 		virtual AbilityEffect* CreateEffect() override;
 	};
 
+	// BuffPerFamilyCard
+	class GDBuffPerFamilyCard : public GDAbilityEffect
+	{
+		GDCLASS(GDBuffPerFamilyCard, GDAbilityEffect);
+
+	protected:
+		Family m_targetFamily = Family::ERROR;
+		int m_hp = 0;
+		int m_atk = 0;
+		int m_fCost = 0;
+
+		static void _bind_methods();
+
+	public:
+		GDBuffPerFamilyCard() = default;
+
+		virtual AbilityEffect* CreateEffect() override;
+
+		int GetFamily();
+		int GetHP();
+		int GetAtk();
+		int GetFlipCost();
+
+		void SetFamily(int newFamily);
+		void SetHP(int hp);
+		void SetAtk(int atk);
+		void SetFlipCost(int fCost);
+	};
+
+	// BuffEachFamilyCard
+	class GDBuffEachFamilyCard : public GDAbilityEffect
+	{
+		GDCLASS(GDBuffEachFamilyCard, GDAbilityEffect);
+
+	protected:
+		Family m_targetFamily = Family::ERROR;
+		int m_hp = 0;
+		int m_atk = 0;
+		int m_fCost = 0;
+
+		static void _bind_methods();
+
+	public:
+		GDBuffEachFamilyCard() = default;
+
+		virtual AbilityEffect* CreateEffect() override;
+
+		int GetFamily();
+		int GetHP();
+		int GetAtk();
+		int GetFlipCost();
+
+		void SetFamily(int newFamily);
+		void SetHP(int hp);
+		void SetAtk(int atk);
+		void SetFlipCost(int fCost);
+	};
+
 	class A : public GDAbilityEffect
 	{
 		GDCLASS(A, GDAbilityEffect);
