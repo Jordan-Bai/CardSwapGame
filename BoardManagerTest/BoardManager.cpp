@@ -44,6 +44,12 @@ BoardManager::~BoardManager()
 
 bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 {
+	if (slot < 0 || slot >= m_slots)
+	{
+		std::cout << "ERROR: Card played in slot out of range (BoardManager::PlayCard)\n";
+		return false;
+	}
+
 	ActiveCard* placedCard;
 
 	if (playerIndex == 1)

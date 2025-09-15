@@ -73,6 +73,7 @@ public:
 	void AddFlipCostBuff(int fCost);
 
 	bool HasActivateAbility();
+	bool FlipsAllowed();
 	bool CanStack(CardData* card);
 	bool Stack(CardData* card);
 };
@@ -124,6 +125,7 @@ public:
 
 	int GetDamageTaken();
 	bool GetFrontActive();
+	bool FlipsAllowed();
 	bool CanFlip();
 	bool CanStack(CardData* card);
 

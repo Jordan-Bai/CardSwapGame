@@ -42,6 +42,7 @@ struct CreatureData
 	Family family;
 	std::vector<Ability*> abilities;
 	StackOptions stackOptions;
+	bool allowFlips = true;
 
 	CardData* owner;
 

@@ -88,6 +88,7 @@ Family ActiveCreature::GetFamily()
 	return m_data->family;
 }
 
+
 void ActiveCreature::SetHP(int hp)
 {
 	m_overrideStats = true;
@@ -121,6 +122,7 @@ void ActiveCreature::SetStatsToDefault()
 	m_overrideStats = false;
 }
 
+
 void ActiveCreature::ResetBuffs()
 {
 	m_hpBuff = 0;
@@ -143,9 +145,15 @@ void ActiveCreature::AddFlipCostBuff(int fCost)
 	m_fCostBuff += fCost;
 }
 
+
 bool ActiveCreature::HasActivateAbility()
 {
 	return OnActivate != nullptr;
+}
+
+bool ActiveCreature::FlipsAllowed()
+{
+	return m_data->allowFlips;
 }
 
 bool ActiveCreature::CanStack(CardData* card)
@@ -360,9 +368,14 @@ bool ActiveCard::GetFrontActive()
 	return m_frontActive;
 }
 
+bool ActiveCard::FlipsAllowed()
+{
+	return GetOpositeFace() != nullptr && GetCurrentFace()->FlipsAllowed();
+}
+
 bool ActiveCard::CanFlip()
 {
-	return !m_flippedThisTurn && GetOpositeFace() != nullptr;
+	return !m_flippedThisTurn && FlipsAllowed();
 }
 
 bool ActiveCard::CanStack(CardData* card)
@@ -391,14 +404,6 @@ void ActiveCard::Heal(int healAmount)
 
 void ActiveCard::Flip()
 {
-	//if (CanFlip())
-	//{
-	//	m_frontActive = !m_frontActive;
-	//	m_flippedThisTurn = true;
-	//	return true;
-	//}
-	//
-	//return false;
 	if (GetOpositeFace() != nullptr)
 	{
 		m_frontActive = !m_frontActive;
