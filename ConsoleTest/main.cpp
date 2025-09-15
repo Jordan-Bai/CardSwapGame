@@ -5,7 +5,7 @@
 #include <string>
 #include <fstream>
 
-int cardDataInstances = 0;
+//int cardDataInstances = 0;
 
 int main()
 {

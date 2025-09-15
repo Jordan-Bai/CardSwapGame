@@ -3,6 +3,7 @@
 #include "Ability.h"
 
 int activeCards = 0;
+int cardDataInstances = 0;
 
 // Active creature
 ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
