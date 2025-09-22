@@ -114,6 +114,7 @@ public:
 	int GetAbilityCost();
 	std::string GetName();
 	Family GetFamily();
+	int GetID();
 
 	void ResetBuffs();
 	void AddHPBuff(int hp);

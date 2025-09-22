@@ -327,6 +327,11 @@ Family ActiveCard::GetFamily()
 	return GetCurrentFace()->GetFamily();
 }
 
+int ActiveCard::GetID()
+{
+	return m_data->cardID;
+}
+
 void ActiveCard::ResetBuffs()
 {
 	GetCurrentFace()->ResetBuffs();
