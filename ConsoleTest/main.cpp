@@ -200,6 +200,12 @@ int main()
 	std::string playerInput = " ";
 	int turn = 0;
 
+	board.ClearBoard();
+	board.EndMatch();
+	dealer.StartMatch(cards);
+	player.StartMatch(cards);
+	board.StartMatch();
+
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
 		turn++;

@@ -265,11 +265,36 @@ void BoardManager::DestroyCard(int slot, int side)
 	}
 }
 
+void BoardManager::StartMatch()
+{
+	m_gameShouldEnd = false;
+}
+
 void BoardManager::EndMatch()
 {
 	m_player1->EndMatch();
 	m_player2->EndMatch();
 	m_gameShouldEnd = true;
+}
+
+void BoardManager::ClearBoard()
+{
+	for (int i = 0; i < m_slots; i++)
+	{
+		ActiveCard* targetCard = m_side1[i];
+		if (targetCard != nullptr)
+		{
+			delete targetCard;
+			m_side1[i] = nullptr;
+		}
+
+		targetCard = m_side2[i];
+		if (targetCard != nullptr)
+		{
+			delete targetCard;
+			m_side2[i] = nullptr;
+		}
+	}
 }
 
 

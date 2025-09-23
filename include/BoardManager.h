@@ -31,7 +31,10 @@ public:
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
 	void DestroyCard(ActiveCard* card);
 	void DestroyCard(int slot, int side);
+
+	void StartMatch();
 	void EndMatch();
+	void ClearBoard();
 
 	void DisplayBoard();
 	std::vector<std::string> GetCardText(CardData* card);

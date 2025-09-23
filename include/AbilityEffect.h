@@ -101,6 +101,13 @@ struct BuffEachFamilyCard : public AbilityEffect
 	virtual std::string GetIcon() override;
 };
 
+struct ApplyEntangled : public AbilityEffect
+{
+	ApplyEntangled();
+
+	virtual std::string GetIcon() override;
+};
+
 struct A : public AbilityEffect
 {
 

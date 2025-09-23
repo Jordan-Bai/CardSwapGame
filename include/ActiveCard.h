@@ -94,6 +94,8 @@ class ActiveCard
 	bool m_frontActive = true;
 	bool m_flippedThisTurn = false;
 
+	bool m_entangled = false;
+
 public:
 	int m_slot;
 	int m_side;
