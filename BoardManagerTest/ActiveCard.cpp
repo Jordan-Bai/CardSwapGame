@@ -2,7 +2,6 @@
 
 #include "Ability.h"
 
-int activeCards = 0;
 int cardDataInstances = 0;
 
 // Active creature
@@ -211,10 +210,6 @@ ActiveCard::ActiveCard(CardData* data, int slot, int side, BoardManager* boardRe
 	{
 		m_backFace = nullptr;
 	}
-	// Call "OnPlayed"
-
-	id = activeCards;
-	activeCards++;
 }
 
 ActiveCard::ActiveCard(const ActiveCard& other)
@@ -240,9 +235,6 @@ ActiveCard::ActiveCard(const ActiveCard& other)
 	{
 		m_backFace = nullptr;
 	}
-
-	id = activeCards;
-	activeCards++;
 }
 
 ActiveCard::~ActiveCard()

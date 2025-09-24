@@ -106,31 +106,27 @@ int main()
 	CreatureData* duckTower = new CreatureData(9, 5, 0, 1);
 	duckTower->family = Family::Bird;
 	creatures.push_back(duckTower);
-	CardData* newCard = new CardData(1, duck, duckTower);
-	cards.push_back(newCard);
+	CardData* duckCard = new CardData(1, duck, duckTower);
+	cards.push_back(duckCard);
 
-	CardData* newCard2 = new CardData(newCard);
-	cards.push_back(newCard2);
-	CardData* newCard3 = new CardData(newCard);
-	cards.push_back(newCard3);
+	CardData* copyDuck1 = new CardData(duckCard);
+	cards.push_back(copyDuck1);
+	CardData* copyDuck2 = new CardData(duckCard);
+	cards.push_back(copyDuck2);
 
 	CreatureData* frontCreature = new CreatureData(1, 1, 2, 1);
 	frontCreature->abilities.push_back(&buffBirdAbility);
 	frontCreature->family = Family::Bird;
 	creatures.push_back(frontCreature);
-	CardData* newCard4 = new CardData(1, frontCreature, nullptr);
-	cards.push_back(newCard4);
+	CardData* newCard = new CardData(1, frontCreature, nullptr);
+	cards.push_back(newCard);
 
 	CreatureData* frontCreature2 = new CreatureData(2, 2, 2, 1);
 	frontCreature2->abilities.push_back(&buffOtherBirdAbility);
 	frontCreature2->family = Family::Bird;
 	creatures.push_back(frontCreature2);
-	CardData* newCard5 = new CardData(1, frontCreature2, nullptr);
-	cards.push_back(newCard5);
-
-	PickupCard pickupEffect(newCard);
-	Ability pickupAbility(AbilityTrigger::OnActivate, &pickupEffect);
-	//frontCreature->abilities.push_back(&pickupAbility);
+	CardData* newCard2 = new CardData(1, frontCreature2, nullptr);
+	cards.push_back(newCard2);
 
 	dealer.StartMatch(cards);
 	player.StartMatch(cards);
@@ -288,6 +284,67 @@ int main()
 				}
 
 				board.DisplayBoard();
+				continue;
+			}
+
+			// Inspect card
+			int iIndex = playerInput.find("i");
+			if (iIndex != std::string::npos)
+			{
+				if (num1Index != std::string::npos)
+				{
+					// Get slot to inspect
+					int num1 = std::stoi(playerInput.substr(num1Index, 1)) - 1;
+
+					std::vector<std::string> cardText;
+					CreatureData* creature;
+
+					// if a is also typed, inspect an active card
+					int aIndex = playerInput.find("a");
+					if (aIndex != std::string::npos)
+					{
+						if (num2Index == std::string::npos)
+						{
+							std::cout << "No side specified: Side 1 is the dealer, side 2 is the player\n";
+							continue;
+						}
+						int num2 = std::stoi(playerInput.substr(num2Index, 1));
+						ActiveCard* activeCard = board.GetSlot(num1, num2);
+						if (activeCard == nullptr)
+						{
+							std::cout << "No card at that slot\n";
+							continue;
+						}
+
+						cardText = board.GetCardText(activeCard);
+						creature = activeCard->GetCurrentFace()->GetData();
+					}
+					else
+					{
+						if (num1 < player.m_hand.size())
+						{
+							CardData* data = player.m_hand[num1];
+							cardText = board.GetCardText(data);
+							creature = data->frontCreature;
+						}
+						else
+						{
+							std::cout << "No card at that index\n";
+							continue;
+						}
+					}
+
+					for (std::string cardLine : cardText)
+					{
+						std::cout << cardLine << '\n';
+					}
+					for (int i = 0; i < creature->abilities.size(); i++)
+					{
+						std::cout << "[Ability " << i + 1 << "] " << creature->abilities[i]->description << '\n';
+					}
+
+					board.DisplayBoard();
+				}
 				continue;
 			}
 

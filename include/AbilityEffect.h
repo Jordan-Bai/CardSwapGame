@@ -9,6 +9,7 @@ struct AbilityEffect
 	std::function<void(ActiveCreature* owner, CardData* card)> stackEffect;
 
 	virtual void Init(ActiveCreature* owner);
+	virtual std::string GetDescription() = 0;
 	virtual std::string GetIcon() = 0;
 };
 
@@ -20,6 +21,7 @@ struct ChangeStats : public AbilityEffect
 
 	ChangeStats(int health, int attack, int flipCost);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -27,6 +29,7 @@ struct Flip : public AbilityEffect
 {
 	Flip();
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -36,6 +39,7 @@ struct Heal : public AbilityEffect
 
 	Heal(int healAmount);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -45,6 +49,7 @@ struct GainEnergy : public AbilityEffect
 
 	GainEnergy(int energyToGain);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -54,6 +59,7 @@ struct PickupCard : public AbilityEffect
 
 	PickupCard(CardData* cardToPickup);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -64,6 +70,7 @@ struct RandomizeStats : public AbilityEffect
 
 	RandomizeStats(int minInclusive, int maxInclusive);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -74,6 +81,7 @@ struct CopyCards : public AbilityEffect
 	CopyCards(std::vector<int> slotsToCopy);
 
 	virtual void Init(ActiveCreature* owner) override;
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -86,6 +94,7 @@ struct BuffPerFamilyCard : public AbilityEffect
 
 	BuffPerFamilyCard(Family familyType, int health, int attack, int flipCost = 0);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -98,6 +107,7 @@ struct BuffEachFamilyCard : public AbilityEffect
 
 	BuffEachFamilyCard(Family familyType, int health, int attack, int flipCost = 0);
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
@@ -105,11 +115,14 @@ struct ApplyEntangled : public AbilityEffect
 {
 	ApplyEntangled();
 
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };
 
 struct A : public AbilityEffect
 {
 
+
+	virtual std::string GetDescription() override;
 	virtual std::string GetIcon() override;
 };

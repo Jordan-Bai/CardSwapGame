@@ -25,6 +25,7 @@ struct Ability
 {
 	AbilityTrigger trigger;
 	AbilityEffect* effect;
+	std::string description;
 
 	Ability(AbilityTrigger _trigger, AbilityEffect* effect);
 

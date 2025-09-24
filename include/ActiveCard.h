@@ -6,8 +6,6 @@
 //#include <vector>
 #include <functional>
 
-extern int activeCards;
-
 class ActiveCard;
 
 class ActiveCreature
@@ -87,8 +85,6 @@ class ActiveCard
 	ActiveCreature* m_backFace;
 
 	BoardManager* m_boardRef;
-
-	int id; //FOR TESTING
 
 	int m_damageTaken;
 	bool m_frontActive = true;
