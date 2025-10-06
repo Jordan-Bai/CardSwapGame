@@ -21,7 +21,7 @@ public:
 	int m_card;
 	int m_target;
 public:
-	PlayCard(int cardToPlay, int targetSlot, int cardCost)
+	PlayCard(int cardToPlay, int targetSlot)
 		: m_card(cardToPlay), m_target(targetSlot)
 	{
 	}
@@ -34,7 +34,7 @@ class FlipCard : public Behaviour
 public:
 	int m_target;
 public:
-	FlipCard(int targetSlot, int flipCost)
+	FlipCard(int targetSlot)
 		: m_target(targetSlot)
 	{
 	}

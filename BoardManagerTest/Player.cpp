@@ -90,6 +90,11 @@ void Player::StartTurn()
 	//}
 }
 
+void Player::EndTurn()
+{
+	m_boardRef->TurnEnds(m_playerIndex);
+}
+
 bool Player::DrawCard()
 {
 	// Draw a card

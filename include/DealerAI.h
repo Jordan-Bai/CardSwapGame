@@ -21,6 +21,11 @@ public:
 	~DealerAI();
 
 	void DoActions();
+	std::vector<Behaviour*> GetActions();
+
+	// FOR TESTING: Shows process of simulating board
+	void TestSimulation(std::vector<Behaviour*> actions);
+
 	// OPTIMIZATION V2
 	//==============================================================
 	std::vector<Behaviour*> GetDestroyActions(int slot);

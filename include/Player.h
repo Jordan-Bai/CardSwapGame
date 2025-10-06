@@ -30,6 +30,7 @@ public:
 	void StartMatch(std::vector<CardData*> deck);
 	void EndMatch();
 	void StartTurn();
+	void EndTurn();
 	bool DrawCard();
 	void PickupCard(CardData* card);
 

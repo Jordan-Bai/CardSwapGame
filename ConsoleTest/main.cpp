@@ -10,7 +10,7 @@
 int main()
 {
 	int seed = time(0);
-	//seed = 1757400999;
+	seed = 1759710567;
 	srand(seed);
 
 	bool doOutput = true;
@@ -134,13 +134,6 @@ int main()
 	BoardManager board(&dealer, &player, 4);
 	DealerAI captain(&board, &dealer);
 
-	//std::function<void()> showBoardUpdate = [&board]()
-	//	{
-	//		std::cout << "BOARD UPDATE:\n";
-	//		board.DisplayBoard();
-	//	};
-	//board.OnBoardUpdates = showBoardUpdate;
-
 	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
 	//==============================================================
 	if (false)
@@ -202,6 +195,71 @@ int main()
 	player.StartMatch(cards);
 	board.StartMatch();
 
+	// TEST SEQUENCE OF ACTIONS (for checking dealer simulations)
+	if (false)
+	{
+		std::vector<std::vector<Behaviour*>> dealerActions;
+		std::vector<std::vector<Behaviour*>> playerActions;
+
+		// TURN 1
+		dealerActions.push_back(std::vector<Behaviour*>({ new PlayCard(2, 2), new PlayCard(3, 3) }));
+		playerActions.push_back(std::vector<Behaviour*>({ new PlayCard(0, 2), new PlayCard(1, 3) }));
+
+		// TURN 2
+		//dealerActions.push_back(std::vector<Behaviour*>({ new PlayCard(0, 0), new PlayCard(0, 1) }));
+		//playerActions.push_back(std::vector<Behaviour*>({ new PlayCard(1, 0), new PlayCard(1, 1), new PlayCard(1, 2) }));
+
+		// TURN 3
+		//dealerActions.push_back(std::vector<Behaviour*>({ new PlayCard(0, 0), new PlayCard(3, 1), new PlayCard(1, 2) }));
+		//playerActions.push_back(std::vector<Behaviour*>({ new PlayCard(2, 3) }));
+
+		for (int i = 0; i < dealerActions.size(); i++)
+		{
+			dealer.StartTurn();
+			//board.DisplayBoard();
+			for (Behaviour* action : dealerActions[i])
+			{
+				action->DoAction(&dealer);
+			}
+			dealer.EndTurn();
+
+			player.StartTurn();
+			for (Behaviour* action : playerActions[i])
+			{
+				action->DoAction(&player);
+			}
+			player.EndTurn();
+			board.DisplayBoard();
+
+			board.DoAttackPhase();
+		}
+
+		// Do turn we want to test
+		std::vector<Behaviour*> testActions = { new PlayCard(0, 0), new PlayCard(0, 1) };
+		dealer.StartTurn();
+		board.DisplayBoard();
+		std::cout << "SIMULATION:\n//==============================================================\n";
+		captain.TestSimulation(testActions);
+		std::cout << "//==============================================================\n";
+
+		for (int i = 0; i < dealerActions.size(); i++)
+		{
+			for (Behaviour* action : dealerActions[i])
+			{
+				delete action;
+			}
+			for (Behaviour* action : playerActions[i])
+			{
+				delete action;
+			}
+		}
+
+		for (Behaviour* action : testActions)
+		{
+			delete action;
+		}
+	}
+
 	while (playerInput != "x" && !board.ShouldGameEnd()) // X ends the game
 	{
 		turn++;
@@ -217,7 +275,34 @@ int main()
 		}
 
 		dealer.StartTurn();
-		captain.DoActions();
+		// MANUAL DEALER ACTIONS FOR TESTING
+		//==============================================================
+		if (false)
+		{
+			std::vector<Behaviour*> dealerActions = captain.GetActions();
+
+			for (int i = 0; i < dealerActions.size(); i++)
+			{
+				if (i != 0)
+				{
+					std::cin >> playerInput;
+				}
+
+				dealerActions[i]->DoAction(&dealer);
+				board.DisplayBoard();
+			}
+
+			for (Behaviour* action : dealerActions)
+			{
+				delete action;
+			}
+
+			dealer.EndTurn();
+		}
+		else
+		{
+			captain.DoActions();
+		}
 		player.StartTurn();
 		board.DisplayBoard();
 
@@ -421,14 +506,49 @@ int main()
 			}
 		}
 
-		board.TurnEnds(player.m_playerIndex);
-		board.DoAttackPhase();
-		board.DisplayBoard();
+		//board.TurnEnds(player.m_playerIndex);
+		player.EndTurn();
 
-		//while (playerInput != "x" && playerInput != "n") // N for next (advance turn)
-		//{
-		//	std::cin >> playerInput;
-		//}
+		// MANUAL ATTACKS FOR TESTING
+		//==============================================================
+		if (false)
+		{
+			// Do player attacks
+			for (int i = 0; i < 4; i++)
+			{
+				if (board.GetSlot(i, 2) == nullptr)
+				{
+					continue;
+				}
+
+				if (i != 0)
+				{
+					std::cin >> playerInput;
+				}
+
+				board.ManualAttack(i, 2);
+				board.DisplayBoard();
+			}
+			// Do delear attacks
+			for (int i = 0; i < 4; i++)
+			{
+				if (board.GetSlot(i, 1) == nullptr)
+				{
+					continue;
+				}
+
+				std::cin >> playerInput;
+
+				board.ManualAttack(i, 1);
+				board.DisplayBoard();
+			}
+		}
+		//==============================================================
+		else
+		{
+			board.DoAttackPhase();
+			board.DisplayBoard();
+		}
 	}
 
 	if (player.m_hp <= 0)

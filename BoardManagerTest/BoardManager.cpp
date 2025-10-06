@@ -194,6 +194,24 @@ void BoardManager::DoAttackPhase()
 	}
 }
 
+int BoardManager::ManualAttack(int slot, int side)
+{
+	ActiveCard* attacker = GetSlot(slot, side);
+	if (attacker == nullptr)
+	{
+		std::cout << "Attacker null\n";
+		return -1;
+	}
+
+	std::vector<int> cardTargets = attacker->GetTargets();
+	for (int slot : cardTargets)
+	{
+		PerformAttack(attacker, slot);
+	}
+
+	return slot;
+}
+
 void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 {
 	if (targetSlot < 0 || targetSlot >= m_slots)
@@ -744,6 +762,19 @@ void BoardManager::BoardUpdates()
 			if (targetCard != nullptr)
 			{
 				targetCard->OnBoardUpdates();
+			}
+		}
+	}
+
+	// Check if any cards died due to stuff updating
+	for (int side = 1; side <= 2; side++)
+	{
+		for (int i = 0; i < m_slots; i++)
+		{
+			ActiveCard* targetCard = GetSlot(i, side);
+			if (targetCard != nullptr && targetCard->GetHP() <= 0)
+			{
+				DestroyCard(targetCard);
 			}
 		}
 	}

@@ -56,7 +56,28 @@ void DealerAI::DoActions()
 	}
 	bestBranch.second.clear();
 
-	m_boardRef->TurnEnds(m_data->m_playerIndex);
+	//m_boardRef->TurnEnds(m_data->m_playerIndex);
+	m_data->EndTurn();
+}
+
+std::vector<Behaviour*> DealerAI::GetActions()
+{
+	branchCount = 0;
+
+	return CheckDestroyPhase(std::vector<Behaviour*>(), 0).second;
+}
+
+
+void DealerAI::TestSimulation(std::vector<Behaviour*> actions)
+{
+	CopyBoardData();
+	m_copyBoard->DisplayBoard();
+	for (Behaviour* action : actions)
+	{
+		action->DoAction(m_copyDealer);
+		m_copyBoard->DisplayBoard();
+	}
+	std::cout << '\n' << EvaluateBoard() << '\n';
 }
 
 
@@ -89,7 +110,7 @@ std::vector<Behaviour*> DealerAI::GetPlaceActions(int slot)
 			int cardCost = m_copyDealer->m_hand[i]->cost;
 			if (availableEnergy >= cardCost)
 			{
-				Behaviour* playCardAction = new PlayCard(i, slot, cardCost);
+				Behaviour* playCardAction = new PlayCard(i, slot);
 				possibleActions.push_back(playCardAction);
 			}
 		}
@@ -109,7 +130,7 @@ std::vector<Behaviour*> DealerAI::GetFlipActions(int slot)
 		int flipCost = targetCard->GetFlipCost();
 		if (targetCard->CanFlip() && availableEnergy >= flipCost)
 		{
-			Behaviour* flipCardAction = new FlipCard(slot, flipCost);
+			Behaviour* flipCardAction = new FlipCard(slot);
 			possibleActions.push_back(flipCardAction);
 		}
 	}
@@ -451,11 +472,24 @@ void DealerAI::CopyBoardData()
 	for (int i = 0; i < m_copyBoard->GetSlotCount(); i++)
 	{
 		// Clear current cards
-		m_copyBoard->DestroyCard(i, 1);
-		m_copyBoard->DestroyCard(i, 2);
+		//m_copyBoard->DestroyCard(i, 1);
+		//m_copyBoard->DestroyCard(i, 2);
+		ActiveCard* cardSide1 = m_copyBoard->GetSlot(i, 1);
+		if (cardSide1 != nullptr)
+		{
+			delete cardSide1;
+			m_copyBoard->SetSlot(i, 1, nullptr);
+		}
+		ActiveCard* cardSide2 = m_copyBoard->GetSlot(i, 2);
+		if (cardSide1 != nullptr)
+		{
+			delete cardSide2;
+			m_copyBoard->SetSlot(i, 2, nullptr);
+		}
 
 		// Copy cards from real board
-		ActiveCard* cardSide1 = m_boardRef->GetSlot(i, 1);
+		//ActiveCard* cardSide1 = m_boardRef->GetSlot(i, 1);
+		cardSide1 = m_boardRef->GetSlot(i, 1);
 		if (cardSide1 != nullptr)
 		{
 			ActiveCard* copyCard = new ActiveCard(*cardSide1);
@@ -463,7 +497,8 @@ void DealerAI::CopyBoardData()
 
 			m_copyBoard->SetSlot(i, 1, copyCard);
 		}
-		ActiveCard* cardSide2 = m_boardRef->GetSlot(i, 2);
+		//ActiveCard* cardSide2 = m_boardRef->GetSlot(i, 2);
+		cardSide2 = m_boardRef->GetSlot(i, 2);
 		if (cardSide2 != nullptr)
 		{
 			ActiveCard* copyCard = new ActiveCard(*cardSide2);
