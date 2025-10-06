@@ -128,7 +128,7 @@ public:
 	bool CanFlip();
 	bool CanStack(CardData* card);
 
-	std::vector<int> GetTargets();
+	int GetTarget();
 
 	void TakeDamage(int damage);
 	void Heal(int healAmount);

@@ -161,11 +161,8 @@ void BoardManager::DoAttackPhase()
 	{
 		if (m_side2[i] != nullptr)
 		{
-			std::vector<int> cardTargets = m_side2[i]->GetTargets();
-			for (int slot : cardTargets)
-			{
-				PerformAttack(m_side2[i], slot);
-			}
+			int target = m_side2[i]->GetTarget();
+			PerformAttack(m_side2[i], target);
 		}
 	}
 
@@ -180,11 +177,8 @@ void BoardManager::DoAttackPhase()
 	{
 		if (m_side1[i] != nullptr)
 		{
-			std::vector<int> cardTargets = m_side1[i]->GetTargets();
-			for (int slot : cardTargets)
-			{
-				PerformAttack(m_side1[i], slot);
-			}
+			int target = m_side1[i]->GetTarget();
+			PerformAttack(m_side1[i], target);
 		}
 	}
 
@@ -203,11 +197,8 @@ int BoardManager::ManualAttack(int slot, int side)
 		return -1;
 	}
 
-	std::vector<int> cardTargets = attacker->GetTargets();
-	for (int slot : cardTargets)
-	{
-		PerformAttack(attacker, slot);
-	}
+	int target = attacker->GetTarget();
+	PerformAttack(attacker, target);
 
 	return slot;
 }

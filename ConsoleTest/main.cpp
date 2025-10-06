@@ -10,7 +10,7 @@
 int main()
 {
 	int seed = time(0);
-	seed = 1759710567;
+	//seed = 1759710567;
 	srand(seed);
 
 	bool doOutput = true;

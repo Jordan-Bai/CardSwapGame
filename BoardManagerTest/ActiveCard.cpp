@@ -380,9 +380,9 @@ bool ActiveCard::CanStack(CardData* card)
 	return GetCurrentFace()->CanStack(card);
 }
 
-std::vector<int> ActiveCard::GetTargets() // By default, target is opposite slot
+int ActiveCard::GetTarget() // By default, target is opposite slot
 {
-	return std::vector<int>(1, m_slot);
+	return m_slot;
 }
 
 void ActiveCard::TakeDamage(int damage)

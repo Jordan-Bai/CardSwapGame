@@ -28,7 +28,7 @@ public:
 	bool ActivateCard(ActiveCard* card);
 
 	void DoAttackPhase();
-	// Returns the slot that was attacked ( currently always the same slot, may change if we add taunt
+	// Returns the slot that was attacked ( currently always the same slot, may change if we add taunt)
 	int ManualAttack(int slot, int side);
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
 	void DestroyCard(ActiveCard* card);
