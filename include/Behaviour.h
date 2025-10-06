@@ -20,7 +20,7 @@ class PlayCard : public Behaviour
 public:
 	int m_card;
 	int m_target;
-public:
+
 	PlayCard(int cardToPlay, int targetSlot)
 		: m_card(cardToPlay), m_target(targetSlot)
 	{
@@ -33,7 +33,7 @@ class FlipCard : public Behaviour
 {
 public:
 	int m_target;
-public:
+
 	FlipCard(int targetSlot)
 		: m_target(targetSlot)
 	{
@@ -44,8 +44,9 @@ public:
 
 class DestroyCard : public Behaviour
 {
-	int m_target;
 public:
+	int m_target;
+
 	DestroyCard(int targetSlot)
 		: m_target(targetSlot)
 	{
@@ -56,9 +57,10 @@ public:
 
 class SwapSlots : public Behaviour
 {
+public:
 	int m_target1;
 	int m_target2;
-public:
+
 	SwapSlots(int slot1, int slot2)
 		: m_target1(slot1), m_target2(slot2)
 	{
