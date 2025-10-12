@@ -28,11 +28,13 @@ public:
 	bool ActivateCard(ActiveCard* card);
 
 	void DoAttackPhase();
-	// Returns the slot that was attacked ( currently always the same slot, may change if we add taunt)
+	// Returns the slot that was attacked (currently always the same slot, may change if we add taunt)
 	int ManualAttack(int slot, int side);
 	void PerformAttack(ActiveCard* attacker, int targetSlot);
+
 	void DestroyCard(ActiveCard* card);
 	void DestroyCard(int slot, int side);
+	void CullDead();
 
 	void StartMatch();
 	void EndMatch();
@@ -47,6 +49,7 @@ public:
 	int OppositeSide(int side);
 	Player* GetPlayer(int side);
 	ActiveCard* GetSlot(int slot, int side);
+	ActiveCard* GetSlotReal(int slot, int side); // Will return dead cards
 	void SetSlot(int slot, int side, ActiveCard* newCard);
 
 	int GetSlotCount();

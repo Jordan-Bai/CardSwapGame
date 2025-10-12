@@ -128,6 +128,13 @@ int main()
 	CardData* newCard2 = new CardData(1, frontCreature2, nullptr);
 	cards.push_back(newCard2);
 
+	//CreatureData* frontCreature3 = new CreatureData(7, 7, 1, 1);
+	//CreatureData* backCreature = new CreatureData(0, 2, 2, 1);
+	//creatures.push_back(frontCreature3);
+	//creatures.push_back(backCreature);
+	//CardData* newCard3 = new CardData(1, frontCreature3, backCreature);
+	//cards.push_back(newCard3);
+
 	dealer.StartMatch(cards);
 	player.StartMatch(cards);
 
@@ -171,8 +178,6 @@ int main()
 		dealer.StartTurn();
 		for (int i = 0; i < 10; i++)
 		{
-			//captain.CheckPlacePhase(std::vector<Behaviour*>(), 3);
-			//captain.CheckFlipPhase(std::vector<Behaviour*>(), 0);
 			dealer.StartTurn();
 			captain.DoActions();
 			//captain.CopyBoardData();
@@ -183,6 +188,7 @@ int main()
 		//board.DisplayBoard();
 
 		std::cout << "B: " << behaviours << '\n';
+		std::cout << "A: " << activeCards << '\n';
 	}
 	//==============================================================
 

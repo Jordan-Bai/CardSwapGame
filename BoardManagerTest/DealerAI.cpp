@@ -41,6 +41,7 @@ void DealerAI::DoActions()
 	//m_data->StartTurn();
 
 	branchCount = 0;
+	//m_boardRef->CullDead();
 
 	std::pair<float, std::vector<Behaviour*>> bestBranch = CheckDestroyPhase(std::vector<Behaviour*>(), 0);
 
@@ -469,6 +470,7 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::BestBranch(std::pair<float, 
 
 void DealerAI::CopyBoardData()
 {
+	//m_copyBoard->CullDead();
 	for (int i = 0; i < m_copyBoard->GetSlotCount(); i++)
 	{
 		// Clear current cards
@@ -477,14 +479,16 @@ void DealerAI::CopyBoardData()
 		ActiveCard* cardSide1 = m_copyBoard->GetSlot(i, 1);
 		if (cardSide1 != nullptr)
 		{
-			delete cardSide1;
+			//delete cardSide1;
 			m_copyBoard->SetSlot(i, 1, nullptr);
+			delete cardSide1;
 		}
 		ActiveCard* cardSide2 = m_copyBoard->GetSlot(i, 2);
-		if (cardSide1 != nullptr)
+		if (cardSide2 != nullptr)
 		{
-			delete cardSide2;
+			//delete cardSide2;
 			m_copyBoard->SetSlot(i, 2, nullptr);
+			delete cardSide2;
 		}
 
 		// Copy cards from real board

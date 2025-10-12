@@ -6,6 +6,8 @@
 //#include <vector>
 #include <functional>
 
+extern int activeCards;
+
 class ActiveCard;
 
 class ActiveCreature
@@ -95,6 +97,8 @@ class ActiveCard
 public:
 	int m_slot;
 	int m_side;
+
+	bool m_dead = false;
 
 	ActiveCard(CardData* data, int slot, int side, BoardManager* boardRef);
 	ActiveCard(const ActiveCard& other); //copy constructor

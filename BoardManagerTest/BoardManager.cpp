@@ -52,28 +52,37 @@ bool BoardManager::PlayCard(CardData* data, int slot, int playerIndex)
 
 	ActiveCard* placedCard;
 
-	if (playerIndex == 1)
+	ActiveCard* targetSlot = GetSlot(slot, playerIndex);
+	if (targetSlot != nullptr)
 	{
-		ActiveCard* targetSlot = m_side1[slot];
-		if (targetSlot != nullptr)
-		{
-			return targetSlot->Stack(data);
-		}
-
-		placedCard = new ActiveCard(data, slot, playerIndex, this);
-		m_side1[slot] = placedCard;
+		return targetSlot->Stack(data);
 	}
-	else
-	{
-		ActiveCard* targetSlot = m_side2[slot];
-		if (targetSlot != nullptr)
-		{
-			return targetSlot->Stack(data);
-		}
 
-		placedCard = new ActiveCard(data, slot, playerIndex, this);
-		m_side2[slot] = placedCard;
-	}
+	placedCard = new ActiveCard(data, slot, playerIndex, this);
+	SetSlot(slot, playerIndex, placedCard);
+
+	//if (playerIndex == 1)
+	//{
+	//	ActiveCard* targetSlot = m_side1[slot];
+	//	if (targetSlot != nullptr)
+	//	{
+	//		return targetSlot->Stack(data);
+	//	}
+	//
+	//	placedCard = new ActiveCard(data, slot, playerIndex, this);
+	//	m_side1[slot] = placedCard;
+	//}
+	//else
+	//{
+	//	ActiveCard* targetSlot = m_side2[slot];
+	//	if (targetSlot != nullptr)
+	//	{
+	//		return targetSlot->Stack(data);
+	//	}
+	//
+	//	placedCard = new ActiveCard(data, slot, playerIndex, this);
+	//	m_side2[slot] = placedCard;
+	//}
 
 	// Send OnPlayed signal
 	placedCard->OnPlayed();
@@ -154,15 +163,22 @@ bool BoardManager::ActivateCard(ActiveCard* card)
 	return false;
 }
 
+
 void BoardManager::DoAttackPhase()
 {
 	// Player's cards attack first
 	for (int i = 0; i < m_slots; i++)
 	{
-		if (m_side2[i] != nullptr)
+		//if (m_side2[i] != nullptr)
+		//{
+		//	int target = m_side2[i]->GetTarget();
+		//	PerformAttack(m_side2[i], target);
+		//}
+		ActiveCard* card = GetSlot(i, 2);
+		if (card != nullptr)
 		{
-			int target = m_side2[i]->GetTarget();
-			PerformAttack(m_side2[i], target);
+			int target = card->GetTarget();
+			PerformAttack(card, target);
 		}
 	}
 
@@ -175,10 +191,16 @@ void BoardManager::DoAttackPhase()
 	// Dealer's cards attack second
 	for (int i = 0; i < m_slots; i++)
 	{
-		if (m_side1[i] != nullptr)
+		//if (m_side1[i] != nullptr)
+		//{
+		//	int target = m_side1[i]->GetTarget();
+		//	PerformAttack(m_side1[i], target);
+		//}
+		ActiveCard* card = GetSlot(i, 1);
+		if (card != nullptr)
 		{
-			int target = m_side1[i]->GetTarget();
-			PerformAttack(m_side1[i], target);
+			int target = card->GetTarget();
+			PerformAttack(card, target);
 		}
 	}
 
@@ -224,41 +246,65 @@ void BoardManager::PerformAttack(ActiveCard* attacker, int targetSlot)
 	}
 	else
 	{
-		defendingCard->TakeDamage(attacker->GetAtk());
+		int atk = attacker->GetAtk();
 
-		// Check if card died
-		if (defendingCard->GetHP() <= 0)
+		if (atk > 0)
 		{
-			// Do overkill damage 
-			defendingPlayer->m_hp += defendingCard->GetHP();
-
-			DestroyCard(defendingCard);
-		}
-		else
-		{
-			// Send "OnAttacked" signal to defender
 			defendingCard->OnAttacked(attacker);
-		}
+			int hp = defendingCard->GetHP();
 
-		// Send "OnBoardUpdates" signal to all cards
-		BoardUpdates();
+			if (atk >= hp)
+			{
+				defendingCard->TakeDamage(hp);
+				defendingPlayer->m_hp -= atk - hp;
+
+				DestroyCard(defendingCard);
+			}
+			else
+			{
+				defendingCard->TakeDamage(atk);
+				//defendingCard->OnAttacked(attacker);
+			}
+
+			//defendingCard->TakeDamage(attacker->GetAtk());
+			//
+			//// Check if card died
+			//if (defendingCard->GetHP() <= 0)
+			//{
+			//	// Do overkill damage 
+			//	defendingPlayer->m_hp += defendingCard->GetHP();
+			//
+			//	DestroyCard(defendingCard);
+			//}
+			//else
+			//{
+			//	// Send "OnAttacked" signal to defender
+			//	defendingCard->OnAttacked(attacker);
+			//}
+
+			// Send "OnBoardUpdates" signal to all cards
+			BoardUpdates();
+		}
 	}
 }
 
+
 void BoardManager::DestroyCard(ActiveCard* card)
 {
+	card->m_dead = true;
+
 	// Add card to corresponding discard pile
 	//GetPlayer(card->m_side)->m_discardPile.push_back(card->GetData());
 	card->Discard(GetPlayer(card->m_side));
 
 	// Remove card from slot
-	SetSlot(card->m_slot, card->m_side, nullptr);
+	//SetSlot(card->m_slot, card->m_side, nullptr);
 
 	// Send "OnDeath" signal to card before it gets destroyed
 	card->OnDeath();
 
 	// Destroy card
-	delete card;
+	//delete card;
 
 	// Send "OnCardDies" signal to all other cards
 	CardDies();
@@ -273,6 +319,24 @@ void BoardManager::DestroyCard(int slot, int side)
 		DestroyCard(cardToDestroy);
 	}
 }
+
+void BoardManager::CullDead()
+{
+	for (int side = 1; side <= 2; side++)
+	{
+		for (int i = 0; i < m_slots; i++)
+		{
+			ActiveCard* targetCard = GetSlotReal(i, side);
+			if (targetCard != nullptr && targetCard->m_dead)
+			{
+				//DestroyCard(targetCard);
+				SetSlot(i, side, nullptr);
+				//delete targetCard;
+			}
+		}
+	}
+}
+
 
 void BoardManager::StartMatch()
 {
@@ -423,10 +487,21 @@ std::vector<std::string> BoardManager::GetCardText(CardData* card)
 
 std::vector<std::string> BoardManager::GetCardText(ActiveCard* card)
 {
-	std::string cardLine1 = " |";
-	std::string cardLine2 = " |";
-	std::string cardLine3 = " |";
-	std::string cardLine4 = " |";
+	std::string borderChar = "|";
+	if (card != nullptr && card->m_dead)
+	{
+		borderChar = "#";
+	}
+
+	//std::string cardLine1 = " |";
+	//std::string cardLine2 = " |";
+	//std::string cardLine3 = " |";
+	//std::string cardLine4 = " |";
+
+	std::string cardLine1 = " " + borderChar;
+	std::string cardLine2 = " " + borderChar;
+	std::string cardLine3 = " " + borderChar;
+	std::string cardLine4 = " " + borderChar;
 
 	if (card == nullptr)
 	{
@@ -455,10 +530,15 @@ std::vector<std::string> BoardManager::GetCardText(ActiveCard* card)
 		cardLine4 += std::to_string(card->GetHP());
 	}
 
-	cardLine1 += "| ";
-	cardLine2 += "| ";
-	cardLine3 += "| ";
-	cardLine4 += "| ";
+	//cardLine1 += "| ";
+	//cardLine2 += "| ";
+	//cardLine3 += "| ";
+	//cardLine4 += "| ";
+
+	cardLine1 += borderChar + " ";
+	cardLine2 += borderChar + " ";
+	cardLine3 += borderChar + " ";
+	cardLine4 += borderChar + " ";
 
 	return std::vector<std::string>{ cardLine1, cardLine2, cardLine3, cardLine4 };
 }
@@ -588,6 +668,34 @@ ActiveCard* BoardManager::GetSlot(int slot, int side)
 		return nullptr;
 	}
 
+	ActiveCard* card;
+
+	if (side == 1)
+	{
+		card = m_side1[slot];
+	}
+	else
+	{
+		card = m_side2[slot];
+	}
+
+	// If the card at this slot is dead, ignore it
+	if (card != nullptr && card->m_dead)
+	{
+		return nullptr;
+	}
+
+	return card;
+}
+
+ActiveCard* BoardManager::GetSlotReal(int slot, int side)
+{
+	if (slot < 0 || slot >= m_slots)
+	{
+		//std::cout << "ERROR: Accessing slot out of range (BoardManager::GetSlot)\n";
+		return nullptr;
+	}
+
 	if (side == 1)
 	{
 		return m_side1[slot];
@@ -604,6 +712,12 @@ void BoardManager::SetSlot(int slot, int side, ActiveCard* newCard)
 	{
 		std::cout << "ERROR: Accessing slot out of range (BoardManager::SetSlot)\n";
 		return;
+	}
+
+	ActiveCard* currentCard = GetSlotReal(slot, side);
+	if (currentCard != nullptr && currentCard->m_dead)
+	{
+		delete currentCard;
 	}
 
 	if (side == 1)
@@ -737,7 +851,7 @@ void BoardManager::BoardUpdates()
 		for (int i = 0; i < m_slots; i++)
 		{
 			ActiveCard* targetCard = GetSlot(i, side);
-			if (targetCard != nullptr)
+			if (targetCard != nullptr && !targetCard->m_dead)
 			{
 				targetCard->ResetBuffs();
 			}
@@ -757,7 +871,7 @@ void BoardManager::BoardUpdates()
 		}
 	}
 
-	// Check if any cards died due to stuff updating
+	// Check if any cards died due to stuff updating (that weren't already dead)
 	for (int side = 1; side <= 2; side++)
 	{
 		for (int i = 0; i < m_slots; i++)
