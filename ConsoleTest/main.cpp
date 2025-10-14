@@ -135,17 +135,21 @@ int main()
 	//CardData* newCard3 = new CardData(1, frontCreature3, backCreature);
 	//cards.push_back(newCard3);
 
-	dealer.StartMatch(cards);
-	player.StartMatch(cards);
+	//dealer.StartMatch(cards);
+	//player.StartMatch(cards);
 
 	BoardManager board(&dealer, &player, 4);
 	DealerAI captain(&board, &dealer);
 
+	dealer.StartMatch(cards);
+	player.StartMatch(cards);
+	board.StartMatch();
+
 	// MAKING CUSTOM BOARD STATE FOR TESTING THE DEALER
 	//==============================================================
-	if (false)
+	if (true)
 	{
-		CreatureData* creature1 = new CreatureData(1, 5, 4);
+		CreatureData* creature1 = new CreatureData(1, -5, 4);
 		creatures.push_back(creature1);
 		CardData* card1 = new CardData(1, creature1, creature1);
 		cards.push_back(card1);
@@ -167,7 +171,7 @@ int main()
 		board.PlayCard(card1, 1, dealer.m_playerIndex);
 		board.PlayCard(card2, 2, dealer.m_playerIndex);
 		//board.PlayCard(card1, 3, dealer.m_playerIndex);
-		board.PlayCard(card3, 1, player.m_playerIndex);
+		//board.PlayCard(card3, 1, player.m_playerIndex);
 	}
 	//==============================================================
 
@@ -195,11 +199,11 @@ int main()
 	std::string playerInput = " ";
 	int turn = 0;
 
-	board.ClearBoard();
-	board.EndMatch();
-	dealer.StartMatch(cards);
-	player.StartMatch(cards);
-	board.StartMatch();
+	//board.ClearBoard();
+	//board.EndMatch();
+	//dealer.StartMatch(cards);
+	//player.StartMatch(cards);
+	//board.StartMatch();
 
 	// TEST SEQUENCE OF ACTIONS (for checking dealer simulations)
 	if (false)

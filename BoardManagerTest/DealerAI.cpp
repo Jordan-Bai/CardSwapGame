@@ -482,6 +482,8 @@ void DealerAI::CopyBoardData()
 			//delete cardSide1;
 			m_copyBoard->SetSlot(i, 1, nullptr);
 			delete cardSide1;
+			// Since we're using GetSlot() instead of GetSlotReal(), card will always be alive,
+			// and therefore can't be destroyed by SetSlot()
 		}
 		ActiveCard* cardSide2 = m_copyBoard->GetSlot(i, 2);
 		if (cardSide2 != nullptr)

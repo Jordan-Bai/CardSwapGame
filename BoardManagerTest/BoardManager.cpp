@@ -184,7 +184,7 @@ void BoardManager::DoAttackPhase()
 
 	if (m_player1->m_hp <= 0) // If the dealer is dead
 	{
-		EndMatch();
+		//EndMatch();
 		return;
 	}
 
@@ -204,10 +204,10 @@ void BoardManager::DoAttackPhase()
 		}
 	}
 
-	if (m_player2->m_hp <= 0) // If the player is dead
-	{
-		EndMatch();
-	}
+	//if (m_player2->m_hp <= 0) // If the player is dead
+	//{
+	//	EndMatch();
+	//}
 }
 
 int BoardManager::ManualAttack(int slot, int side)
@@ -221,6 +221,13 @@ int BoardManager::ManualAttack(int slot, int side)
 
 	int target = attacker->GetTarget();
 	PerformAttack(attacker, target);
+
+	//Player* defendingPlayer = GetPlayer(OppositeSide(side));
+	//// If the opposing player dies, match should end (would normally be called in DoAttackPhase, since we're not doing that need to check now)
+	//if (defendingPlayer->m_hp <= 0)
+	//{
+	//	EndMatch();
+	//}
 
 	return slot;
 }
@@ -744,6 +751,15 @@ int BoardManager::GetSlotCount()
 
 bool BoardManager::ShouldGameEnd()
 {
+	if (!m_gameShouldEnd)
+	{
+		// If game's not over, check if it should be
+		if (m_player1->m_hp <= 0 || m_player2->m_hp <= 0)
+		{
+			EndMatch();
+		}
+	}
+
 	return m_gameShouldEnd;
 }
 
