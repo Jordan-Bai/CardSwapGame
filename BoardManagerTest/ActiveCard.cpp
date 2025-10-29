@@ -8,7 +8,8 @@ int cardDataInstances = 0;
 // Active creature
 ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
 	: m_data(data), m_owner(owner), m_hpOverride(data->hp), m_atkOverride(data->atk),
-	m_fCostOverride(data->fCost), m_aCostOverride(data->aCost)
+	m_fCostOverride(data->fCost), m_aCostOverride(data->aCost), m_hpBuff(0), m_atkBuff(0), 
+	m_fCostBuff(0)
 {
 	for (Ability* a : m_data->abilities)
 	{
@@ -19,7 +20,8 @@ ActiveCreature::ActiveCreature(CreatureData* data, ActiveCard* owner)
 ActiveCreature::ActiveCreature(const ActiveCreature& other, ActiveCard* owner)
 	:m_data(other.m_data), m_owner(owner), m_overrideStats(other.m_overrideStats),
 	m_hpOverride(other.m_hpOverride), m_atkOverride(other.m_atkOverride),
-	m_fCostOverride(other.m_fCostOverride), m_aCostOverride(other.m_aCostOverride)
+	m_fCostOverride(other.m_fCostOverride), m_aCostOverride(other.m_aCostOverride), 
+	m_hpBuff(other.m_hpBuff), m_atkBuff(other.m_atkBuff), m_fCostBuff(other.m_fCostBuff)
 {
 	for (Ability* a : m_data->abilities)
 	{

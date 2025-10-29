@@ -21,10 +21,10 @@ class ActiveCreature
 	int m_fCostOverride;
 	int m_aCostOverride;
 
-	int m_hpBuff = 0;
-	int m_atkBuff = 0;
-	int m_fCostBuff = 0;
-	int m_aCostBuff = 0;
+	int m_hpBuff;
+	int m_atkBuff;
+	int m_fCostBuff;
+	//int m_aCostBuff = 0;
 
 public:
 	bool m_canCopy = true;
