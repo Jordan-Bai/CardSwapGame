@@ -6,6 +6,7 @@
 
 const float HealthWeight = 2.0f;
 const float CardWeight = 0.4f;
+const float ActionWeight = 0.01f;
 
 int branchCount = 0;
 
@@ -78,7 +79,7 @@ void DealerAI::TestSimulation(std::vector<Behaviour*> actions)
 		action->DoAction(m_copyDealer);
 		m_copyBoard->DisplayBoard();
 	}
-	std::cout << '\n' << EvaluateBoard() << '\n';
+	std::cout << '\n' << EvaluateBoard(actions) << '\n';
 }
 
 
@@ -403,7 +404,7 @@ std::pair<float, std::vector<Behaviour*>> DealerAI::CheckSwapPhase(std::vector<B
 
 	// First, evaluate the current action sequence
 	//m_copyBoard->DoAttackPhase();
-	float bestScore = EvaluateBoard();
+	float bestScore = EvaluateBoard(parentSequence);
 	std::vector<Behaviour*> childSequence;
 
 
@@ -555,7 +556,7 @@ void DealerAI::CopyCards(std::vector<CardData*>& copyTarget, std::vector<CardDat
 	}
 }
 
-float DealerAI::EvaluateBoard()
+float DealerAI::EvaluateBoard(std::vector<Behaviour*> actionSequence)
 {
 	branchCount++;
 
@@ -578,6 +579,8 @@ float DealerAI::EvaluateBoard()
 
 	finalScore += m_copyDealer->m_hp * HealthWeight;
 	finalScore -= m_copyPlayer->m_hp * HealthWeight;
+
+	finalScore -= actionSequence.size() * ActionWeight;
 
 	float cardScore = 0;
 

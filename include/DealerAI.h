@@ -45,5 +45,5 @@ public:
 	void CopyBoardData();
 	void CopyPlayerData(Player* copyTarget, Player* copySource);
 	void CopyCards(std::vector<CardData*>& copyTarget, std::vector<CardData*>& copySource);
-	float EvaluateBoard();
+	float EvaluateBoard(std::vector<Behaviour*> actionSequence);
 };
