@@ -637,7 +637,7 @@ std::string BoardManager::FamilyToString(Family family)
 		return "M";
 	case Reptile:
 		return "R";
-	case ERROR:
+	case ERROR_FAM:
 		return "N/A";
 	}
 }

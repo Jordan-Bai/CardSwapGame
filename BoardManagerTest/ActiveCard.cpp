@@ -90,6 +90,11 @@ Family ActiveCreature::GetFamily()
 	return m_data->family;
 }
 
+Element ActiveCreature::GetElement()
+{
+	return m_data->elem;
+}
+
 
 void ActiveCreature::SetHP(int hp)
 {
@@ -326,6 +331,11 @@ std::string ActiveCard::GetName()
 Family ActiveCard::GetFamily()
 {
 	return GetCurrentFace()->GetFamily();
+}
+
+Element ActiveCard::GetElement()
+{
+	return GetCurrentFace()->GetElement();
 }
 
 int ActiveCard::GetID()

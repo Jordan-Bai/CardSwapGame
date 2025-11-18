@@ -59,6 +59,7 @@ public:
 	int GetAbilityCost();
 	std::string GetName();
 	Family GetFamily();
+	Element GetElement();
 
 	void SetHP(int hp);
 	void SetAtk(int atk);
@@ -116,6 +117,7 @@ public:
 	int GetAbilityCost();
 	std::string GetName();
 	Family GetFamily();
+	Element GetElement();
 	int GetID();
 
 	void ResetBuffs();

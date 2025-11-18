@@ -447,7 +447,7 @@ std::string BuffPerFamilyCard::GetDescription()
 	case Reptile:
 		description += "Reptile";
 		break;
-	case ERROR:
+	case ERROR_FAM:
 		description += "[ERROR TYPE]";
 		break;
 	}
@@ -531,7 +531,7 @@ std::string BuffEachFamilyCard::GetDescription()
 	case Reptile:
 		description += "Reptile";
 		break;
-	case ERROR:
+	case ERROR_FAM:
 		description += "[ERROR TYPE]";
 		break;
 	}

@@ -23,7 +23,15 @@ enum Family
 	Bug,
 	Mammal,
 	Reptile,
-	ERROR
+	ERROR_FAM
+};
+
+enum Element
+{
+	Sea,
+	Air,
+	Land,
+	ERROR_ELEM
 };
 
 struct StackOptions
@@ -40,6 +48,7 @@ struct CreatureData
 	int aCost;
 	std::string name;
 	Family family;
+	Element elem;
 	std::vector<Ability*> abilities;
 	StackOptions stackOptions;
 	bool allowFlips = true;
@@ -47,7 +56,7 @@ struct CreatureData
 	CardData* owner;
 
 	CreatureData(int health, int attack, int flipCost, int abilityCost = 0)
-		:hp(health), atk(attack), fCost(flipCost), aCost(abilityCost), name("[EMPTY]"), family(Family::ERROR), owner(nullptr)
+		:hp(health), atk(attack), fCost(flipCost), aCost(abilityCost), name("[EMPTY]"), family(Family::ERROR_FAM), elem(Element::ERROR_ELEM), owner(nullptr)
 	{
 	}
 };
