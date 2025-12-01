@@ -28,9 +28,9 @@ enum Family
 
 enum Element
 {
-	Sea,
 	Air,
 	Land,
+	Sea,
 	ERROR_ELEM
 };
 
